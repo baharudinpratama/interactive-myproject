@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fff9f5;
+  --foreground: #090b0e;
+  --grey: #546881;
+  --grey-active: #3d4c5e;
+  --grey-dark-active: #090b0e;
+  --grey-lighter: #b2bbc6;
+  --grey-light-active: #909dad;
+  --orange-50: #fff9f5;
+  --red: #e20000;
+  --red-active: #b50000;
+  --red-light: #fce6e6;
+  --red-light-hover: #fbd9d9;
+  --secondary: #fff8f0;
+  --white: #ffffff;
+  --white-active: #ebeef2;
+  --white-hover: #f2f4f7;
+  --white-alt-active: #f5f7f9;
+  --white-alt-hover: #fcfdfd;
+  --white-light-active: #f0f3f6;
+  --yellow: #fec031;
+  --yellow-400: #fdc030;
+  --yellow-500: #f79c08;
+  --yellow-600: #d97207;
+  --yellow-hover: #e5ad2c;
+  --yellow-light: #fff9ea;
+  --yellow-light-active: #ffebbf;
+
+  --tw-bg-selected: var(--yellow);
+}
+
+body {
+  @apply text-base;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--yellow);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: var(--grey-lighter);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--grey-active);
+  }
+
+  /* Next UI datepicker */
+  [data-slot="calendar"] tbody[data-slot="grid-body"] {
+    background: var(--white);
+  }
+
+  [data-slot="calendar"]
+    td[data-slot="cell"]
+    > span:not([data-selected="true"], [data-disabled="true"]):hover {
+    color: var(--grey-dark-active);
+    background: var(--yellow-light-active);
+  }
+
+  [data-slot="calendar"] td[data-slot="cell"] span[data-selected="true"] {
+    color: var(--white);
+    background: var(--yellow);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
