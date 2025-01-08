@@ -17,7 +17,8 @@ export default function Breadcrumb() {
   const { openModal } = useModalContext();
 
   const convertPathname = (str: string) => {
-    const segments = str.replace(/^\//, "").split("-");
+    const currentMenu = str.split("/")[1];
+    const segments = currentMenu.replace(/^\//, "").split("-");
     return segments.map((segment: string) => segment.charAt(0).toUpperCase() + segment.slice(1)).join(" ");
   }
 
