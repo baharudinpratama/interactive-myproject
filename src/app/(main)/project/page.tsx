@@ -61,29 +61,29 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="flex flex-col overflow-auto p-[16px] items-start gap-[16px] flex-1 self-stretch bg-[#FFF8F0]">
+      <div className="flex flex-col overflow-auto p-[16px] items-start gap-[16px] flex-1 self-stretch">
         {currentView === "view-overview" && (
           <Overview />
         )}
         {currentView === "view-board" && (
           <Board />
         )}
-        {currentView === "view-calendar-dhtmlx" && (
+        {/* {currentView === "view-calendar-dhtmlx" && (
           <DHTMLXCalendar events={getData()} date={new Date()} />
-        )}
-        {currentView === "view-calendar-fullcalendar" && (
+        )} */}
+        {/* {currentView === "view-calendar-fullcalendar" && (
           <div className="flex self-stretch">
             <div className="size-full">
               <DemoApp />
             </div>
           </div>
-        )}
-        {currentView === "view-calendar-syncfusion" && (
-          <Calendar />
-        )}
-        {/* {currentView === "view-gantt-matematuk" && (
-          <GanttMatematuk />
         )} */}
+        {/* {currentView === "view-calendar-syncfusion" && (
+          <Calendar />
+        )} */}
+        {currentView === "view-gantt-matematuk" && (
+          <GanttMatematuk />
+        )}
         {/* {currentView === "view-gantt-dhtmlx" && (
           <GanttView />
         )} */}

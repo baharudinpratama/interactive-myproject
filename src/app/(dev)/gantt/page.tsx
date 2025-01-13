@@ -1,92 +1,133 @@
-import React from "react";
+"use client";
 
-type Task = {
-  id: string;
-  name: string;
-  startDate: Date;
-  endDate: Date;
-  progress: number;
-};
+import { Button } from "@nextui-org/react";
+import { Gantt, Task, ViewMode } from "gantt-task-react";
+import "gantt-task-react/dist/index.css";
+import { useState } from "react";
+import { getStartEndDateForProject, initTasks } from "./helper";
+import "./index.css";
+import { ViewSwitcher } from "./view-switcher";
 
-type GanttChartProps = {
-  tasks: Task[];
-};
+export default function Page() {
+  const [view, setView] = useState<ViewMode>(ViewMode.Day);
+  const [tasks, setTasks] = useState<Task[]>(initTasks());
+  const [isChecked, setIsChecked] = useState(true);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  // let columnWidth = 65;
+  // if (view === ViewMode.Year) {
+  //   columnWidth = 350;
+  // } else if (view === ViewMode.Month) {
+  //   columnWidth = 300;
+  // } else if (view === ViewMode.Week) {
+  //   columnWidth = 250;
+  // }
 
-const GanttChart: React.FC<GanttChartProps> = ({ tasks }) => {
-  // Example utility to calculate widths
-  const getDaysBetween = (start: Date, end: Date) => {
-    return Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+  const handleAddTask = () => {
+    const currentDate = new Date();
+    setTasks([
+      ...tasks,
+      {
+        id: "Task 10",
+        type: "task",
+        name: "Doing something new",
+        start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+        end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 14),
+        progress: 0,
+        project: "ProjectSample",
+        dependencies: ["Task 4"],
+        displayOrder: 6,
+      }
+    ]);
+  }
+
+  const handleUpdateTask = () => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === selectedTask?.id
+          ? { ...task, progress: 100 }
+          : task
+      )
+    );
+  }
+
+  const handleTaskChange = (task: Task) => {
+    console.log("On date change Id:" + task.id);
+    let newTasks = tasks.map(t => (t.id === task.id ? task : t));
+    if (task.project) {
+      const [start, end] = getStartEndDateForProject(newTasks, task.project);
+      const project = newTasks[newTasks.findIndex(t => t.id === task.project)];
+      if (
+        project.start.getTime() !== start.getTime() ||
+        project.end.getTime() !== end.getTime()
+      ) {
+        const changedProject = { ...project, start, end };
+        newTasks = newTasks.map(t =>
+          t.id === task.project ? changedProject : t
+        );
+      }
+    }
+    setTasks(newTasks);
   };
 
-  const today = new Date();
+  const handleTaskDelete = (task: Task) => {
+    const conf = window.confirm("Are you sure delete " + task.name + " ?");
+    if (conf) {
+      setTasks(tasks.filter(t => t.id !== task.id));
+    }
+    return conf;
+  };
+
+  const handleProgressChange = async (task: Task) => {
+    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
+    console.log("On progress change Id:" + task.id);
+  };
+
+  const handleDoubleClick = (task: Task) => {
+    // alert("On Double Click event Id:" + task.id);
+    handleTaskDelete(task);
+  };
+
+  const handleClick = (task: Task) => {
+    // console.log(task);
+    setSelectedTask(task);
+  };
+
+  const handleSelect = (task: Task, isSelected: boolean) => {
+    console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
+  };
+
+  const handleExpanderClick = (task: Task) => {
+    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
+    console.log("On expander click Id:" + task.id);
+  };
 
   return (
-    <div className="overflow-x-auto w-full border border-gray-200 rounded-lg">
-      <div className="min-w-[600px] grid grid-cols-[150px_repeat(30,_1fr)]">
-        {/* Header */}
-        <div className="sticky top-0 bg-white p-2 font-bold">Task</div>
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            key={i}
-            className="sticky top-0 bg-gray-100 p-2 text-center font-medium text-xs"
-          >
-            {new Date(today.getTime() + i * 24 * 60 * 60 * 1000).toDateString()}
-          </div>
-        ))}
-        {/* Tasks */}
-        {tasks.map((task) => {
-          const duration = getDaysBetween(task.startDate, task.endDate);
-          const offset = getDaysBetween(today, task.startDate);
-
-          return (
-            <React.Fragment key={task.id}>
-              <div className="p-2 border-t border-gray-200">{task.name}</div>
-              <div className="col-span-30 relative">
-                <div
-                  className="absolute h-6 bg-blue-500"
-                  style={{
-                    width: `${duration * 20}px`,
-                    marginLeft: `${offset * 20}px`,
-                  }}
-                >
-                  <div
-                    className="bg-blue-700 h-full"
-                    style={{ width: `${task.progress}%` }}
-                  />
-                </div>
-              </div>
-            </React.Fragment>
-          );
-        })}
+    <>
+      <div className="flex flex-col w-1/3 pb-3 gap-3">
+        <Button onPress={() => handleAddTask()}>Add task</Button>
+        <Button onPress={() => handleUpdateTask()}>Update task</Button>
       </div>
-    </div>
+      <ViewSwitcher
+        onViewModeChange={viewMode => setView(viewMode)}
+        onViewListChange={setIsChecked}
+        isChecked={isChecked}
+      />
+      <h3>Gantt With Unlimited Height</h3>
+      <div className="bg-white">
+        <Gantt
+          tasks={tasks}
+          viewMode={view}
+          onDateChange={handleTaskChange}
+          onDelete={handleTaskDelete}
+          onProgressChange={handleProgressChange}
+          onDoubleClick={handleDoubleClick}
+          onClick={handleClick}
+          onSelect={handleSelect}
+          onExpanderClick={handleExpanderClick}
+        // listCellWidth={isChecked ? "155px" : ""}
+        // columnWidth={columnWidth}
+        />
+      </div>
+    </>
   );
-};
-
-const tasks = [
-  {
-    id: "1",
-    name: "Task 1",
-    startDate: new Date("2024-01-01"),
-    endDate: new Date("2024-01-10"),
-    progress: 50,
-  },
-  {
-    id: "2",
-    name: "Task 2",
-    startDate: new Date("2024-01-05"),
-    endDate: new Date("2024-01-15"),
-    progress: 75,
-  },
-];
-
-const Page = () => {
-  return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Gantt Chart</h1>
-      <GanttChart tasks={tasks} />
-    </div>
-  );
-};
-
-export default Page;
+}

@@ -12,50 +12,47 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
   isChecked,
 }) => {
   return (
-    <div className="flex px-[16px] py-[8px] items-center gap-[10px]">
-      {/* <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
+    <div className="ViewContainer">
+      <button
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.Hour)}
       >
         Hour
-      </button> */}
-      {/* <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
+      </button>
+      <button
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.QuarterDay)}
       >
         Quarter of Day
-      </button> */}
-      {/* <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
+      </button>
+      <button
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.HalfDay)}
       >
         Half of Day
-      </button> */}
-      <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
-        onClick={() => onViewModeChange(ViewMode.Day)}
-      >
+      </button>
+      <button className="Button" onClick={() => onViewModeChange(ViewMode.Day)}>
         Day
       </button>
       <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.Week)}
       >
         Week
       </button>
       <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.Month)}
       >
         Month
       </button>
-      {/* <button
-        className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
+      <button
+        className="Button"
         onClick={() => onViewModeChange(ViewMode.Year)}
       >
         Year
-      </button> */}
-      {/* <div className="Switch">
+      </button>
+      <div className="Switch">
         <label className="Switch_Toggle">
           <input
             type="checkbox"
@@ -65,7 +62,7 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
           <span className="Slider" />
         </label>
         Show Task List
-      </div> */}
+      </div>
     </div>
   );
 };
