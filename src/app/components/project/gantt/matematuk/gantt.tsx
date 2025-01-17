@@ -13,6 +13,7 @@ import { ViewSwitcher } from "./view-switcher";
 export default function GanttMatematuk() {
   const [view, setView] = useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = useState<Task[]>(initTasks());
+  const [projects, setProjects] = useState(tasks.filter(task => task.type === "project"));
   const [isChecked, setIsChecked] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   // let columnWidth = 65;
@@ -38,21 +39,19 @@ export default function GanttMatematuk() {
       displayOrder: 6,
     } as Task
     setTasks((prevTasks) => {
-      // Add the new task to the array
       const updatedTasks = [...prevTasks, newTask];
 
-      // Sort tasks by `displayOrder`, ignoring undefined values
       updatedTasks.sort((a, b) => {
         if (a.displayOrder === undefined && b.displayOrder === undefined) {
-          return 0; // Keep relative order if both are undefined
+          return 0;
         }
         if (a.displayOrder === undefined) {
-          return 1; // Place `a` after `b` if `a.displayOrder` is undefined
+          return 1;
         }
         if (b.displayOrder === undefined) {
-          return -1; // Place `b` after `a` if `b.displayOrder` is undefined
+          return -1;
         }
-        return a.displayOrder - b.displayOrder; // Sort normally if both are defined
+        return a.displayOrder - b.displayOrder;
       });
 
       return updatedTasks;
@@ -117,8 +116,15 @@ export default function GanttMatematuk() {
   };
 
   const handleExpanderClick = (task: Task) => {
-    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("On expander click Id:" + task.id);
+    // setTasks(tasks.map(t => (t.id === task.id ? task : t)));
+    // console.log("On expander click Id:" + task.id);
+    setTasks((prevTasks) =>
+      prevTasks.map((prevTask) =>
+        prevTask.id === task.id
+          ? { ...task, hideChildren: !task.hideChildren }
+          : prevTask
+      )
+    );
   };
 
   return (
@@ -155,11 +161,29 @@ export default function GanttMatematuk() {
           {/* Body */}
           <div className="flex flex-col">
             {tasks.map(task => {
+              const parentProject = tasks.find(project => project.id === task.project);
+
+              if ((task.type === "task" || task.type === "milestone") && parentProject?.hideChildren) {
+                return;
+              }
+
+              let startContent = <></>;
+
+              if (task.type === "project") {
+                if (task.hideChildren) {
+                  startContent = <Icon icon="solar:alt-arrow-right-bold" height={21} onClick={() => handleExpanderClick(task)} />
+                } else {
+                  startContent = <Icon icon="solar:alt-arrow-down-bold" height={21} onClick={() => handleExpanderClick(task)} />
+                }
+              } else {
+                startContent = <div className="size-[21px]"></div>
+              }
+
               return (
                 <div key={task.id} className="flex border-b-[1px] h-[50px]">
                   <div className="flex min-w-[155px] max-w-[155px] p-[8px] items-center">
                     <div className="flex items-center gap-[4px]">
-                      {task.type === "project" && <Icon icon="solar:alt-arrow-down-bold" />}
+                      {startContent}
                       {task.name}
                     </div>
                   </div>
@@ -180,7 +204,7 @@ export default function GanttMatematuk() {
             })}
           </div>
         </div>
-        <div className="max-w-[39rem]">
+        <div className="sm:max-w-[39rem] md:max-w-[39rem] lg:max-w-[39rem] xl:max-w-[39rem] 2xl:max-w-6xl">
           <Gantt
             tasks={tasks}
             viewMode={view}
@@ -192,6 +216,8 @@ export default function GanttMatematuk() {
             onSelect={handleSelect}
             onExpanderClick={handleExpanderClick}
             listCellWidth={isChecked ? "155px" : ""}
+          // barCornerRadius={8}
+          // rowHeight={20}
           // columnWidth={columnWidth}
           />
         </div>

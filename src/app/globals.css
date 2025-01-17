@@ -14,6 +14,7 @@
   --red: #e20000;
   --red-active: #b50000;
   --red-light: #fce6e6;
+  --red-light-active: #f6b0b0;
   --red-light-hover: #fbd9d9;
   --secondary: #fff8f0;
   --white: #ffffff;
@@ -26,6 +27,7 @@
   --yellow-400: #fdc030;
   --yellow-500: #f79c08;
   --yellow-600: #d97207;
+  --yellow-active: #cb9a27;
   --yellow-hover: #e5ad2c;
   --yellow-light: #fff9ea;
   --yellow-light-active: #ffebbf;
@@ -41,6 +43,7 @@ body {
 }
 
 @layer components {
+
   /* Scrollbar */
   ::-webkit-scrollbar {
     height: 8px;
@@ -65,9 +68,7 @@ body {
     background: var(--white);
   }
 
-  [data-slot="calendar"]
-    td[data-slot="cell"]
-    > span:not([data-selected="true"], [data-disabled="true"]):hover {
+  [data-slot="calendar"] td[data-slot="cell"]>span:not([data-selected="true"], [data-disabled="true"]):hover {
     color: var(--grey-dark-active);
     background: var(--yellow-light-active);
   }

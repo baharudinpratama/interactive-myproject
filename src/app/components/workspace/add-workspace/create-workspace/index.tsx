@@ -64,7 +64,7 @@ export default function CreateWorkspace() {
                     </div>
                   </div>
 
-                  <button type="button" onClick={() => { closeAllModals() }}>
+                  <button type="button" onClick={() => openModal("closeModal")}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
                       <path d="M9.9583 1.00004L1 9.95833M0.999962 1L9.95826 9.9583" stroke="#090B0E" strokeWidth="2" strokeLinecap="round" />
                     </svg>
@@ -168,7 +168,7 @@ export default function CreateWorkspace() {
                                   <li key={index} className="flex items-center px-[14px] py-[8px] gap-[8px] cursor-pointer hover:bg-yellow last:rounded-bl-[8px]" onClick={() => addUser(user)}>
                                     <Avatar
                                       name={user.initial}
-                                      classNames={{ base: "w-[24px] h-[24px] bg-[#6985FF]", name: "text-base text-[10px] text-white" }}
+                                      classNames={{ base: "w-[24px] h-[24px] bg-yellow-100", name: "text-base text-[10px] text-yellow-600" }}
                                     />
                                     <span className="text-sm">{user.name}</span>
                                   </li>
@@ -189,7 +189,7 @@ export default function CreateWorkspace() {
                                 <div>
                                   <Avatar
                                     name={user.initial}
-                                    classNames={{ base: "w-[24px] h-[24px] bg-[#6985FF]", name: "text-base text-[10px] text-white" }}
+                                    classNames={{ base: "w-[24px] h-[24px] bg-yellow-100", name: "text-base text-[10px] text-yellow-600" }}
                                   />
                                 </div>
 

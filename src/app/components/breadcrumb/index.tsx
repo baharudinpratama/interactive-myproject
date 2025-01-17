@@ -2,7 +2,7 @@
 
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { BreadcrumbItem, Breadcrumbs, Button, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import { Avatar, BreadcrumbItem, Breadcrumbs, Button, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import EditIcon from "./edit-icon";
@@ -79,7 +79,7 @@ export default function Breadcrumb() {
 
             <PopoverContent className="w-[200px] p-[5px] rounded-[8px] border border-white-active bg-white drop-shadow-sm">
               <Listbox classNames={{ base: "p-0", list: "gap-0" }} aria-label="Action">
-                <ListboxItem key="rename" onPress={() => setEditMode(true)} classNames={{ base: "px-[10px] py-[8px] data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
+                <ListboxItem key="rename" onPress={() => { openModal("renameProject"); setIsOpen(false); }} classNames={{ base: "px-[10px] py-[8px] data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
                   <div className="flex items-center gap-[8px] flex-1">
                     <Icon icon="solar:pen-linear" height={16} />
                     <div className="flex flex-1">Rename</div>
@@ -237,9 +237,10 @@ export default function Breadcrumb() {
 
                         <ul className="flex flex-col self-stretch">
                           <li className="group flex p-[8px] items-center gap-[8px]">
-                            <div className="flex size-[20px] p-[7px] justify-center items-center rounded-[3px] bg-[#6985FF]/35">
-                              <span className="text-[#6985FF] text-center text-[10px] font-bold">R</span>
-                            </div>
+                            <Avatar
+                              name="R"
+                              classNames={{ base: "w-[20px] h-[20px] rounded-[3px] bg-yellow-100", name: "text-base text-[10px] text-yellow-600" }}
+                            />
                             <div className="flex items-center flex-1">RnD 2</div>
                             <div className="flex items-center opacity-0 group-hover:opacity-100">
                               <Icon icon="solar:menu-dots-bold" size={16} />
@@ -247,9 +248,10 @@ export default function Breadcrumb() {
                           </li>
 
                           <li className="group flex p-[8px] items-center gap-[8px]">
-                            <div className="flex size-[20px] p-[7px] justify-center items-center rounded-[3px] bg-[#6985FF]/35">
-                              <span className="text-[#6985FF] text-center text-[10px] font-bold">R</span>
-                            </div>
+                            <Avatar
+                              name="R"
+                              classNames={{ base: "w-[20px] h-[20px] rounded-[3px] bg-red-light-active", name: "text-base text-[10px] text-red" }}
+                            />
                             <div className="flex items-center flex-1">RnD 3</div>
                             <div className="flex items-center opacity-0 group-hover:opacity-100">
                               <Icon icon="solar:menu-dots-bold" size={16} />

@@ -36,6 +36,7 @@ const config: Config = {
           active: "var(--red-active)",
           light: {
             DEFAULT: "var(--red-light)",
+            active: "var(--red-light-active)",
             hover: "var(--red-light-hover)",
           },
         },
@@ -57,6 +58,7 @@ const config: Config = {
           400: "var(--yellow-400)",
           500: "var(--yellow-500)",
           600: "var(--yellow-600)",
+          active: "var(--yellow-active)",
           hover: "var(--yellow-hover)",
           light: {
             DEFAULT: "var(--yellow-light)",

@@ -136,7 +136,7 @@ export default function Body() {
               <div className="flex justify-center items-center min-w-[24px] self-stretch">
                 <Avatar
                   name="R"
-                  classNames={{ base: "w-[20px] h-[20px] rounded-[3px] bg-[#6985FF]/[0.35]", name: "text-base text-[10px] font-bold text-[#6985FF]" }}
+                  classNames={{ base: "w-[20px] h-[20px] rounded-[3px] bg-yellow-active", name: "text-base text-[10px] text-yellow-light-active" }}
                 />
               </div>
 

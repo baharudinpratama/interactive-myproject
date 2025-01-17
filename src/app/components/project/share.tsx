@@ -225,7 +225,7 @@ export default function ShareProject() {
                     <div className="flex items-center gap-[8px]">
                       <Avatar
                         name="IA"
-                        classNames={{ base: "w-[20px] h-[20px] bg-[#ECEFFF]", name: "text-base text-[8px] text-[#6985FF]" }}
+                        classNames={{ base: "w-[20px] h-[20px] bg-yellow-100", name: "text-base text-[10px] text-yellow-600" }}
                       />
 
                       InterActive (You)
@@ -234,7 +234,7 @@ export default function ShareProject() {
                     <div className="flex items-center gap-[8px]">
                       <Avatar
                         name="A"
-                        classNames={{ base: "w-[20px] h-[20px] bg-[#ECEFFF]", name: "text-base text-[8px] text-[#6985FF]" }}
+                        classNames={{ base: "w-[20px] h-[20px] bg-yellow-100", name: "text-base text-[10px] text-yellow-600" }}
                       />
 
                       Admin

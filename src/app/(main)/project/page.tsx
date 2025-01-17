@@ -18,12 +18,12 @@ export default function Page() {
     { id: "view-overview", name: "Overview", icon: "solar:calendar-search-linear" },
     { id: "view-list", name: "List", icon: "solar:checklist-linear" },
     { id: "view-board", name: "Board", icon: "solar:align-top-linear" },
-    { id: "view-calendar-dhtmlx", name: "Calendar DHTMLX", icon: "solar:calendar-linear" },
-    { id: "view-calendar-fullcalendar", name: "Calendar Full Calendar", icon: "solar:calendar-linear" },
-    { id: "view-calendar-syncfusion", name: "Calendar Syncfusion", icon: "solar:calendar-linear" },
-    { id: "view-gantt-dhtmlx", name: "Gantt DHTMLX", icon: "solar:align-left-linear" },
-    { id: "view-gantt-syncfusion", name: "Gantt Syncfusion", icon: "solar:align-left-linear" },
-    { id: "view-gantt-matematuk", name: "Gantt Matematuk", icon: "solar:align-left-linear" },
+    // { id: "view-calendar-dhtmlx", name: "Calendar DHTMLX", icon: "solar:calendar-linear" },
+    { id: "view-calendar-fullcalendar", name: "Calendar", icon: "solar:calendar-linear" },
+    // { id: "view-calendar-syncfusion", name: "Calendar Syncfusion", icon: "solar:calendar-linear" },
+    // { id: "view-gantt-dhtmlx", name: "Gantt DHTMLX", icon: "solar:align-left-linear" },
+    // { id: "view-gantt-syncfusion", name: "Gantt Syncfusion", icon: "solar:align-left-linear" },
+    { id: "view-gantt-matematuk", name: "Gantt", icon: "solar:align-left-linear" },
   ];
 
   const [currentView, setCurrentView] = useState("view-overview");
@@ -71,13 +71,13 @@ export default function Page() {
         {/* {currentView === "view-calendar-dhtmlx" && (
           <DHTMLXCalendar events={getData()} date={new Date()} />
         )} */}
-        {/* {currentView === "view-calendar-fullcalendar" && (
+        {currentView === "view-calendar-fullcalendar" && (
           <div className="flex self-stretch">
             <div className="size-full">
               <DemoApp />
             </div>
           </div>
-        )} */}
+        )}
         {/* {currentView === "view-calendar-syncfusion" && (
           <Calendar />
         )} */}

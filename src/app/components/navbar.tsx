@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="flex p-[6px] items-center gap-[6px] rounded-full bg-white-active">
         <Avatar
           name="IA"
-          classNames={{ base: "w-[24px] h-[24px] bg-[#6985FF]", name: "text-base text-white" }}
+          classNames={{ base: "w-[24px] h-[24px] bg-yellow-600", name: "text-base text-[12px] text-white" }}
         />
         <Icon icon="solar:alt-arrow-down-outline" size={18} />
       </div>

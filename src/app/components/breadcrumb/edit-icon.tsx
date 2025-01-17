@@ -1,44 +1,49 @@
-"use client";
-
 import MyButton from "@/app/components/button";
 import { Icon } from "@iconify-icon/react";
 import { Divider, Input } from "@nextui-org/react";
+import twemojiJSONIconsData from "@iconify/json/json/twemoji.json";
+import { IconifyJSONIconsData } from "@iconify/types";
 import { useRef, useState } from "react";
+
+const twemojiIcons = twemojiJSONIconsData as IconifyJSONIconsData;
 
 export default function EditIcon() {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [icons, setIcons] = useState<any>(Object.keys(twemojiIcons.icons).slice(0, 12).map(value => `twemoji:${value}`));
+  const [colors] = useState(["#6E56CF", "#3E63DD", "#0091FF", "#12A594", "#B2BBC6"]);
+  const [selectedColor, setSelectedColor] = useState("#B2BBC6");
+  const [iconSearchInput, setIconSearchInput] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("heroicons:list-bullet");
 
-  const icons = [
-    { icon: "solar:vinyl-record-linear" },
-    { icon: "solar:ticket-sale-bold" },
-    { icon: "solar:chart-2-bold" },
-    { icon: "solar:shuffle-bold" },
-    { icon: "solar:hand-heart-bold" },
-    { icon: "solar:buildings-bold" },
-    { icon: "solar:calculator-minimalistic-bold" },
-    { icon: "solar:layers-bold" },
-    { icon: "solar:alarm-bold" },
-    { icon: "solar:rocket-bold" },
-    { icon: "solar:backpack-bold" },
-    { icon: "solar:compass-square-bold" },
-  ];
-
-  const handleIconClick = () => {
+  const handleColorClick = () => {
     if (inputRef.current) {
       inputRef.current.click();
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedColor(e.target.value);
+  const handleColorInput = (input: React.ChangeEvent<HTMLInputElement> | string) => {
+    const newColor =
+      typeof input === 'string' ? input : input.target.value;
+
+    setSelectedColor(newColor);
   };
+
+  const handleSearch = (query: string) => {
+    setIconSearchInput(query);
+    const filteredIcons = Object.keys(twemojiIcons.icons)
+      .filter(icon => query.toLowerCase().split(" ").every((word) => icon.toLowerCase().includes(word))).slice(0, 12)
+      .map(value => `twemoji:${value}`);
+    setIcons(filteredIcons);
+  }
+
+  const handleIconSelect = (icon: string) => {
+    setSelectedIcon(icon);
+  }
 
   return (
     <div className="flex flex-col gap-[13px]">
       <div className="flex items-center gap-[4px]">
-        Example : <Icon icon={selectedIcon} width={22} style={{ color: selectedColor }} />
+        Example : <Icon icon={selectedIcon} height={22} style={{ color: selectedColor }} />
       </div>
 
       <div className="flex flex-col gap-[8px] self-stretch">
@@ -94,7 +99,7 @@ export default function EditIcon() {
             <MyButton
               size="sm"
               radius="full"
-              onClick={handleIconClick}
+              onClick={handleColorClick}
               className="p-0 min-w-[22px] h-[22px] bg-transparent"
               children={
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -111,7 +116,7 @@ export default function EditIcon() {
               type="color"
               ref={inputRef}
               value={selectedColor}
-              onChange={handleChange}
+              onChange={handleColorInput}
               className="absolute top-0 left-0 opacity-0 pointer-events-none"
             />
           </div>
@@ -131,6 +136,8 @@ export default function EditIcon() {
           placeholder={
             "Search"
           }
+          value={iconSearchInput}
+          onValueChange={val => handleSearch(val)}
           classNames={{
             base: [
               "text-base",
@@ -173,8 +180,8 @@ export default function EditIcon() {
 
         <div className="grid grid-cols-6 gap-y-[13px]">
           {icons.map((sample: any, index: any) => (
-            <button className="m-0 p-0" onClick={() => { setSelectedIcon(sample.icon) }}>
-              <Icon key={index} icon={sample.icon} width={22} style={{ color: "#B2BBC6" }} />
+            <button className="m-0 p-0" onClick={() => { handleIconSelect(sample) }}>
+              <Icon key={index} icon={sample} height={22} style={{ color: selectedColor }} />
             </button>
           ))}
         </div>
