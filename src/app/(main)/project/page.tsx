@@ -1,29 +1,29 @@
 "use client";
 
 import Board from "@/app/components/project/board/board";
-import { default as DHTMLXCalendar, getData } from "@/app/components/project/calendar/dhtmlx/calendar-dhtmlx";
 import DemoApp from "@/app/components/project/calendar/fullcalendar/calendar-fullcalendar";
-import Calendar from "@/app/components/project/calendar/syncfusion/calendar";
-import GanttView from "@/app/components/project/gantt/dhtmlx/gantt";
 import GanttMatematuk from "@/app/components/project/gantt/matematuk/gantt";
-import GanttSyncfusion from "@/app/components/project/gantt/syncfusion/gantt";
 import Overview from "@/app/components/project/overview/overview";
+import { Icon } from "@iconify-icon/react";
 import { Divider } from "@nextui-org/react";
 import clsx from "clsx";
 import { useState } from "react";
-import { Icon } from "@iconify-icon/react";
+// import { default as DHTMLXCalendar, getData } from "@/app/components/project/calendar/dhtmlx/calendar-dhtmlx";
+// import Calendar from "@/app/components/project/calendar/syncfusion/calendar";
+// import GanttView from "@/app/components/project/gantt/dhtmlx/gantt";
+// import GanttSyncfusion from "@/app/components/project/gantt/syncfusion/gantt";
 
 export default function Page() {
   const views = [
     { id: "view-overview", name: "Overview", icon: "solar:calendar-search-linear" },
     { id: "view-list", name: "List", icon: "solar:checklist-linear" },
     { id: "view-board", name: "Board", icon: "solar:align-top-linear" },
-    // { id: "view-calendar-dhtmlx", name: "Calendar DHTMLX", icon: "solar:calendar-linear" },
     { id: "view-calendar-fullcalendar", name: "Calendar", icon: "solar:calendar-linear" },
+    { id: "view-gantt-matematuk", name: "Gantt", icon: "solar:align-left-linear" },
+    // { id: "view-calendar-dhtmlx", name: "Calendar DHTMLX", icon: "solar:calendar-linear" },
     // { id: "view-calendar-syncfusion", name: "Calendar Syncfusion", icon: "solar:calendar-linear" },
     // { id: "view-gantt-dhtmlx", name: "Gantt DHTMLX", icon: "solar:align-left-linear" },
     // { id: "view-gantt-syncfusion", name: "Gantt Syncfusion", icon: "solar:align-left-linear" },
-    { id: "view-gantt-matematuk", name: "Gantt", icon: "solar:align-left-linear" },
   ];
 
   const [currentView, setCurrentView] = useState("view-overview");
@@ -68,9 +68,6 @@ export default function Page() {
         {currentView === "view-board" && (
           <Board />
         )}
-        {/* {currentView === "view-calendar-dhtmlx" && (
-          <DHTMLXCalendar events={getData()} date={new Date()} />
-        )} */}
         {currentView === "view-calendar-fullcalendar" && (
           <div className="flex self-stretch">
             <div className="size-full">
@@ -78,12 +75,15 @@ export default function Page() {
             </div>
           </div>
         )}
-        {/* {currentView === "view-calendar-syncfusion" && (
-          <Calendar />
-        )} */}
         {currentView === "view-gantt-matematuk" && (
           <GanttMatematuk />
         )}
+        {/* {currentView === "view-calendar-dhtmlx" && (
+          <DHTMLXCalendar events={getData()} date={new Date()} />
+        )} */}
+        {/* {currentView === "view-calendar-syncfusion" && (
+          <Calendar />
+        )} */}
         {/* {currentView === "view-gantt-dhtmlx" && (
           <GanttView />
         )} */}

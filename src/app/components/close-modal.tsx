@@ -9,7 +9,7 @@ export default function CloseModal() {
   const { openModals, closeModal, closeAllModals } = useModalContext();
 
   return (
-    <Modal isOpen={openModals["closeModal"] ?? false} hideCloseButton={true} size="xs">
+    <Modal isOpen={openModals["closeModal"] ?? false} hideCloseButton={true} size="xs" className="w-[300px]">
       <ModalContent className="overflow-visible">
         {() => (
           <>
@@ -30,19 +30,19 @@ export default function CloseModal() {
                   </div>
                 </div>
 
-                <div className="flex w-full justify-between items-center">
+                <div className="flex w-full justify-center items-center gap-[12px]">
                   <MyButton
                     variant="bordered"
                     color="yellow"
                     children="Cancel"
                     onPress={() => { closeModal("closeModal") }}
-                    className="px-[24px]"
+                    className="w-full px-[24px]"
                   />
                   <MyButton
                     color="yellow"
                     children="Continue"
                     onPress={() => { closeAllModals() }}
-                    className="px-[24px]"
+                    className="w-full px-[24px]"
                   />
                 </div>
               </div>

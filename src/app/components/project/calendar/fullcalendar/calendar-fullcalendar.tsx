@@ -1,127 +1,221 @@
+"use client";
+
+import MyButton from "@/app/components/button";
+import { useWorkspaceContext, Workspace } from "@/app/contexts/workspace";
 import {
   DateSelectArg,
   EventApi,
+  EventChangeArg,
   EventClickArg,
-  EventContentArg,
+  EventInput,
   formatDate,
-} from '@fullcalendar/core'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import FullCalendar from '@fullcalendar/react'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import React from 'react'
-import "./demo-app.css"
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+} from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+} from "@nextui-org/react";
+import React, { useEffect, useRef, useState } from "react";
 
-interface DemoAppState {
-  weekendsVisible: boolean
-  currentEvents: EventApi[]
-}
+const DemoApp: React.FC = () => {
+  const calendarRef = useRef<FullCalendar | null>(null);
+  const { workspaces, setWorkspaces } = useWorkspaceContext();
+  const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [newEventTitle, setNewEventTitle] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<DateSelectArg | null>(null);
 
-export default class DemoApp extends React.Component<{}, DemoAppState> {
-  state: DemoAppState = {
-    weekendsVisible: true,
-    currentEvents: []
+  useEffect(() => {
+    const events: EventInput[] = [];
+
+    workspaces.forEach((workspace) => {
+      workspace.projects.forEach((project) => {
+        project.tasks.forEach((task) => {
+          events.push({
+            id: task.id,
+            title: task.name,
+            start: task.start,
+            end: task.end,
+            allDay: true
+          });
+        });
+      });
+    });
+
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.removeAllEvents();
+      events.forEach(event => calendarApi.addEvent(event));
+    }
+  }, [workspaces]);
+
+  const handleDateClick = (selected: DateSelectArg) => {
+    setSelectedDate(selected);
+    setIsDialogOpen(true);
+  };
+
+  const handleEventClick = (selected: EventClickArg) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the event "${selected.event.title}"?`
+      )
+    ) {
+      selected.event.remove();
+      const updatedEvents = currentEvents.filter(
+        (event) => event.id !== selected.event.id
+      );
+      setCurrentEvents(updatedEvents);
+    }
+  };
+
+  const handleEvents = (events: EventApi[]) => {
+    setCurrentEvents(events);
   }
 
-  render() {
-    return (
-      <div className='demo-app'>
-        {this.renderSidebar()}
-        <div className='demo-app-main'>
+  const handleEventChange = (e: EventChangeArg) => {
+    const updatedWorkspaces = workspaces.map(workspace => ({
+      ...workspace,
+      projects: workspace.projects.map(project => ({
+        ...project,
+        tasks: project.tasks.map(task =>
+          task.id === e.event.id
+            ? { ...task, start: new Date(e.event.startStr), end: new Date(e.event.endStr) }
+            : task
+        )
+      }))
+    }));
+
+    setWorkspaces(updatedWorkspaces);
+  }
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setNewEventTitle("");
+  };
+
+  const handleAddEvent = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newEventTitle && selectedDate) {
+      const calendarApi = selectedDate.view.calendar;
+      calendarApi.unselect();
+
+      const newEvent = {
+        id: `${Date.now()}-${newEventTitle}`,
+        title: newEventTitle,
+        start: selectedDate.start,
+        end: selectedDate.end,
+        allDay: selectedDate.allDay,
+      };
+
+      calendarApi.addEvent(newEvent);
+      handleCloseDialog();
+    }
+  };
+
+  const handleUpdate = () => {
+
+  };
+
+  return (
+    <div>
+      <div className="flex w-full px-10 justify-start items-start gap-8">
+        <div className="w-3/12">
+          <div className="pt-10 text-2xl font-extrabold px-7">
+            Calendar Events
+          </div>
+          <div className="flex py-4">
+            <MyButton
+              color="yellow"
+              children="Refresh Events"
+              onPress={handleUpdate}
+              className="px-6"
+            />
+          </div>
+          <ul className="space-y-4">
+            {currentEvents.length <= 0 && (
+              <div className="italic text-center text-gray-400">
+                No Events Present
+              </div>
+            )}
+
+            {currentEvents.length > 0 &&
+              currentEvents.map((event: EventApi) => (
+                <li
+                  key={event.id}
+                  className="flex flex-col border border-gray-200 shadow px-4 py-2 rounded-md text-blue-800"
+                >
+                  {event.title}
+                  <div className="flex justify-between">
+                    <label className="text-slate-950">
+                      {formatDate(event.start!, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </label>
+                    <label className="text-slate-950">
+                      {formatDate(event.end!, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </label>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
+
+        <div className="w-9/12 mt-8">
           <FullCalendar
+            ref={calendarRef}
+            height={"85vh"}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
             }}
-            initialView='dayGridMonth'
+            initialView="dayGridMonth"
             editable={true}
             selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
-            weekends={this.state.weekendsVisible}
-            initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-            select={this.handleDateSelect}
-            eventContent={renderEventContent} // custom render function
-            eventClick={this.handleEventClick}
-            eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
-          /* you can update a remote database when these fire:
-          eventAdd={function(){}}
-          eventChange={function(){}}
-          eventRemove={function(){}}
-          */
+            select={handleDateClick}
+            eventClick={handleEventClick}
+            eventsSet={handleEvents}
+            eventChange={handleEventChange}
           />
         </div>
       </div>
-    )
-  }
 
-  renderSidebar() {
-    return (
-      <div className='demo-app-sidebar'>
-        <div className='demo-app-sidebar-section'>
-          <h2>All Events ({this.state.currentEvents.length})</h2>
-          <ul>
-            {this.state.currentEvents.map(renderSidebarEvent)}
-          </ul>
-        </div>
-      </div>
-    )
-  }
+      <Modal isOpen={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <ModalContent>
+          <ModalHeader>Add New Event Details</ModalHeader>
+          <form className="space-x-5 mb-4" onSubmit={handleAddEvent}>
+            <input
+              type="text"
+              placeholder="Event Title"
+              value={newEventTitle}
+              onChange={(e) => setNewEventTitle(e.target.value)}
+              required
+              className="border border-gray-200 p-3 rounded-md text-lg"
+            />
+            <button
+              className="bg-green-500 text-white p-3 mt-5 rounded-md"
+              type="submit"
+            >
+              Add
+            </button>
+          </form>
+        </ModalContent>
+      </Modal>
+    </div>
+  );
+};
 
-  handleWeekendsToggle = () => {
-    this.setState({
-      weekendsVisible: !this.state.weekendsVisible
-    })
-  }
-
-  handleDateSelect = (selectInfo: DateSelectArg) => {
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
-
-    calendarApi.unselect() // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
-    }
-  }
-
-  handleEventClick = (clickInfo: EventClickArg) => {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
-    }
-  }
-
-  handleEvents = (events: EventApi[]) => {
-    this.setState({
-      currentEvents: events
-    })
-  }
-
-}
-
-function renderEventContent(eventContent: EventContentArg) {
-  return (
-    <>
-      <b>{eventContent.timeText}</b>
-      <i>{eventContent.event.title}</i>
-    </>
-  )
-}
-
-function renderSidebarEvent(event: EventApi) {
-  return (
-    <li key={event.id}>
-      <b>{formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
-      <i>{event.title}</i>
-    </li>
-  )
-}
+export default DemoApp;

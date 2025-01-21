@@ -1,16 +1,18 @@
 "use client";
 
 import MyButton from "@/app/components/button";
+import { useWorkspaceContext } from "@/app/contexts/workspace";
 import { Icon } from "@iconify-icon/react";
 import { Avatar } from "@nextui-org/react";
 import { Gantt, Task, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getStartEndDateForProject, initTasks } from "./helper";
 import "./index.css";
 import { ViewSwitcher } from "./view-switcher";
 
 export default function GanttMatematuk() {
+  const { workspaces, setWorkspaces } = useWorkspaceContext();
   const [view, setView] = useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = useState<Task[]>(initTasks());
   const [projects, setProjects] = useState(tasks.filter(task => task.type === "project"));
@@ -24,6 +26,38 @@ export default function GanttMatematuk() {
   // } else if (view === ViewMode.Week) {
   //   columnWidth = 250;
   // }
+
+  useEffect(() => {
+    const tasks: Task[] = [];
+
+    workspaces.forEach((workspace) => {
+      workspace.projects.forEach((project) => {
+        tasks.push({
+          id: project.id,
+          type: project.type,
+          name: project.name,
+          start: project.start,
+          end: project.end,
+          progress: project.progress
+        });
+
+        project.tasks.forEach((task) => {
+          tasks.push({
+            id: task.id,
+            type: task.type,
+            name: task.name,
+            start: task.start,
+            end: task.end,
+            progress: task.progress,
+            project: task.project,
+            dependencies: task.dependencies,
+          });
+        });
+      });
+    });
+
+    setTasks(tasks);
+  }, [workspaces]);
 
   const handleAddTask = () => {
     const currentDate = new Date();

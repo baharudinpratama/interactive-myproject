@@ -34,7 +34,7 @@ export default function DeleteProject() {
 
   return (
     <>
-      <Modal isOpen={openModals["deleteProject"]} hideCloseButton={true} size="sm">
+      <Modal isOpen={openModals["deleteProject"]} hideCloseButton={true} size="xs" className="w-[300px]">
         <ModalContent className="overflow-visible">
           {() => (
             <>
@@ -57,20 +57,20 @@ export default function DeleteProject() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end items-center gap-[12px]">
-                    <MyButton
-                      variant="bordered"
-                      color="yellow"
-                      children="Cancel"
-                      onPress={() => closeAllModals()}
-                      className="px-[24px]"
-                    />
+                  <div className="flex justify-center items-center gap-[12px]">
+                      <MyButton
+                        variant="bordered"
+                        color="yellow"
+                        children="Cancel"
+                        onPress={() => closeAllModals()}
+                        className="w-full px-[24px]"
+                      />
 
                     <MyButton
                       color="yellow"
                       children="Continue"
                       onPress={() => openModal("deleteProjectOtp")}
-                      className="px-[24px]"
+                      className="w-full px-[24px]"
                     />
                   </div>
                 </div>
