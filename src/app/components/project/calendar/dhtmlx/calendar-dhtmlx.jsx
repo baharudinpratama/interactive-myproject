@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { EventCalendar } from "@dhx/trial-eventcalendar";
-import "@dhx/trial-eventcalendar/dist/event-calendar.css"; // include Event Calendar styles
+// import "@dhx/trial-eventcalendar/dist/event-calendar.css"; // include Event Calendar styles
 
 export function getData() {
   return [

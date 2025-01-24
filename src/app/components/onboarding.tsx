@@ -17,7 +17,11 @@ export default function Onboarding() {
   ]);
 
   useEffect(() => {
-    openModal("onboarding");
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+    if (!hasSeenOnboarding) {
+      openModal("onboarding");
+      localStorage.setItem("hasSeenOnboarding", "true");
+    }
   }, []);
 
   return (

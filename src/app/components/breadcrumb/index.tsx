@@ -6,11 +6,12 @@ import { Avatar, BreadcrumbItem, Breadcrumbs, Button, Input, Listbox, ListboxIte
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import EditIcon from "./edit-icon";
+import { useWorkspaceContext } from "@/app/contexts/workspace";
 
 export default function Breadcrumb() {
   const pathname = usePathname();
+  const { workspaces } = useWorkspaceContext();
   const [isProject, setIsProject] = useState(false);
-  const [projectName, setProjectName] = useState("Project");
   const [editMode, setEditMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -65,14 +66,10 @@ export default function Breadcrumb() {
           <Popover placement="bottom-start" isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)} classNames={{ content: "w-[200px] p-[5px] rounded-[8px] border-white-active bg-white drop-shadow-sm" }}>
             <PopoverTrigger disabled={!isProject} className="aria-expanded:opacity-100 aria-expanded:scale-1 aria-expanded:bg-yellow-light-active">
               <div role="button" className="flex pl-[10px] pr-[12px] py-[5px] items-center gap-[8px] rounded-[8px]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M20 7L4 7" stroke="#090B0E" strokeWidth="1.8" strokeLinecap="round" />
-                  <path d="M20 12L4 12" stroke="#090B0E" strokeWidth="1.8" strokeLinecap="round" />
-                  <path d="M20 17L4 17" stroke="#090B0E" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
+                <Icon icon={workspaces[0].projects[0].icon} height={24} color={workspaces[0].projects[0].iconColor} />
 
                 <span className="text-[20px] font-bold">
-                  {projectName}
+                  {workspaces[0].projects[0].name}
                 </span>
               </div>
             </PopoverTrigger>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Gantt } from "@dhx/trial-gantt";
-import "@dhx/trial-gantt/codebase/dhtmlxgantt.css";
+// import "@dhx/trial-gantt/codebase/dhtmlxgantt.css";
 
 const tasks = {
   data: [

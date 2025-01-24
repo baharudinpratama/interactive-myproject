@@ -12,7 +12,7 @@ import "./index.css";
 import { ViewSwitcher } from "./view-switcher";
 
 export default function GanttMatematuk() {
-  const { workspaces, setWorkspaces } = useWorkspaceContext();
+  const { workspaces, setWorkspaces, updateTask, deleteTask } = useWorkspaceContext();
   const [view, setView] = useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = useState<Task[]>(initTasks());
   const [projects, setProjects] = useState(tasks.filter(task => task.type === "project"));
@@ -102,29 +102,48 @@ export default function GanttMatematuk() {
     );
   }
 
-  const handleTaskChange = (task: Task) => {
-    console.log("On date change Id:" + task.id);
-    let newTasks = tasks.map(t => (t.id === task.id ? task : t));
-    if (task.project) {
-      const [start, end] = getStartEndDateForProject(newTasks, task.project);
-      const project = newTasks[newTasks.findIndex(t => t.id === task.project)];
-      if (
-        project.start.getTime() !== start.getTime() ||
-        project.end.getTime() !== end.getTime()
-      ) {
-        const changedProject = { ...project, start, end };
-        newTasks = newTasks.map(t =>
-          t.id === task.project ? changedProject : t
-        );
+  const handleTaskChange = (updatedTask: Task) => {
+    const newTasks = tasks.map(task => (task.id === updatedTask.id ? updatedTask : task));
+    setTasks(newTasks);
+
+    if (updatedTask.project) {
+      const [start, end] = getStartEndDateForProject(newTasks, updatedTask.project);
+      const project = newTasks.find(t => t.id === updatedTask.project);
+      if (project && (project.start.getTime() !== start.getTime() ||
+        project.end.getTime() !== end.getTime())) {
+        const updatedWorkspaces = workspaces.map(workspace => ({
+          ...workspace,
+          projects: workspace.projects.map(project =>
+            project.id === updatedTask.project
+              ? {
+                ...project,
+                start,
+                end,
+                tasks: project.tasks.map(task =>
+                  task.id === updatedTask.id
+                    ? { ...task, start: updatedTask.start, end: updatedTask.end }
+                    : task
+                )
+              }
+              : project
+          )
+        }));
+        setWorkspaces(updatedWorkspaces);
+        return;
       }
     }
-    setTasks(newTasks);
+
+    updateTask(updatedTask.id, {
+      start: updatedTask.start,
+      end: updatedTask.end,
+    });
   };
 
-  const handleTaskDelete = (task: Task) => {
-    const conf = window.confirm("Are you sure delete " + task.name + " ?");
+  const handleTaskDelete = (taskToDelete: Task) => {
+    const conf = window.confirm("Are you sure delete " + taskToDelete.name + " ?");
     if (conf) {
-      setTasks(tasks.filter(t => t.id !== task.id));
+      setTasks(tasks.filter(t => t.id !== taskToDelete.id));
+      deleteTask(taskToDelete.id);
     }
     return conf;
   };
@@ -140,8 +159,6 @@ export default function GanttMatematuk() {
   };
 
   const handleClick = (task: Task) => {
-    // console.log(task);
-    console.log(tasks);
     setSelectedTask(task);
   };
 

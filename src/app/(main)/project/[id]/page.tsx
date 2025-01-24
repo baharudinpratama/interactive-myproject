@@ -13,7 +13,11 @@ import { useState } from "react";
 // import GanttView from "@/app/components/project/gantt/dhtmlx/gantt";
 // import GanttSyncfusion from "@/app/components/project/gantt/syncfusion/gantt";
 
-export default function Page() {
+export default function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
   const views = [
     { id: "view-overview", name: "Overview", icon: "solar:calendar-search-linear" },
     { id: "view-list", name: "List", icon: "solar:checklist-linear" },

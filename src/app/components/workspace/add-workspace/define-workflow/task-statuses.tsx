@@ -9,7 +9,7 @@ import UrlConverter from "@/app/components/url-converter";
 
 export default function TaskStatuses() {
   const [taskStatuses, setTaskStatuses] = useState([
-    { id: "to-do", name: "TO DO", icon: "solar:record-circle-fill-linear", iconColor: "#B2BBC6" },
+    { id: "to-do", name: "TO DO", icon: "solar:record-circle-filled-linear", iconColor: "#B2BBC6" },
   ]);
 
   const { openModals, closeModal, openModal } = useModalContext();

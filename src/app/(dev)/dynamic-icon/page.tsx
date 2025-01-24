@@ -14,7 +14,7 @@ export default function Page() {
   const [icons, setIcons] = useState<any>(Object.keys(solarIcons.icons).slice(0, 12).map(value => `solar:${value}`));
   const [iconSearchInput, setIconSearchInput] = useState("");
   const [selectedColor, setSelectedColor] = useState("#B2BBC6");
-  const [selectedIcon, setSelectedIcon] = useState("solar:record-circle-fill-linear");
+  const [selectedIcon, setSelectedIcon] = useState("solar:record-circle-filled-linear");
 
   const handleIconClick = () => {
     if (inputRef.current) {
