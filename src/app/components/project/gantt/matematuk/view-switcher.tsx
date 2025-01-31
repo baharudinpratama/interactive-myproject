@@ -13,12 +13,12 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
 }) => {
   return (
     <div className="flex px-[16px] py-[8px] items-center gap-[10px]">
-      {/* <button
+      <button
         className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
         onClick={() => onViewModeChange(ViewMode.Hour)}
       >
         Hour
-      </button> */}
+      </button>
       {/* <button
         className="px-[8px] py-[4px] border-[1px] rounded-[8px]"
         onClick={() => onViewModeChange(ViewMode.QuarterDay)}

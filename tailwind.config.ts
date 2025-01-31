@@ -44,6 +44,7 @@ const config: Config = {
         white: {
           DEFAULT: "var(--white)",
           active: "var(--white-active)",
+          dark: "var(--white-dark)",
           hover: "var(--white-hover)",
           alt: {
             active: "var(--white-alt-active)",

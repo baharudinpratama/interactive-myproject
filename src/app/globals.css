@@ -19,6 +19,7 @@
   --secondary: #fff8f0;
   --white: #ffffff;
   --white-active: #ebeef2;
+  --white-dark: #f6f8f9;
   --white-hover: #f2f4f7;
   --white-alt-active: #f5f7f9;
   --white-alt-hover: #fcfdfd;
@@ -43,7 +44,6 @@ body {
 }
 
 @layer components {
-
   /* Scrollbar */
   ::-webkit-scrollbar {
     height: 8px;
@@ -68,7 +68,9 @@ body {
     background: var(--white);
   }
 
-  [data-slot="calendar"] td[data-slot="cell"]>span:not([data-selected="true"], [data-disabled="true"]):hover {
+  [data-slot="calendar"]
+    td[data-slot="cell"]
+    > span:not([data-selected="true"], [data-disabled="true"]):hover {
     color: var(--grey-dark-active);
     background: var(--yellow-light-active);
   }

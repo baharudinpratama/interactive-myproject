@@ -10,7 +10,7 @@ import { useWorkspaceContext } from "@/app/contexts/workspace";
 
 export default function Breadcrumb() {
   const pathname = usePathname();
-  const { workspaces } = useWorkspaceContext();
+  const { projects } = useWorkspaceContext();
   const [isProject, setIsProject] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,10 +66,10 @@ export default function Breadcrumb() {
           <Popover placement="bottom-start" isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)} classNames={{ content: "w-[200px] p-[5px] rounded-[8px] border-white-active bg-white drop-shadow-sm" }}>
             <PopoverTrigger disabled={!isProject} className="aria-expanded:opacity-100 aria-expanded:scale-1 aria-expanded:bg-yellow-light-active">
               <div role="button" className="flex pl-[10px] pr-[12px] py-[5px] items-center gap-[8px] rounded-[8px]">
-                <Icon icon={workspaces[0].projects[0].icon} height={24} color={workspaces[0].projects[0].iconColor} />
+                <Icon icon={projects[0].icon} height={24} color={projects[0].iconColor} />
 
                 <span className="text-[20px] font-bold">
-                  {workspaces[0].projects[0].name}
+                  {projects[0].name}
                 </span>
               </div>
             </PopoverTrigger>

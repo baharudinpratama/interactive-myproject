@@ -15,7 +15,7 @@ import { useLayoutEffect, useState } from "react";
 export default function Body() {
   const pathname = usePathname();
   const router = useRouter();
-  const { workspaces, setWorkspaces } = useWorkspaceContext();
+  const { projects } = useWorkspaceContext();
   const { isSidebarOpen } = useSidebarContext();
   const { openModal } = useModalContext();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -158,17 +158,17 @@ export default function Body() {
                 className={clsx("flex w-full min-h-[37px] p-[8px] pl-[16px] items-center self-stretch rounded-[8px] cursor-pointer font-semibold bg-[#F9E9B8]", {
                   "gap-[8px]": isSidebarOpen,
                 })}
-                onClick={() => { router.push(`/project/${workspaces[0].projects[0].id}`) }}
+                onClick={() => { router.push(`/project/${projects[0].id}`) }}
               >
                 <div className="flex justify-center items-center min-w-[24px] self-stretch">
                   {isLoaded && (
-                    <Icon icon={workspaces[0].projects[0].icon} height={20} color={workspaces[0].projects[0].iconColor} />
+                    <Icon icon={projects[0].icon} height={20} color={projects[0].iconColor} />
                   )}
                 </div>
 
                 {isSidebarOpen && (
                   <div className="flex flex-1 whitespace-nowrap overflow-hidden">
-                    {workspaces[0].projects[0].name}
+                    {projects[0].name}
                   </div>
                 )}
               </div>

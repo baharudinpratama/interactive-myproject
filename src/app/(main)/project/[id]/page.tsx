@@ -3,6 +3,7 @@
 import Board from "@/app/components/project/board/board";
 import DemoApp from "@/app/components/project/calendar/fullcalendar/calendar-fullcalendar";
 import GanttMatematuk from "@/app/components/project/gantt/matematuk/gantt";
+import List from "@/app/components/project/list";
 import Overview from "@/app/components/project/overview/overview";
 import { Icon } from "@iconify-icon/react";
 import { Divider } from "@nextui-org/react";
@@ -68,6 +69,9 @@ export default function Page({
       <div className="flex flex-col overflow-auto p-[16px] items-start gap-[16px] flex-1 self-stretch">
         {currentView === "view-overview" && (
           <Overview />
+        )}
+        {currentView === "view-list" && (
+          <List />
         )}
         {currentView === "view-board" && (
           <Board />

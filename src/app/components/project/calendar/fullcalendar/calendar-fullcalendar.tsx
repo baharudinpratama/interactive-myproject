@@ -13,9 +13,9 @@ import {
 } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from '@fullcalendar/list';
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from '@fullcalendar/list';
 import {
   Modal,
   ModalBody,
@@ -26,33 +26,31 @@ import React, { useEffect, useRef, useState } from "react";
 
 const DemoApp: React.FC = () => {
   const calendarRef = useRef<FullCalendar | null>(null);
-  const { workspaces, setWorkspaces, updateTask, deleteTask } = useWorkspaceContext();
+  const { tasks, addTask, updateTask, deleteTask } = useWorkspaceContext();
   const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [newEventTitle, setNewEventTitle] = useState<string>("");
+  const [startDateInput, setStartDateInput] = useState<string>("");
+  const [endDateInput, setEndDateInput] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<DateSelectArg | null>(null);
 
   useEffect(() => {
     const events: EventInput[] = [];
 
-    workspaces.forEach((workspace) => {
-      workspace.projects.forEach((project) => {
-        project.tasks.forEach((task) => {
-          let allDay = false;
-          if (
-            task.start.toTimeString().startsWith('00:00:00') &&
-            task.end.toTimeString().startsWith('00:00:00')
-          ) {
-            allDay = true;
-          }
-          events.push({
-            id: task.id,
-            title: task.name,
-            start: task.start,
-            end: task.end,
-            allDay,
-          });
-        });
+    tasks.forEach((task) => {
+      let allDay = false;
+      if (
+        task.start.toTimeString().startsWith("00:00:00") &&
+        task.end.toTimeString().startsWith("00:00:00")
+      ) {
+        allDay = true;
+      }
+      events.push({
+        id: task.id,
+        title: task.name,
+        start: task.start,
+        end: task.end,
+        allDay,
       });
     });
 
@@ -61,7 +59,7 @@ const DemoApp: React.FC = () => {
       calendarApi.removeAllEvents();
       events.forEach(event => calendarApi.addEvent(event));
     }
-  }, [workspaces]);
+  }, [tasks]);
 
   const handleDateClick = (selected: DateSelectArg) => {
     setSelectedDate(selected);
@@ -114,10 +112,22 @@ const DemoApp: React.FC = () => {
       const newEvent = {
         id: `${Date.now()}-${newEventTitle}`,
         title: newEventTitle,
-        start: selectedDate.start,
-        end: selectedDate.end,
-        allDay: selectedDate.allDay,
+        start: startDateInput,
+        end: endDateInput,
+        allDay: false,
       };
+
+      addTask({
+        start: new Date(startDateInput),
+        end: new Date(endDateInput),
+        name: newEventTitle,
+        // id: 
+        // progress: 0,
+        type: "task",
+        // dependencies?: string[];
+        // project?: string;
+        // displayOrder?: number;
+      });
 
       calendarApi.addEvent(newEvent);
       handleCloseDialog();
@@ -193,20 +203,39 @@ const DemoApp: React.FC = () => {
         <ModalContent>
           <ModalHeader>Add New Event Details</ModalHeader>
           <ModalBody className="p-[25px] pt-0">
-            <form className="flex items-center gap-[12px]" onSubmit={handleAddEvent}>
+            <form className="flex flex-col items-center gap-[12px]" onSubmit={handleAddEvent}>
               <MyInput
                 type="text"
+                label="Title"
                 placeholder="Event Title"
                 value={newEventTitle}
                 onChange={(e) => setNewEventTitle(e.target.value)}
                 required
               />
-              <MyButton
-                color="yellow"
-                type="submit"
-              >
-                Add
-              </MyButton>
+              <MyInput
+                type="datetime-local"
+                label="Date Start"
+                placeholder="Date start"
+                value={startDateInput}
+                onChange={(e) => setStartDateInput(e.target.value)}
+                required
+              />
+              <MyInput
+                type="datetime-local"
+                label="Date End"
+                placeholder="Date end"
+                value={endDateInput}
+                onChange={(e) => setEndDateInput(e.target.value)}
+                required
+              />
+              <div className="flex justify-end items-center self-stretch">
+                <MyButton
+                  color="yellow"
+                  type="submit"
+                >
+                  Add
+                </MyButton>
+              </div>
             </form>
           </ModalBody>
         </ModalContent>
