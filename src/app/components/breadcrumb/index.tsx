@@ -75,15 +75,15 @@ export default function Breadcrumb() {
             </PopoverTrigger>
 
             <PopoverContent className="w-[200px] p-[5px] rounded-[8px] border border-white-active bg-white drop-shadow-sm">
-              <Listbox classNames={{ base: "p-0", list: "gap-0" }} aria-label="Action">
-                <ListboxItem key="rename" onPress={() => { openModal("renameProject"); setIsOpen(false); }} classNames={{ base: "px-[10px] py-[8px] data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
+              <Listbox classNames={{ base: "p-0", list: "gap-0" }} itemClasses={{ base: "data-[hover=true]:bg-yellow-light-active data-[selectable=true]:focus:bg-white data-[focus=true]:bg-white" }} aria-label="Action">
+                <ListboxItem key="rename" onPress={() => { openModal("renameProject"); setIsOpen(false); }} classNames={{ base: "px-[10px] py-[8px] data-[selectable=true]:focus:bg-white data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
                   <div className="flex items-center gap-[8px] flex-1">
                     <Icon icon="solar:pen-linear" height={16} />
                     <div className="flex flex-1">Rename</div>
                   </div>
                 </ListboxItem>
 
-                <ListboxItem key="copy-link" onPress={handleCopy} classNames={{ base: "p-0 px-[10px] py-[8px] data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
+                <ListboxItem key="copy-link" onPress={handleCopy} classNames={{ base: "p-0 px-[10px] py-[8px] data-[selectable=true]:focus:bg-white data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
                   <div className="flex items-center gap-[8px] flex-1">
                     <Icon icon="solar:link-linear" height={16} />
                     <div className="flex flex-1">
@@ -173,7 +173,7 @@ export default function Breadcrumb() {
                   </Popover>
                 </ListboxItem>
 
-                <ListboxItem key="move" classNames={{ base: "p-0 px-[10px] py-[8px] data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
+                <ListboxItem key="move" classNames={{ base: "p-0 px-[10px] py-[8px] data-[selectable=true]:focus:bg-white data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
                   <Popover placement="right-start">
                     <PopoverTrigger className="aria-expanded:opacity-100 aria-expanded:scale-1">
                       <div className="flex items-center gap-[8px] flex-1">

@@ -43,7 +43,7 @@ export default function Page({
                 key={view.id}
                 onClick={() => { setCurrentView(view.id); }}
                 className={clsx("flex px-[16px] py-[8px] items-center gap-[8px] self-stretch cursor-pointer", {
-                  "font-semibold border-b-[1.5px] border-[#F79C08]": currentView === view.id,
+                  "font-semibold border-b-[1.5px] border-yellow-500": currentView === view.id,
                 })}>
                 <Icon icon={view.icon} height={16} style={{ strokeWidth: currentView === view.id ? 1.5 : 1 }} />
                 <div className="flex flex-nowrap min-w-max items-center self-stretch">

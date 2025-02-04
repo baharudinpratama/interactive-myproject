@@ -44,15 +44,16 @@ const config: Config = {
         white: {
           DEFAULT: "var(--white)",
           active: "var(--white-active)",
-          dark: "var(--white-dark)",
-          hover: "var(--white-hover)",
           alt: {
             active: "var(--white-alt-active)",
             hover: "var(--white-alt-hover)",
           },
+          dark: "var(--white-dark)",
+          hover: "var(--white-hover)",
           light: {
             active: "var(--white-light-active)",
           },
+          normal: "var(--white-normal)",
         },
         yellow: {
           DEFAULT: "var(--yellow)",
@@ -68,7 +69,7 @@ const config: Config = {
         }
       },
       fontSize: {
-        base: ["14px", "150%"]
+        base: ["14px", { lineHeight: "150%" }]
       },
     },
   },
