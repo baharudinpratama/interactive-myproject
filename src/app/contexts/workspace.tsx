@@ -115,8 +115,8 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
       displayOrder: 5,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 8, 30),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10, 17, 30),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 6, 0, 0),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
       name: "Review",
       id: "task-4",
       type: "task",

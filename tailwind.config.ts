@@ -17,6 +17,9 @@ const config: Config = {
       colors: {
         background: "var(--orange-50)",
         foreground: "var(--grey-dark-active)",
+        green: {
+          DEFAULT: "var(--green)",
+        },
         grey: {
           DEFAULT: "var(--grey)",
           active: "var(--grey-active)",

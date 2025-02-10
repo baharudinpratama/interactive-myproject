@@ -5,6 +5,7 @@
 :root {
   --background: #fff9f5;
   --foreground: #090b0e;
+  --green: #54af48;
   --grey: #546881;
   --grey-active: #3d4c5e;
   --grey-dark-active: #090b0e;
@@ -52,16 +53,16 @@ body {
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--yellow);
+    background: var(--white-normal);
   }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    background: var(--grey-lighter);
+    background: var(--yellow);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--grey-active);
+    background: var(--yellow-hover);
   }
 
   /* Next UI datepicker */

@@ -1,23 +1,30 @@
 import MyButton from "@/app/components/button";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
+import { parseDate } from "@internationalized/date";
+import type { TimeInputValue } from "@nextui-org/react";
 import {
-  Accordion, AccordionItem, Avatar, Calendar, cn, Divider, Input,
+  Accordion, AccordionItem, Avatar, Button, Calendar, Checkbox, cn, Divider, getKeyValue, Input,
   Modal, ModalBody, ModalContent, ModalHeader,
-  Popover, PopoverContent, PopoverTrigger, Textarea
+  Popover, PopoverContent, PopoverTrigger,
+  Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea, TimeInput
 } from "@nextui-org/react";
+import type { DateValue } from "@react-types/calendar";
 import clsx from "clsx";
 import { useState } from "react";
 
-export default function TaskDetail() {
-  const { openModals, openModal, closeModal } = useModalContext();
+export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boolean) => void }) {
+  const { openModals, openModal, closeModal, closeAllModals } = useModalContext();
   const [taskName, setTaskName] = useState("Survey");
-  const [editMode, setEditMode] = useState(false);
+  const [renameMode, setRenameMode] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("to-do");
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>(["InterActive"]);
+  const [dueDate, setDueDate] = useState<DateValue | null>(parseDate("2025-02-08"));
   const [selectedPriority, setSelectedPriority] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<string[]>(["v1"]);
   const [inputDescription, setInputDescription] = useState("");
+  const [timeInputMode, setTimeInputMode] = useState(false);
+  const [dueDateTime, setDueDateTime] = useState<TimeInputValue | null>(null);
   const handleSelectAssignees = (assignee: string) => {
     setSelectedAssignees((prevAssignees) =>
       prevAssignees.includes(assignee)
@@ -34,7 +41,7 @@ export default function TaskDetail() {
   }
 
   return (
-    <Modal isOpen={openModals["taskDetail"] ?? false} hideCloseButton={true} size="3xl">
+    <Modal isOpen={openModals["taskDetail"] ?? false} hideCloseButton={true} size="4xl">
       <ModalContent>
         <ModalHeader className="px-[16px] py-[12px]">
           <div className="flex flex-col w-full">
@@ -67,26 +74,29 @@ export default function TaskDetail() {
 
         <ModalBody className="p-0">
           <div className="flex flex-1">
-            <div className="flex p-[16px] flex-col justify-start flex-1">
+            <div className="flex max-h-[652px] p-[16px] flex-col justify-start flex-1 overflow-y-auto">
               <div className="flex flex-col border-b border-white-active">
                 <div className="flex justify-between items-center self-stretch font-semibold">
-                  <div className="flex items-center" onClick={() => setEditMode(true)}>
-                    {editMode && (
+                  <div className="flex h-[24px] items-center" onClick={() => setRenameMode(true)}>
+                    {renameMode ? (
                       <Input
+                        autoFocus={true}
                         value={taskName}
                         onValueChange={setTaskName}
+                        onBlur={() => setRenameMode(false)}
+                        onKeyDown={(e) => { e.key.toLowerCase() === "enter" && setRenameMode(false) }}
                         fullWidth={false}
                         classNames={{
                           input: "text-base !text-yellow-500 font-bold",
-                          inputWrapper: "min-h-max h-auto bg-yellow-light-active data-[hover=true]:bg-yellow-light-active group-data-[focus=true]:bg-yellow-light-active"
+                          inputWrapper: [
+                            "min-h-max h-auto bg-yellow-light-active data-[hover=true]:bg-yellow-light-active group-data-[focus=true]:bg-yellow-light-active",
+                            "group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-transparent",
+                          ]
                         }}
                       />
-                    )}
-                    {!editMode && (
-                      taskName
-                    )}
+                    ) : taskName}
                   </div>
-                  <Icon icon="solar:pen-2-linear" height={17} onClick={() => setEditMode(false)} />
+                  <Icon icon="solar:pen-2-linear" height={17} onClick={() => setRenameMode(false)} />
                 </div>
                 <div className="grid grid-cols-2 pb-[16px] pt-[8px] gap-x-[16px] gap-y-[12px]">
                   <Popover placement="bottom-start">
@@ -260,13 +270,322 @@ export default function TaskDetail() {
                           Due Date
                         </div>
                         <div className="flex text-grey-lighter">
-                          Empty
+                          {dueDate ? (
+                            new Date(dueDate.toString()).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                          ) : (
+                            "Empty"
+                          )}
                         </div>
                       </div>
                     </PopoverTrigger>
 
                     <PopoverContent className="p-0 rounded-[8px]">
-                      <Calendar></Calendar>
+                      <Calendar
+                        value={dueDate}
+                        onChange={setDueDate}
+                        classNames={{
+                          base: "rounded-[8px] shadow-none",
+                          prevButton: "text-grey-dark-active",
+                          title: "text-grey-dark-active",
+                          nextButton: "text-grey-dark-active",
+                          gridWrapper: "pb-[8px]",
+                          gridHeaderCell: "text-[10px] text-grey-lighter",
+                          gridBody: "bg-white",
+                          cellButton: "data-[hover=true]:bg-yellow-light-active data-[hover=true]:text-grey-dark-active data-[selected=true]:bg-yellow data-[selected=true]:hover:bg-yellow"
+                        }}
+                      />
+                      <Divider className="bg-white-active" />
+                      <div className="flex w-full px-[10px] py-[8px] items-center">
+                        <div className="flex h-[22px] items-center gap-[8px]">
+                          <Icon icon="solar:alarm-linear" height={16} />
+                          <div className="flex items-center" onClick={() => setTimeInputMode(true)}>
+                            {timeInputMode ? (
+                              <TimeInput
+                                autoFocus={true}
+                                value={dueDateTime}
+                                onChange={setDueDateTime}
+                                // onBlur={() => setTimeInputMode(false)}
+                                // onKeyDown={(e) => { e.key.toLowerCase() === "enter" && setTimeInputMode(false) }}
+                                fullWidth={false}
+                                classNames={{
+                                  inputWrapper: [
+                                    "min-h-max h-auto",
+                                    "bg-yellow-light-active",
+                                    "hover:bg-yellow-light-active focus-within:hover:bg-yellow-light-active",
+                                  ],
+                                  innerWrapper: "h-auto text-base !text-grey-dark-active",
+                                  segment: [
+                                    "text-grey-dark-active data-[editable=true]:text-grey-dark-active",
+                                    "data-[editable=true]:data-[placeholder=true]:text-grey-dark-active",
+                                    // isInvalid=true
+                                    // "data-[invalid=true]:text-danger-300 data-[invalid=true]:data-[editable=true]:text-danger",
+                                    // "data-[invalid=true]:focus:bg-danger-400/50 dark:data-[invalid=true]:focus:bg-danger-400/20",
+                                    // "data-[invalid=true]:data-[editable=true]:focus:text-danger",
+                                  ],
+                                  input: [
+                                    "text-base !text-grey-dark-active",
+                                  ],
+                                }}
+                              />
+                            ) : "Set Time"}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex w-full px-[10px] py-[8px] justify-between items-center">
+                        <div className="flex w-full h-[22px] items-center gap-[8px]">
+                          <Icon icon="solar:alarm-linear" height={16} />
+                          <div className="flex items-center" onClick={() => setTimeInputMode(true)}>
+                            13.00
+                          </div>
+                        </div>
+                        <div className="flex">
+                          <Icon icon="solar:minus-square-bold" height={16} style={{ color: "#B2BBC6" }} />
+                        </div>
+                      </div>
+                      <Popover placement="right-start">
+                        <PopoverTrigger className="aria-expanded:opacity-100 aria-expanded:scale-1">
+                          <Button
+                            fullWidth={true}
+                            disableAnimation={true}
+                            startContent={
+                              <Icon icon="solar:calendar-linear" height={16} />
+                            }
+                            children={
+                              <div className="flex h-[22px] w-full justify-between items-center">
+                                Repeat
+                                <Icon icon="solar:alt-arrow-right-linear" height={16} />
+                              </div>
+                            }
+                            className="px-[10px] py-[8px] justify-start gap-[8px] rounded-none bg-white data-[hover=true]:opacity-100"
+                          />
+                        </PopoverTrigger>
+
+                        <PopoverContent className="w-[300px] ml-[-5px] p-0 rounded-[8px] border border-white-active bg-white drop-shadow-sm">
+                          <div className="flex w-full flex-col">
+                            <div className="flex flex-col p-[12px] gap-[16px]">
+                              <div className="flex w-full flex-col gap-[12px]">
+                                Repeat Every
+
+                                <div className="flex flex-row items-center gap-[8px]">
+                                  <div className="basis-1/4">
+                                    <Input
+                                      type="number"
+                                      min={1}
+                                      fullWidth={false}
+                                      placeholder="days"
+                                      classNames={{
+                                        base: [
+                                          "text-base",
+                                          "bg-transparent",
+                                          "group-data-[has-label=true]:mt-[27px]",
+                                          "opacity-100",
+                                        ],
+                                        label: [
+                                          "text-grey-dark-active",
+                                          "group-data-[invalid=true]:!text-grey-dark-active",
+                                          "group-data-[disabled=true]:!text-grey-light-active",
+                                        ],
+                                        input: [
+                                          "text-grey-dark-active",
+                                          "placeholder:text-base placeholder:text-grey-light-active",
+                                          "group-data-[invalid=true]:!text-grey-dark-active",
+                                          "group-data-[disabled=true]:!text-grey-light-active",
+                                        ],
+                                        inputWrapper: [
+                                          "p-[8px]",
+                                          "bg-transparent",
+                                          "rounded-[8px]",
+                                          "border border-white-active",
+                                          "group-data-[hover=true]:bg-transparent",
+                                          "group-data-[focus=true]:bg-transparent group-data-[focus=true]:border-grey-dark-active",
+                                          "group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-transparent",
+                                          "group-data-[invalid=true]:!border-red-active group-data-[invalid=true]:!bg-red-light-hover",
+                                          "group-data-[disabled=true]:!bg-white-light-active",
+                                          "shadow-none",
+                                        ],
+                                        errorMessage: [
+                                          "text-[12px] text-red-active",
+                                        ],
+                                        helperWrapper: [
+                                          "p-0 pt-[2px]",
+                                        ],
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="basis-3/4">
+                                    <Select
+                                      placeholder="Choose one"
+                                      classNames={{
+                                        base: [
+                                          "text-base",
+                                          "opacity-100",
+                                        ],
+                                        trigger: [
+                                          "bg-transparent",
+                                          "rounded-[8px]",
+                                          "border border-white-active",
+                                          "text-base text-grey-light-active",
+                                          "data-[hover=true]:bg-transparent",
+                                          "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
+                                          "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
+                                        ],
+                                      }}
+                                    >
+                                      <SelectItem key={"daily"}>Daily</SelectItem>
+                                      <SelectItem key={"weekly"}>Weekly</SelectItem>
+                                      <SelectItem key={"monthly"}>Monthly</SelectItem>
+                                      <SelectItem key={"yearly"}>Yearly</SelectItem>
+                                    </Select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full border border-white-active bg-white-normal">
+                                  S
+                                </div>
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full border border-white-active bg-white-normal">
+                                  M
+                                </div>
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full border border-white-active bg-white-normal">
+                                  T
+                                </div>
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full bg-yellow-500 font-normal text-white">
+                                  W
+                                </div>
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full border border-white-active bg-white-normal">
+                                  T
+                                </div>
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full border border-white-active bg-white-normal">
+                                  F
+                                </div>
+                                <div role="button" className="flex size-[25px] justify-center items-center rounded-full border border-white-active bg-white-normal">
+                                  S
+                                </div>
+                              </div>
+
+                              <Select
+                                placeholder="Same day each month"
+                                classNames={{
+                                  base: [
+                                    "text-base",
+                                    "opacity-100",
+                                  ],
+                                  trigger: [
+                                    "bg-transparent",
+                                    "rounded-[8px]",
+                                    "border border-white-active",
+                                    "data-[hover=true]:bg-transparent",
+                                    "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
+                                    "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
+                                  ],
+                                }}
+                              >
+                                <SelectItem key={""}></SelectItem>
+                              </Select>
+                            </div>
+                            <Divider className="bg-white-active" />
+                            <div className="flex flex-col">
+                              <Checkbox
+                                size="sm"
+                                // value={view.value}
+                                disableAnimation={true}
+                                classNames={{
+                                  base: cn(
+                                    "inline-flex w-full max-w-md m-0",
+                                    "cursor-pointer rounded-0 gap-[10px] p-[10px] border-none",
+                                    "data-[selected=true]:border-yellow",
+                                  ),
+                                  wrapper: cn(
+                                    "mr-0 rtl:ml-0",
+                                    "text-white after:text-white",
+                                    "after:bg-yellow",
+                                    "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
+                                    "group-data-[focus-visible=true]:ring-yellow",
+                                  ),
+                                  label: cn("w-full"),
+                                }}
+                              >
+                                <div className="flex items-center gap-[10px]">
+                                  <div className="flex flex-1 items-center gap-[5px]">
+                                    Skip weekend
+                                  </div>
+                                </div>
+                              </Checkbox>
+                              <Checkbox
+                                size="sm"
+                                // value={view.value}
+                                disableAnimation={true}
+                                classNames={{
+                                  base: cn(
+                                    "inline-flex w-full max-w-md m-0",
+                                    "cursor-pointer rounded-0 gap-[10px] p-[10px] border-none",
+                                    "data-[selected=true]:border-yellow",
+                                  ),
+                                  wrapper: cn(
+                                    "mr-0 rtl:ml-0",
+                                    "text-white after:text-white",
+                                    "after:bg-yellow",
+                                    "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
+                                    "group-data-[focus-visible=true]:ring-yellow",
+                                  ),
+                                  label: cn("w-full"),
+                                }}
+                              >
+                                <div className="flex items-center gap-[10px]">
+                                  <div className="flex flex-1 items-center gap-[5px]">
+                                    Repeat forever
+                                  </div>
+                                </div>
+                              </Checkbox>
+                            </div>
+                            <Divider className="bg-white-active" />
+                            <div className="flex w-full p-[12px] justify-end items-center gap-[16px]">
+                              <MyButton
+                                variant="bordered"
+                                color="yellow"
+                                children="Cancel"
+                                // onPress={() => closeAllModals()}
+                                className="px-[18px]"
+                              />
+
+                              <MyButton
+                                color="yellow"
+                                children="Save"
+                                // onPress={() => closeAllModals()}
+                                className="px-[18px]"
+                              />
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                      <div className="flex w-full px-[10px] py-[8px] justify-between items-center">
+                        <div className="flex w-full h-[22px] items-center gap-[8px]">
+                          <Icon icon="solar:calendar-linear" height={16} />
+                          <div className="flex items-center" onClick={() => setTimeInputMode(true)}>
+                            10 December
+                          </div>
+                        </div>
+                        <div className="flex">
+                          <Icon icon="solar:minus-square-bold" height={16} style={{ color: "#B2BBC6" }} />
+                        </div>
+                      </div>
+                      <Divider className="bg-white-active" />
+                      <div className="flex w-full p-[12px] justify-end items-center gap-[12px]">
+                        <MyButton
+                          variant="bordered"
+                          color="yellow"
+                          children="Cancel"
+                          // onPress={() => closeAllModals()}
+                          className="px-[18px]"
+                        />
+
+                        <MyButton
+                          color="yellow"
+                          children="Save"
+                          // onPress={() => { setIsEmpty(false); closeAllModals(); }}
+                          className="px-[18px]"
+                        />
+                      </div>
                     </PopoverContent>
                   </Popover>
                   <Popover placement="bottom-start">
@@ -277,7 +596,10 @@ export default function TaskDetail() {
                           Priority
                         </div>
                         <div className="flex text-grey-lighter">
-                          Empty
+                          <div className="flex items-center gap-[8px]">
+                            <Icon icon="solar:flag-bold" height={16} style={{ color: "#F96E15" }} />
+                            <span className="text-grey-dark-active">Normal</span>
+                          </div>
                         </div>
                       </div>
                     </PopoverTrigger>
@@ -336,7 +658,7 @@ export default function TaskDetail() {
                           Tags
                         </div>
                         <div className="flex text-grey-lighter">
-                          Empty
+                          V 1.0
                         </div>
                       </div>
                     </PopoverTrigger>
@@ -445,22 +767,162 @@ export default function TaskDetail() {
                     key={1}
                     aria-label="Custom Field"
                     title="Custom Field"
-                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), }}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloremque, dolorem!
+                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                  >
+                    <div className="flex w-full pt-[12px]">
+                      <Table
+                        aria-label="Table custom field"
+                        classNames={{
+                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                          thead: "[&>tr]:first:rounded-none",
+                          th: "first:rounded-s-none last:rounded-e-none",
+                          td: "text-[12px]",
+                        }}
+                      >
+                        <TableHeader className="bg-white-normal">
+                          <TableColumn key={"field-name"} className="text-[12px] font-normal text-grey-lighter">Field Name</TableColumn>
+                          <TableColumn key={"type"} className="text-[12px] font-normal text-grey-lighter">Type</TableColumn>
+                          <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow key={"custom-field-1"}>
+                            <TableCell>Name</TableCell>
+                            <TableCell className="text-grey-lighter">Text</TableCell>
+                            <TableCell className="justify-items-end">
+                              <Avatar
+                                name="I"
+                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow key={"custom-field-2"}>
+                            <TableCell>Due Date</TableCell>
+                            <TableCell className="text-grey-lighter">Date</TableCell>
+                            <TableCell className="justify-items-end">
+                              <Avatar
+                                name="I"
+                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
                   </AccordionItem>
                   <AccordionItem
                     key={2}
                     aria-label="Attachment"
                     title="Attachment"
-                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), }}>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, numquam.
+                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                  >
+                    <div className="flex w-full pt-[12px]">
+                      <Table
+                        aria-label="Table attachment"
+                        classNames={{
+                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                          thead: "[&>tr]:first:rounded-none",
+                          th: "first:rounded-s-none last:rounded-e-none",
+                          td: "text-[12px]",
+                        }}
+                      >
+                        <TableHeader className="bg-white-normal">
+                          <TableColumn key={"name"} className="text-[12px] font-normal text-grey-lighter">Name</TableColumn>
+                          <TableColumn key={"size"} className="text-[12px] font-normal text-grey-lighter">Size</TableColumn>
+                          <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Date</TableColumn>
+                          <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow key={"attachment-1"}>
+                            <TableCell>
+                              <div className="flex items-center gap-[10px]">
+                                <Avatar
+                                  fallback={
+                                    <Icon icon="solar:gallery-linear" height={14} style={{ color: "var(--yellow-600)" }} />
+                                  }
+                                  classNames={{ base: "w-[24px] h-[24px] rounded-[4px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                />
+                                Screenshot.jpg
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-grey-lighter">15 KB</TableCell>
+                            <TableCell className="text-grey-lighter">01/01/24</TableCell>
+                            <TableCell className="justify-items-end">
+                              <Avatar
+                                name="I"
+                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow key={"attachment-2"}>
+                            <TableCell>
+                              <div className="flex items-center gap-[10px]">
+                                <Avatar
+                                  fallback={
+                                    <Icon icon="solar:gallery-linear" height={14} style={{ color: "var(--yellow-600)" }} />
+                                  }
+                                  classNames={{ base: "w-[24px] h-[24px] rounded-[4px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                />
+                                Screenshot.jpg
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-grey-lighter">15 KB</TableCell>
+                            <TableCell className="text-grey-lighter">01/01/24</TableCell>
+                            <TableCell className="justify-items-end">
+                              <Avatar
+                                name="I"
+                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
                   </AccordionItem>
                   <AccordionItem
                     key={3}
                     aria-label="Link"
                     title="Link"
-                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), }}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, distinctio?
+                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                  >
+                    <div className="flex w-full pt-[12px]">
+                      <Table
+                        aria-label="Table custom field"
+                        classNames={{
+                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                          thead: "[&>tr]:first:rounded-none",
+                          th: "first:rounded-s-none last:rounded-e-none",
+                          td: "text-[12px]",
+                        }}
+                      >
+                        <TableHeader className="bg-white-normal">
+                          <TableColumn key={"link"} className="text-[12px] font-normal text-grey-lighter">Link</TableColumn>
+                          <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Date</TableColumn>
+                          <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow key={"link-1"}>
+                            <TableCell>Survey</TableCell>
+                            <TableCell className="text-grey-lighter">01/01/2024</TableCell>
+                            <TableCell className="justify-items-end">
+                              <Avatar
+                                name="I"
+                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow key={"link-2"}>
+                            <TableCell>Survey</TableCell>
+                            <TableCell className="text-grey-lighter">01/01/2024</TableCell>
+                            <TableCell className="justify-items-end">
+                              <Avatar
+                                name="I"
+                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
                   </AccordionItem>
                 </Accordion>
               </div>
@@ -468,7 +930,7 @@ export default function TaskDetail() {
                 <MyButton
                   color="yellow"
                   children="Save"
-                  onPress={() => { closeModal("createTask"); openModal("taskDetail") }}
+                  onPress={() => { setIsEmpty(false); closeAllModals() }}
                   className="px-[24px]"
                 />
               </div>
