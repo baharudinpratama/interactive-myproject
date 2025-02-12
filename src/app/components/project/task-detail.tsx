@@ -4,7 +4,10 @@ import { Icon } from "@iconify-icon/react";
 import { parseDate } from "@internationalized/date";
 import type { TimeInputValue } from "@nextui-org/react";
 import {
-  Accordion, AccordionItem, Avatar, Button, Calendar, Checkbox, cn, Divider, getKeyValue, Input,
+  Accordion, AccordionItem, Avatar, Button, Calendar, Checkbox, cn,
+  Divider,
+  Image,
+  Input,
   Modal, ModalBody, ModalContent, ModalHeader,
   Popover, PopoverContent, PopoverTrigger,
   Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea, TimeInput
@@ -25,6 +28,8 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
   const [inputDescription, setInputDescription] = useState("");
   const [timeInputMode, setTimeInputMode] = useState(false);
   const [dueDateTime, setDueDateTime] = useState<TimeInputValue | null>(null);
+  const [selectedRightView, setSelectedRightView] = useState("act");
+  const [selectedBottomView, setSelectedBottomView] = useState("detail");
   const handleSelectAssignees = (assignee: string) => {
     setSelectedAssignees((prevAssignees) =>
       prevAssignees.includes(assignee)
@@ -748,183 +753,199 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
               <div className="flex flex-col">
                 <div className="flex items-center flex-1 border-b border-white-active">
                   <div
-                    className={clsx("flex px-[16px] py-[5px] items-center gap-[8px] self-stretch cursor-pointer font-semibold border-b-[1.5px] border-yellow-500", {
+                    onClick={() => setSelectedBottomView("detail")}
+                    className={clsx("flex px-[16px] py-[5px] items-center gap-[8px] self-stretch text-grey-lighter cursor-pointer", {
+                      "font-semibold border-b-[1.5px] border-yellow-500 !text-grey-dark-active": selectedBottomView === "detail",
                     })}>
                     <div className="flex flex-nowrap min-w-max items-center self-stretch">
                       Detail
                     </div>
                   </div>
                   <div
-                    className={clsx("flex px-[16px] py-[5px] items-center gap-[8px] self-stretch cursor-pointer", {
+                    onClick={() => setSelectedBottomView("subtask")}
+                    className={clsx("flex px-[16px] py-[5px] items-center gap-[8px] self-stretch text-grey-lighter cursor-pointer", {
+                      "font-semibold border-b-[1.5px] border-yellow-500 !text-grey-dark-active": selectedBottomView === "subtask",
                     })}>
-                    <div className="flex flex-nowrap min-w-max items-center self-stretch text-grey-lighter">
+                    <div className="flex flex-nowrap min-w-max items-center self-stretch">
                       Subtask
                     </div>
                   </div>
                 </div>
-                <Accordion showDivider={false} className="px-0">
-                  <AccordionItem
-                    key={1}
-                    aria-label="Custom Field"
-                    title="Custom Field"
-                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
-                  >
-                    <div className="flex w-full pt-[12px]">
-                      <Table
-                        aria-label="Table custom field"
-                        classNames={{
-                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
-                          thead: "[&>tr]:first:rounded-none",
-                          th: "first:rounded-s-none last:rounded-e-none",
-                          td: "text-[12px]",
-                        }}
-                      >
-                        <TableHeader className="bg-white-normal">
-                          <TableColumn key={"field-name"} className="text-[12px] font-normal text-grey-lighter">Field Name</TableColumn>
-                          <TableColumn key={"type"} className="text-[12px] font-normal text-grey-lighter">Type</TableColumn>
-                          <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow key={"custom-field-1"}>
-                            <TableCell>Name</TableCell>
-                            <TableCell className="text-grey-lighter">Text</TableCell>
-                            <TableCell className="justify-items-end">
-                              <Avatar
-                                name="I"
-                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                          <TableRow key={"custom-field-2"}>
-                            <TableCell>Due Date</TableCell>
-                            <TableCell className="text-grey-lighter">Date</TableCell>
-                            <TableCell className="justify-items-end">
-                              <Avatar
-                                name="I"
-                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </AccordionItem>
-                  <AccordionItem
-                    key={2}
-                    aria-label="Attachment"
-                    title="Attachment"
-                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
-                  >
-                    <div className="flex w-full pt-[12px]">
-                      <Table
-                        aria-label="Table attachment"
-                        classNames={{
-                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
-                          thead: "[&>tr]:first:rounded-none",
-                          th: "first:rounded-s-none last:rounded-e-none",
-                          td: "text-[12px]",
-                        }}
-                      >
-                        <TableHeader className="bg-white-normal">
-                          <TableColumn key={"name"} className="text-[12px] font-normal text-grey-lighter">Name</TableColumn>
-                          <TableColumn key={"size"} className="text-[12px] font-normal text-grey-lighter">Size</TableColumn>
-                          <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Date</TableColumn>
-                          <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow key={"attachment-1"}>
-                            <TableCell>
-                              <div className="flex items-center gap-[10px]">
+                {selectedBottomView === "detail" && (
+                  <Accordion showDivider={false} className="px-0">
+                    <AccordionItem
+                      key={1}
+                      aria-label="Custom Field"
+                      title="Custom Field"
+                      classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                    >
+                      <div className="flex w-full pt-[12px]">
+                        <Table
+                          aria-label="Table custom field"
+                          classNames={{
+                            wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                            thead: "[&>tr]:first:rounded-none",
+                            th: "first:rounded-s-none last:rounded-e-none",
+                            td: "text-[12px]",
+                          }}
+                        >
+                          <TableHeader className="bg-white-normal">
+                            <TableColumn key={"field-name"} className="text-[12px] font-normal text-grey-lighter">Field Name</TableColumn>
+                            <TableColumn key={"type"} className="text-[12px] font-normal text-grey-lighter">Type</TableColumn>
+                            <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow key={"custom-field-1"}>
+                              <TableCell>Name</TableCell>
+                              <TableCell className="text-grey-lighter">Text</TableCell>
+                              <TableCell className="justify-items-end">
                                 <Avatar
-                                  fallback={
-                                    <Icon icon="solar:gallery-linear" height={14} style={{ color: "var(--yellow-600)" }} />
-                                  }
-                                  classNames={{ base: "w-[24px] h-[24px] rounded-[4px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                  name="I"
+                                  classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
                                 />
-                                Screenshot.jpg
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-grey-lighter">15 KB</TableCell>
-                            <TableCell className="text-grey-lighter">01/01/24</TableCell>
-                            <TableCell className="justify-items-end">
-                              <Avatar
-                                name="I"
-                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                          <TableRow key={"attachment-2"}>
-                            <TableCell>
-                              <div className="flex items-center gap-[10px]">
+                              </TableCell>
+                            </TableRow>
+                            <TableRow key={"custom-field-2"}>
+                              <TableCell>Due Date</TableCell>
+                              <TableCell className="text-grey-lighter">Date</TableCell>
+                              <TableCell className="justify-items-end">
                                 <Avatar
-                                  fallback={
-                                    <Icon icon="solar:gallery-linear" height={14} style={{ color: "var(--yellow-600)" }} />
-                                  }
-                                  classNames={{ base: "w-[24px] h-[24px] rounded-[4px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                  name="I"
+                                  classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
                                 />
-                                Screenshot.jpg
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-grey-lighter">15 KB</TableCell>
-                            <TableCell className="text-grey-lighter">01/01/24</TableCell>
-                            <TableCell className="justify-items-end">
-                              <Avatar
-                                name="I"
-                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </AccordionItem>
+                    <AccordionItem
+                      key={2}
+                      aria-label="Attachment"
+                      title="Attachment"
+                      classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                    >
+                      <div className="flex w-full pt-[12px]">
+                        <Table
+                          aria-label="Table attachment"
+                          classNames={{
+                            wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                            thead: "[&>tr]:first:rounded-none",
+                            th: "first:rounded-s-none last:rounded-e-none",
+                            td: "text-[12px]",
+                          }}
+                        >
+                          <TableHeader className="bg-white-normal">
+                            <TableColumn key={"name"} className="text-[12px] font-normal text-grey-lighter">Name</TableColumn>
+                            <TableColumn key={"size"} className="text-[12px] font-normal text-grey-lighter">Size</TableColumn>
+                            <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Date</TableColumn>
+                            <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow key={"attachment-1"}>
+                              <TableCell>
+                                <div className="flex items-center gap-[10px]">
+                                  <Avatar
+                                    fallback={
+                                      <Icon icon="solar:gallery-linear" height={14} style={{ color: "var(--yellow-600)" }} />
+                                    }
+                                    classNames={{ base: "w-[24px] h-[24px] rounded-[4px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                  />
+                                  Screenshot.jpg
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-grey-lighter">15 KB</TableCell>
+                              <TableCell className="text-grey-lighter">01/01/24</TableCell>
+                              <TableCell className="justify-items-end">
+                                <Avatar
+                                  name="I"
+                                  classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow key={"attachment-2"}>
+                              <TableCell>
+                                <div className="flex items-center gap-[10px]">
+                                  <Avatar
+                                    fallback={
+                                      <Icon icon="solar:gallery-linear" height={14} style={{ color: "var(--yellow-600)" }} />
+                                    }
+                                    classNames={{ base: "w-[24px] h-[24px] rounded-[4px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                  />
+                                  Screenshot.jpg
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-grey-lighter">15 KB</TableCell>
+                              <TableCell className="text-grey-lighter">01/01/24</TableCell>
+                              <TableCell className="justify-items-end">
+                                <Avatar
+                                  name="I"
+                                  classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </AccordionItem>
+                    <AccordionItem
+                      key={3}
+                      aria-label="Link"
+                      title="Link"
+                      classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                    >
+                      <div className="flex w-full pt-[12px]">
+                        <Table
+                          aria-label="Table custom field"
+                          classNames={{
+                            wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                            thead: "[&>tr]:first:rounded-none",
+                            th: "first:rounded-s-none last:rounded-e-none",
+                            td: "text-[12px]",
+                          }}
+                        >
+                          <TableHeader className="bg-white-normal">
+                            <TableColumn key={"link"} className="text-[12px] font-normal text-grey-lighter">Link</TableColumn>
+                            <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Date</TableColumn>
+                            <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow key={"link-1"}>
+                              <TableCell>Survey</TableCell>
+                              <TableCell className="text-grey-lighter">01/01/2024</TableCell>
+                              <TableCell className="justify-items-end">
+                                <Avatar
+                                  name="I"
+                                  classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow key={"link-2"}>
+                              <TableCell>Survey</TableCell>
+                              <TableCell className="text-grey-lighter">01/01/2024</TableCell>
+                              <TableCell className="justify-items-end">
+                                <Avatar
+                                  name="I"
+                                  classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </AccordionItem>
+                  </Accordion>
+                )}
+                {selectedBottomView === "subtask" && (
+                  <div className="flex items-start min-h-[162px]">
+                    <div className="flex w-full p-[16px] items-center gap-[8px] text-grey-lighter cursor-pointer" onClick={() => openModal("createTask")}>
+                      <Icon icon="heroicons:plus" />
+                      <div className="flex items-center text-base">
+                        Add Task
+                      </div>
                     </div>
-                  </AccordionItem>
-                  <AccordionItem
-                    key={3}
-                    aria-label="Link"
-                    title="Link"
-                    classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
-                  >
-                    <div className="flex w-full pt-[12px]">
-                      <Table
-                        aria-label="Table custom field"
-                        classNames={{
-                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
-                          thead: "[&>tr]:first:rounded-none",
-                          th: "first:rounded-s-none last:rounded-e-none",
-                          td: "text-[12px]",
-                        }}
-                      >
-                        <TableHeader className="bg-white-normal">
-                          <TableColumn key={"link"} className="text-[12px] font-normal text-grey-lighter">Link</TableColumn>
-                          <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Date</TableColumn>
-                          <TableColumn key={"author"} className="text-end text-[12px] font-normal text-grey-lighter">Author</TableColumn>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow key={"link-1"}>
-                            <TableCell>Survey</TableCell>
-                            <TableCell className="text-grey-lighter">01/01/2024</TableCell>
-                            <TableCell className="justify-items-end">
-                              <Avatar
-                                name="I"
-                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                          <TableRow key={"link-2"}>
-                            <TableCell>Survey</TableCell>
-                            <TableCell className="text-grey-lighter">01/01/2024</TableCell>
-                            <TableCell className="justify-items-end">
-                              <Avatar
-                                name="I"
-                                classNames={{ base: "w-[24px] h-[24px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </AccordionItem>
-                </Accordion>
+                  </div>
+                )}
               </div>
               <div className="flex pt-[16px] justify-end items-center">
                 <MyButton
@@ -936,37 +957,151 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
               </div>
             </div>
             <div className="flex w-[338px] flex-col border-x border-white-active">
-              <div className="flex flex-col flex-1">
-                <div className="flex p-[16px] self-stretch font-semibold">
-                  Activity
+              {selectedRightView === "act" && (
+                <div className="flex flex-col flex-1">
+                  <div className="flex p-[16px] self-stretch font-semibold">
+                    Activity
+                  </div>
+                  <div className="flex h-full flex-1 bg-white-normal">
+                    <ul className="flex flex-col px-[16px] py-[12px] gap-[8px] flex-1">
+                      <li className="flex items-center gap-[8px] text-grey-lighter">
+                        <Icon icon="solar:dot-bold" height={6} style={{ color: "var(--grey-lighter)" }} />
+                        <div className="flex flex-1">You created this task.</div>
+                        2 min
+                      </li>
+                      <li className="flex items-center gap-[8px] text-grey-lighter">
+                        <Icon icon="solar:dot-bold" height={6} style={{ color: "var(--grey-lighter)" }} />
+                        <div className="flex flex-1">You updated this task.</div>
+                        1 min
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="flex h-full flex-1 bg-white-normal">
-                  <ul className="flex flex-col px-[16px] py-[12px] gap-[8px] flex-1">
-                    <li className="flex items-center gap-[8px] text-grey-lighter">
-                      <Icon icon="solar:dot-bold" height={6} style={{ color: "var(--grey-lighter)" }} />
-                      <div className="flex flex-1">You created this task.</div>
-                      2 min
-                    </li>
-                    <li className="flex items-center gap-[8px] text-grey-lighter">
-                      <Icon icon="solar:dot-bold" height={6} style={{ color: "var(--grey-lighter)" }} />
-                      <div className="flex flex-1">You updated this task.</div>
-                      1 min
-                    </li>
-                  </ul>
+              )}
+              {selectedRightView === "chat" && (
+                <div className="flex flex-col flex-1">
+                  <div className="flex p-[16px] self-stretch font-semibold">
+                    Message
+                  </div>
+                  <div className="flex h-full flex-1 bg-white-normal">
+                    <ul className="flex flex-col px-[16px] py-[12px] gap-[8px] flex-1">
+                      <li className="flex items-center gap-[8px]">
+                        <div className="flex items-center gap-[8px]">
+                          <Avatar
+                            name="I"
+                            classNames={{ base: "w-[20px] h-[20px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                          />
+                          <div className="text-base font-semibold">
+                            InterActive
+                          </div>
+                        </div>
+                      </li>
+                      <li className="flex items-center gap-[8px]">
+                        <div className="flex flex-1">Follow up this task.</div>
+                        <div className="flex text-grey-lighter">1 min</div>
+                      </li>
+                      <li className="flex items-center gap-[8px]">
+                        <div className="flex items-center gap-[8px]">
+                          <Avatar
+                            name="D"
+                            classNames={{ base: "w-[20px] h-[20px] bg-yellow-light-active", name: "text-base text-[10px] text-yellow-600" }}
+                          />
+                          <div className="text-base font-semibold">
+                            Dea Aurelia
+                          </div>
+                        </div>
+                      </li>
+                      <li className="flex items-center gap-[8px]">
+                        <div className="flex flex-1">Okay.</div>
+                        <div className="flex text-grey-lighter">1 min</div>
+                      </li>
+                      <li className="flex items-center gap-[8px]">
+                        <div className="flex flex-1">
+                          <Image src="/cuate.png" />
+                        </div>
+                        <div className="flex text-grey-lighter">1 min</div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="flex p-[16px] pb-[12px] self-stretch bg-white-normal">
+                    <Input
+                      labelPlacement="outside"
+                      startContent={
+                        <div className="flex items-center cursor-pointer">
+                          <Icon icon="solar:paperclip-linear" height={17} />
+                        </div>
+                      }
+                      endContent={
+                        <MyButton
+                          color="yellow"
+                          children="Send"
+                          // onPress={() => closeAllModals()}
+                          className="px-[18px]"
+                        />
+                      }
+                      placeholder={
+                        "Add a comment ..."
+                      }
+                      // value={iconSearchInput}
+                      // onValueChange={val => handleSearch(val)}
+                      classNames={{
+                        base: [
+                          "text-base",
+                          "bg-transparent",
+                          "group-data-[has-label=true]:mt-[27px]",
+                          "opacity-100",
+                        ],
+                        label: [
+                          "text-grey-dark-active",
+                          "group-data-[invalid=true]:!text-grey-dark-active",
+                          "group-data-[disabled=true]:!text-grey-light-active",
+                        ],
+                        input: [
+                          "text-grey-dark-active",
+                          "placeholder:text-grey-light-active",
+                          "group-data-[invalid=true]:!text-grey-dark-active",
+                          "group-data-[disabled=true]:!text-grey-light-active",
+                        ],
+                        inputWrapper: [
+                          "h-[52px]",
+                          "px-[10px] py-[8px]",
+                          "bg-white",
+                          "rounded-[8px]",
+                          "border border-white-normal-active",
+                          "group-data-[hover=true]:bg-white",
+                          "group-data-[focus=true]:bg-white group-data-[focus=true]:border-grey-dark-active",
+                          "group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-transparent",
+                          "group-data-[invalid=true]:!border-red-active group-data-[invalid=true]:!bg-red-light-hover",
+                          "group-data-[disabled=true]:!bg-white-light-active",
+                          "shadow-none",
+                        ],
+                        errorMessage: [
+                          "text-[12px] text-red-active",
+                        ],
+                        helperWrapper: [
+                          "p-0 pt-[2px]",
+                        ],
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="flex w-[52px] p-[8px] h-full flex-col items-center gap-[8px]">
-              <div className="flex flex-col items-center">
-                <div className="flex p-[8px] rounded-[8px] bg-yellow-100">
+              <div className="flex flex-col items-center cursor-pointer" onClick={() => setSelectedRightView("act")}>
+                <div className={clsx("flex p-[8px] rounded-[8px]", {
+                  "bg-yellow-100": selectedRightView === "act",
+                })}>
                   <Icon icon="solar:history-linear" height={18} style={{ color: "var(--yellow-600)" }} />
                 </div>
                 <div className="text-base !text-[12px]">
                   Act
                 </div>
               </div>
-              <div className="flex flex-col items-center">
-                <div className="flex p-[8px]">
+              <div className="flex flex-col items-center cursor-pointer" onClick={() => setSelectedRightView("chat")}>
+                <div className={clsx("flex p-[8px] rounded-[8px]", {
+                  "bg-yellow-100": selectedRightView === "chat",
+                })}>
                   <Icon icon="mynaui:chat-messages" height={18} style={{ color: "var(--yellow-600)" }} />
                 </div>
                 <div className="text-base !text-[12px]">

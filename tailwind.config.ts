@@ -31,6 +31,10 @@ const config: Config = {
           },
           lighter: "var(--grey-lighter)",
         },
+        light: {
+          alt: "var(--light-alt)",
+          secondary: "var(--light-secondary)",
+        },
         orange: {
           50: "var(--orange-50)",
         },

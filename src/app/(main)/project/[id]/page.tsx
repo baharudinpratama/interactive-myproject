@@ -2,6 +2,7 @@
 
 import Board from "@/app/components/project/board/board";
 import DemoApp from "@/app/components/project/calendar/fullcalendar/calendar-fullcalendar";
+import CreateTask from "@/app/components/project/create-task";
 import GanttMatematuk from "@/app/components/project/gantt/matematuk/gantt";
 import List from "@/app/components/project/list";
 import Overview from "@/app/components/project/overview/overview";
@@ -99,6 +100,8 @@ export default function Page({
           <GanttSyncfusion />
         )} */}
       </div>
+
+      <CreateTask />
     </>
   );
 }

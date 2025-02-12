@@ -85,7 +85,7 @@ export default function List() {
         </div>
       )}
 
-      <CreateTask />
+      {/* <CreateTask /> */}
       <TaskDetail setIsEmpty={setIsEmpty} />
     </>
   );

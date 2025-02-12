@@ -135,9 +135,9 @@ const DemoApp: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="flex w-full px-10 justify-start items-start gap-8">
-        <div className="w-3/12">
+    <>
+      <div className="flex w-[calc(100%+32px)] m-[-16px] justify-start items-start gap-8">
+        {/* <div className="w-3/12">
           <div className="pt-10 pb-4 text-2xl font-extrabold px-7">
             Calendar Events
           </div>
@@ -174,17 +174,16 @@ const DemoApp: React.FC = () => {
                 </li>
               ))}
           </ul>
-        </div>
+        </div> */}
 
-        <div className="w-9/12 mt-8">
+        <div className="w-full">
           <FullCalendar
             ref={calendarRef}
             height={"85vh"}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
             headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+              left: "title prev,next",
+              right: "timeGridDay,timeGridWeek,dayGridMonth,listWeek",
             }}
             initialView="dayGridMonth"
             editable={true}
@@ -195,6 +194,10 @@ const DemoApp: React.FC = () => {
             eventClick={handleEventClick}
             eventsSet={handleEvents}
             eventChange={handleEventChange}
+            dayHeaderFormat={{ weekday: "long" }}
+            eventColor="#F6F8F9"
+            eventTextColor="#090B0E"
+            allDayText="All Day"
           />
         </div>
       </div>
@@ -240,7 +243,7 @@ const DemoApp: React.FC = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 };
 

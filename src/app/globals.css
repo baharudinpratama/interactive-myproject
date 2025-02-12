@@ -11,6 +11,8 @@
   --grey-dark-active: #090b0e;
   --grey-lighter: #b2bbc6;
   --grey-light-active: #909dad;
+  --light-alt: #fefefe;
+  --light-secondary: #eee;
   --orange-50: #fff9f5;
   --red: #e20000;
   --red-active: #b50000;
@@ -43,6 +45,78 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Full calendar */
+.fc table {
+  @apply !border-[#EBEEF2];
+}
+
+.fc table.fc-scrollgrid {
+  @apply border-x-0 border-b-0 !border-t-3 !border-t-light-secondary;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  @apply m-0;
+}
+
+.fc-toolbar > .fc-toolbar-chunk:first-child {
+  @apply flex items-center;
+}
+
+.fc-toolbar-chunk > .fc-button-group > button {
+  @apply px-[18px] py-[8px] bg-white hover:bg-white;
+  @apply rounded-[8px] border-white-active hover:border-yellow-600;
+  @apply text-grey-lighter hover:text-grey-lighter;
+  @apply focus:!border-white-active focus:!bg-white focus:!text-grey-lighter focus:!ring-2 focus:!ring-current;
+}
+
+.fc-toolbar-chunk > .fc-button-group > button.fc-button-active {
+  @apply px-[18px] py-[8px] !bg-white hover:bg-white;
+  @apply rounded-[8px] !border-yellow-500 hover:!border-yellow-600;
+  @apply !text-yellow-500 hover:!text-yellow-500;
+  @apply focus:!border-yellow-500 focus:!bg-white focus:!text-yellow-500 focus:!ring-2 focus:!ring-current;
+}
+
+.fc-toolbar-title {
+  @apply min-w-[140px] py-[8px] px-[16px] !text-base;
+}
+
+.fc-button-primary.fc-prev-button,
+.fc-button-primary.fc-next-button {
+  @apply !p-0 bg-white border-none hover:bg-white focus:!bg-white focus:!ring-2 focus:!ring-current;
+}
+
+.fc .fc-button-group {
+  @apply !m-0 px-[16px] py-[8px] gap-[6px];
+}
+
+.fc-button-group > .fc-button {
+  @apply !rounded-[8px];
+}
+
+.fc-icon {
+  color: #b2bbc6;
+}
+
+/* .fc th .fc-col-header-cell {
+  @apply border-b-0;
+} */
+
+.fc th .fc-scrollgrid-sync-inner {
+  @apply px-[16px] py-[8px] !text-start !text-base font-semibold;
+}
+
+.fc th .fc-scrollgrid-sync-inner a {
+  @apply p-0;
+}
+
+.fc .fc-h-event .fc-event-main-frame {
+  @apply pl-[8px] rounded-l-[5px] border-l-[4px] border-grey-lighter;
+}
+
+.fc .fc-timegrid-divider {
+  @apply p-0;
 }
 
 @layer components {
