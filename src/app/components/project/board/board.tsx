@@ -1,7 +1,7 @@
 "use client";
 
 import { useModalContext } from "@/app/contexts/modal";
-import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, useDroppable } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor, MouseSensor, TouchSensor, useDroppable, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Icon } from "@iconify-icon/react";
@@ -29,6 +29,7 @@ type Task = {
 }
 
 const TaskCard = ({ task }: { task: Task }) => {
+  const { openModal } = useModalContext();
   const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: task.id,
     data: { task, type: "task" },
@@ -41,7 +42,12 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="flex flex-col w-full p-[8px] gap-[8px] rounded-[8px] bg-white">
-      <span className="text-[16px] font-semibold">{task.title}</span>
+      <div className="flex justify-between items-center">
+        <span className="text-[16px] font-semibold">{task.title}</span>
+        <div className="flex justify-center items-center" onClick={(e) => { e.stopPropagation(); openModal("deleteTask") }} >
+          <Icon icon="solar:trash-bin-trash-linear" height={16} style={{ color: "#E20000" }} />
+        </div>
+      </div>
       <div className="flex flex-col items-start self-stretch gap-[8px]">
         <div className="flex items-center gap-[10px]">
           <IconUser />
@@ -69,7 +75,7 @@ const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
   const { setNodeRef } = useDroppable({ id: column.id, data: { type: "column" } });
 
   return (
-    <div ref={setNodeRef} className="flex flex-col min-w-[240px] min-h-[80px] p-[4px] items-start gap-[4px] rounded-[8px] bg-white-hover">
+    <div ref={setNodeRef} className="flex flex-col min-w-[240px] max-h-min p-[4px] items-start gap-[4px] rounded-[8px] bg-white-hover">
       <div className="flex items-center gap-[8px]">
         <div className={`flex px-[8px] py-[4px] items-center gap-[8px] rounded-[8px]`} style={{ backgroundColor: column.color }}>
           <IconColumnTitle />
@@ -105,6 +111,20 @@ export default function Board() {
     { id: "task-3", columnId: "on-going", title: "Task 3", priority: "high", priorityColor: "#E20000" },
     { id: "task-4", columnId: "on-going", title: "Task 4", priority: "normal", priorityColor: "#F96E15" },
   ]);
+
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+  const touchSensor = useSensor(TouchSensor);
+  const keyboardSensor = useSensor(KeyboardSensor);
+
+  const sensors = useSensors(
+    mouseSensor,
+    touchSensor,
+    keyboardSensor,
+  );
 
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
@@ -172,7 +192,7 @@ export default function Board() {
   return (
     <div className="flex flex-col flex-1 self-stretch bg-white">
       <div className="flex flex-col gap-[16px] flex-1 self-stretch">
-        <DndContext onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd}>
+        <DndContext onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} sensors={sensors}>
           <div className="flex gap-[16px]">
             {columns.map(column => (<ColumnItem key={column.id} column={column} tasks={tasks.filter(task => task.columnId === column.id)} />))}
           </div>

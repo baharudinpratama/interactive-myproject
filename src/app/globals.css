@@ -119,6 +119,14 @@ body {
   @apply p-0;
 }
 
+.fc .fc-timegrid-slot-minor {
+  @apply border-t-0;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  @apply border-white-active;
+}
+
 @layer components {
   /* Scrollbar */
   ::-webkit-scrollbar {

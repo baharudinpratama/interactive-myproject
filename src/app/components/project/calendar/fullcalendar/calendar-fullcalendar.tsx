@@ -40,8 +40,7 @@ const DemoApp: React.FC = () => {
     tasks.forEach((task) => {
       let allDay = false;
       if (
-        task.start.toTimeString().startsWith("00:00:00") &&
-        task.end.toTimeString().startsWith("00:00:00")
+        task.start.toLocaleDateString() !== task.end.toLocaleDateString()
       ) {
         allDay = true;
       }

@@ -82,24 +82,27 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
             <div className="flex max-h-[652px] p-[16px] flex-col justify-start flex-1 overflow-y-auto">
               <div className="flex flex-col border-b border-white-active">
                 <div className="flex justify-between items-center self-stretch font-semibold">
-                  <div className="flex h-[24px] items-center" onClick={() => setRenameMode(true)}>
-                    {renameMode ? (
-                      <Input
-                        autoFocus={true}
-                        value={taskName}
-                        onValueChange={setTaskName}
-                        onBlur={() => setRenameMode(false)}
-                        onKeyDown={(e) => { e.key.toLowerCase() === "enter" && setRenameMode(false) }}
-                        fullWidth={false}
-                        classNames={{
-                          input: "text-base !text-yellow-500 font-bold",
-                          inputWrapper: [
-                            "min-h-max h-auto bg-yellow-light-active data-[hover=true]:bg-yellow-light-active group-data-[focus=true]:bg-yellow-light-active",
-                            "group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-transparent",
-                          ]
-                        }}
-                      />
-                    ) : taskName}
+                  <div className="flex items-center gap-[4px]">
+                    <Icon icon="cuida:subtask-outline" height={14} />
+                    <div className="flex h-[24px] items-center" onClick={() => setRenameMode(true)}>
+                      {renameMode ? (
+                        <Input
+                          autoFocus={true}
+                          value={taskName}
+                          onValueChange={setTaskName}
+                          onBlur={() => setRenameMode(false)}
+                          onKeyDown={(e) => { e.key.toLowerCase() === "enter" && setRenameMode(false) }}
+                          fullWidth={false}
+                          classNames={{
+                            input: "text-base !text-yellow-500 font-bold",
+                            inputWrapper: [
+                              "min-h-max h-auto bg-yellow-light-active data-[hover=true]:bg-yellow-light-active group-data-[focus=true]:bg-yellow-light-active",
+                              "group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-transparent",
+                            ]
+                          }}
+                        />
+                      ) : taskName}
+                    </div>
                   </div>
                   <Icon icon="solar:pen-2-linear" height={17} onClick={() => setRenameMode(false)} />
                 </div>

@@ -3,6 +3,7 @@
 import Board from "@/app/components/project/board/board";
 import DemoApp from "@/app/components/project/calendar/fullcalendar/calendar-fullcalendar";
 import CreateTask from "@/app/components/project/create-task";
+import DeleteTask from "@/app/components/project/delete-task";
 import GanttMatematuk from "@/app/components/project/gantt/matematuk/gantt";
 import List from "@/app/components/project/list";
 import Overview from "@/app/components/project/overview/overview";
@@ -60,7 +61,7 @@ export default function Page({
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M11 6.00004L6 6.00004M6 6.00004L1 6.00004M6 6.00004L6 1M6 6.00004L6 11" stroke="#B2BBC6" strokeWidth="1.25" strokeLinecap="round" />
             </svg>
-            <div className="flex h-full items-center self-stretch">
+            <div className="flex h-full items-center self-stretch text-grey-lighter">
               View
             </div>
           </div>
@@ -102,6 +103,7 @@ export default function Page({
       </div>
 
       <CreateTask />
+      <DeleteTask />
     </>
   );
 }
