@@ -65,11 +65,12 @@ export const CustomCheckbox = ({
           onClick={handleSwitchClick}
           aria-label={`Set ${view.label} as default view`}
           classNames={{
-            wrapper: "w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
+            wrapper: "px-[2px] py-[4px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
             thumb: [
               "w-[12px] h-[12px]",
+              "group-data-[hover=true]:border-yellow",
               "group-data-[pressed=true]:w-[12px]",
-              "group-data-[selected=true]:ml-[8px] rtl:group-data-[selected=true]:mr-[8px] group-data-[selected]:group-data-[pressed]:ml-[8px]",
+              "group-data-[selected=true]:ml-[12px] rtl:group-data-[selected=true]:mr-[12px] group-data-[selected]:group-data-[pressed]:ml-[12px]",
             ],
           }}
         />

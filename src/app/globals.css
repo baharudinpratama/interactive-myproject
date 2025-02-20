@@ -5,13 +5,16 @@
 :root {
   --background: #fff9f5;
   --foreground: #090b0e;
+  --dark-secondary: #a4a4a4;
   --green: #54af48;
   --grey: #546881;
+  --grey-25: #3c4043;
   --grey-active: #3d4c5e;
   --grey-dark-active: #090b0e;
   --grey-lighter: #b2bbc6;
   --grey-light-active: #909dad;
   --light-alt: #fefefe;
+  --light-primary: #f9f9f9;
   --light-secondary: #eee;
   --orange-50: #fff9f5;
   --red: #e20000;
@@ -123,7 +126,8 @@ body {
   @apply border-t-0;
 }
 
-.fc-theme-standard td, .fc-theme-standard th {
+.fc-theme-standard td,
+.fc-theme-standard th {
   @apply border-white-active;
 }
 
@@ -163,6 +167,12 @@ body {
     color: var(--white);
     background: var(--yellow);
   }
+
+  /* [data-range-selection="true"][data-selection-start="true"][data-selected="true"],
+  [data-range-selection="true"][data-selection-end="true"][data-selected="true"] {
+    color: var(--white);
+    background: var(--yellow) !important;
+  } */
 }
 
 @layer utilities {

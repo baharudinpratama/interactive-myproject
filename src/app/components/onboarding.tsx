@@ -8,12 +8,14 @@ import { Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from 
 import { useEffect, useState } from "react";
 
 export default function Onboarding() {
-  const { openModals, closeModal, closeAllModals, openModal } = useModalContext();
+  const { openModals, closeAllModals, openModal } = useModalContext();
   const [step, setStep] = useState(1);
+  const [plans] = useState(["Work", "Personal", "School"]);
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const [teamCategories] = useState(["Just Me", "2-50", "51-200", "201-500", "501-2000", "I don't know"]);
   const [solutions] = useState([
-    "Support", "Engineering & Product", "Sales & CRM", "Marketing", "PMO", "IT", "Creative & Design",
-    "Professional Services", "HR & Recruiting", "Operations", "Personal Use", "Finance & Accounting",
-    "Other"
+    "Support", "Engineering & Product", "Sales & CRM", "Marketing", "PMO", "IT", "Creative & Design", "Professional Services",
+    "HR & Recruiting", "Operations", "Personal Use", "Finance & Accounting", "Other",
   ]);
 
   useEffect(() => {
@@ -23,6 +25,23 @@ export default function Onboarding() {
       localStorage.setItem("hasSeenOnboarding", "true");
     }
   }, []);
+
+  const handleStep = (plan?: string) => {
+    if (plan) {
+      setSelectedPlan(plan);
+      if (plan === "Personal" && step === 1) {
+        return setStep(3);
+      }
+    }
+    setStep(step => step + 1);
+  }
+
+  const handleStepBack = () => {
+    if (selectedPlan === "Personal" && step === 3) {
+      return setStep(1);
+    }
+    setStep(step => step - 1);
+  }
 
   return (
     <Modal isOpen={openModals["onboarding"]} hideCloseButton={true} size="2xl">
@@ -43,27 +62,17 @@ export default function Onboarding() {
                       </div>
                     </div>
                     <div className="flex justify-center gap-[15px]">
-                      <MyButton
-                        variant="bordered"
-                        color="yellow"
-                        children="Work"
-                        onPress={() => setStep(step + 1)}
-                        className="px-[24px]"
-                      />
-                      <MyButton
-                        variant="bordered"
-                        color="yellow"
-                        children="Personal"
-                        onPress={() => setStep(step + 1)}
-                        className="px-[24px]"
-                      />
-                      <MyButton
-                        variant="bordered"
-                        color="yellow"
-                        children="School"
-                        onPress={() => setStep(step + 1)}
-                        className="px-[24px]"
-                      />
+                      {plans.map(plan => {
+                        return (
+                          <MyButton
+                            variant="bordered"
+                            color="yellow"
+                            children={plan}
+                            onPress={() => handleStep(plan)}
+                            className="px-[24px]"
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -78,48 +87,17 @@ export default function Onboarding() {
                     </div>
                     <div className="flex justify-center self-stretch">
                       <div className="grid grid-cols-3 min-w-[500px] gap-[15px]">
-                        <MyButton
-                          variant="bordered"
-                          color="yellow"
-                          children="Just Me"
-                          onPress={() => setStep(step + 1)}
-                          className="px-[24px]"
-                        />
-                        <MyButton
-                          variant="bordered"
-                          color="yellow"
-                          children="2-50"
-                          onPress={() => setStep(step + 1)}
-                          className="px-[24px]"
-                        />
-                        <MyButton
-                          variant="bordered"
-                          color="yellow"
-                          children="51-200"
-                          onPress={() => setStep(step + 1)}
-                          className="px-[24px]"
-                        />
-                        <MyButton
-                          variant="bordered"
-                          color="yellow"
-                          children="201-500"
-                          onPress={() => setStep(step + 1)}
-                          className="px-[24px]"
-                        />
-                        <MyButton
-                          variant="bordered"
-                          color="yellow"
-                          children="501-2000"
-                          onPress={() => setStep(step + 1)}
-                          className="px-[24px]"
-                        />
-                        <MyButton
-                          variant="bordered"
-                          color="yellow"
-                          children="I don't know"
-                          onPress={() => setStep(step + 1)}
-                          className="px-[24px]"
-                        />
+                        {teamCategories.map(teamCat => {
+                          return (
+                            <MyButton
+                              variant="bordered"
+                              color="yellow"
+                              children={teamCat}
+                              onPress={() => handleStep()}
+                              className="px-[24px]"
+                            />
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -142,7 +120,7 @@ export default function Onboarding() {
                               variant="bordered"
                               color="yellow"
                               children={solution}
-                              onPress={() => setStep(step + 1)}
+                              onPress={() => handleStep()}
                               className="px-[24px]"
                             />
                           );
@@ -181,7 +159,7 @@ export default function Onboarding() {
                   color="yellow"
                   startContent={<Icon icon="solar:alt-arrow-left-linear" />}
                   children="Back"
-                  onPress={() => setStep(step - 1)}
+                  onPress={() => handleStepBack()}
                   className="justify-start"
                 />
               )}

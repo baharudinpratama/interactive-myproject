@@ -17,11 +17,15 @@ const config: Config = {
       colors: {
         background: "var(--orange-50)",
         foreground: "var(--grey-dark-active)",
+        dark: {
+          secondary: "var(--dark-secondary)",
+        },
         green: {
           DEFAULT: "var(--green)",
         },
         grey: {
           DEFAULT: "var(--grey)",
+          25: "var(--grey-25)",
           active: "var(--grey-active)",
           dark: {
             active: "var(--grey-dark-active)",
@@ -33,6 +37,7 @@ const config: Config = {
         },
         light: {
           alt: "var(--light-alt)",
+          primary: "var(--light-primary)",
           secondary: "var(--light-secondary)",
         },
         orange: {

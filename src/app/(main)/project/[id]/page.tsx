@@ -7,6 +7,7 @@ import DeleteTask from "@/app/components/project/delete-task";
 import GanttMatematuk from "@/app/components/project/gantt/matematuk/gantt";
 import List from "@/app/components/project/list";
 import Overview from "@/app/components/project/overview/overview";
+import Workload from "@/app/components/project/workload";
 import { Icon } from "@iconify-icon/react";
 import { Divider } from "@nextui-org/react";
 import clsx from "clsx";
@@ -27,6 +28,7 @@ export default function Page({
     { id: "view-board", name: "Board", icon: "solar:align-top-linear" },
     { id: "view-calendar-fullcalendar", name: "Calendar", icon: "solar:calendar-linear" },
     { id: "view-gantt-matematuk", name: "Gantt", icon: "solar:align-left-linear" },
+    { id: "view-workload", name: "Workload", icon: "solar:spedometer-low-broken" },
     // { id: "view-calendar-dhtmlx", name: "Calendar DHTMLX", icon: "solar:calendar-linear" },
     // { id: "view-calendar-syncfusion", name: "Calendar Syncfusion", icon: "solar:calendar-linear" },
     // { id: "view-gantt-dhtmlx", name: "Gantt DHTMLX", icon: "solar:align-left-linear" },
@@ -87,6 +89,9 @@ export default function Page({
         )}
         {currentView === "view-gantt-matematuk" && (
           <GanttMatematuk />
+        )}
+        {currentView === "view-workload" && (
+          <Workload />
         )}
         {/* {currentView === "view-calendar-dhtmlx" && (
           <DHTMLXCalendar events={getData()} date={new Date()} />
