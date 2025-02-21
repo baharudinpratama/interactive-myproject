@@ -5,7 +5,7 @@ import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, K
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Icon } from "@iconify-icon/react";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import IconColumnTitle from "../icon-column-title";
@@ -48,7 +48,7 @@ const TaskCard = ({ task }: { task: Task }) => {
           <Icon icon="solar:trash-bin-trash-linear" height={16} style={{ color: "#E20000" }} />
         </div>
       </div>
-      <div className="flex flex-col items-start self-stretch gap-[8px]">
+      <div className="grid grid-rows-3 grid-flow-col self-stretch gap-[8px]">
         <div className="flex items-center gap-[10px]">
           <IconUser />
           <Avatar
@@ -64,6 +64,18 @@ const TaskCard = ({ task }: { task: Task }) => {
           <Icon icon="solar:flag-bold" height={16} style={{ color: task.priorityColor }} />
           {task.priority.toWellFormed()}
         </div>
+        <div className="flex items-center gap-[10px]">
+          <Icon icon="solar:tag-linear" height={16} style={{ color: "#B2BBC6" }} />
+          V 1.0
+        </div>
+        <div className="flex items-center gap-[10px]">
+          <Icon icon="solar:map-point-linear" height={16} style={{ color: "#B2BBC6" }} />
+          Surabaya
+        </div>
+        <div className="flex items-center gap-[10px]">
+          <Icon icon="solar:dollar-minimalistic-linear" height={16} style={{ color: "#B2BBC6" }} />
+          Rp. 50.000.000
+        </div>
       </div>
     </div>
   );
@@ -76,13 +88,19 @@ const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
 
   return (
     <div ref={setNodeRef} className="flex flex-col min-w-[240px] max-h-min p-[4px] items-start gap-[4px] rounded-[8px] bg-white-hover">
-      <div className="flex items-center gap-[8px]">
-        <div className={`flex px-[8px] py-[4px] items-center gap-[8px] rounded-[8px]`} style={{ backgroundColor: column.color }}>
-          <IconColumnTitle />
-          <span className="mix-blend-normal">{column.title}</span>
+      <div className="flex w-full justify-between items-center">
+        <div className="flex items-center gap-[8px]">
+          <div className={`flex px-[8px] py-[4px] items-center gap-[8px] rounded-[8px]`} style={{ backgroundColor: column.color }}>
+            <IconColumnTitle />
+            <span className="mix-blend-normal">{column.title}</span>
+          </div>
+
+          {column.count}
         </div>
 
-        {column.count}
+        <Button isIconOnly={true} fullWidth={false} className="p-0 w-[16px] h-[16px]">
+          <Icon icon="heroicons:plus" height={16} />
+        </Button>
       </div>
       <div className="flex flex-col self-stretch gap-[4px]">
         <SortableContext items={taskIds}>
