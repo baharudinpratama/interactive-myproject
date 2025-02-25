@@ -95,10 +95,12 @@ const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
             <span className="mix-blend-normal">{column.title}</span>
           </div>
 
-          {column.count}
+          <div className="flex">
+            {column.count}
+          </div>
         </div>
 
-        <Button isIconOnly={true} fullWidth={false} className="p-0 w-[16px] h-[16px]">
+        <Button variant="light" size="sm" isIconOnly={true} fullWidth={false} >
           <Icon icon="heroicons:plus" height={16} />
         </Button>
       </div>
@@ -109,8 +111,8 @@ const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
           ))}
         </SortableContext>
       </div>
-      <div className="p-[8px] w-full items-center gap-[18px] text-grey-lighter cursor-pointer" onClick={() => openModal("createTask")}>
-        + Add Task
+      <div className="p-[8px] w-full items-center gap-[18px]">
+        Total : Rp. 50.000.000
       </div>
     </div>
   );
@@ -213,6 +215,13 @@ export default function Board() {
         <DndContext onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} sensors={sensors}>
           <div className="flex gap-[16px]">
             {columns.map(column => (<ColumnItem key={column.id} column={column} tasks={tasks.filter(task => task.columnId === column.id)} />))}
+
+            <div className="flex max-h-min p-[8px] items-center gap-[8px] cursor-pointer">
+              <Icon icon="heroicons:plus" height={12} style={{ color: "#B2BBC6" }} />
+              <div className="flex items-center text-base text-grey-lighter">
+                New Status
+              </div>
+            </div>
           </div>
 
           {createPortal(
@@ -223,6 +232,7 @@ export default function Board() {
             </DragOverlay>,
             document.body
           )}
+
         </DndContext>
       </div>
     </div>
