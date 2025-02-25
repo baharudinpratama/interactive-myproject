@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(main)/project/**.jsx", "src/app/components/project/calendar/fullcalendar/calendar-fullcalendar.jsx", "src/app/components/project/calendar/dhtmlx/calendar-dhtmlx.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/[locale]/(main)/project/*src/app/[locale]/components/project/calendar/fullcalendar/calendar-fullcalendar.jsxendasrc/app/[locale]/components/project/calendar/dhtmlx/calendar-dhtmlx.jsxhtmlx.jsx"],
   "exclude": ["node_modules"]
 }
