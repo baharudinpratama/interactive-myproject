@@ -1,5 +1,3 @@
 {
-  "welcome": "Selamat datang di aplikasi kami!",
-  "dashboard": "Dasbor",
-  "logout": "Keluar"
+  "sign-in": "Masuk"
 }

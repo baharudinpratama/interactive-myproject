@@ -1,6 +1,6 @@
 "use client";
 
-import { registerIcons } from "./[locale]/components/register-icon";
+import { registerIcons } from "./components/register-icon";
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect } from "react";
