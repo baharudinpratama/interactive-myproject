@@ -152,7 +152,16 @@ export default function Page() {
           </div>
 
           <div className="flex w-full flex-col">
-            <Tabs aria-label="Views" variant="underlined" color="warning" selectedKey={selectedView} onSelectionChange={key => setSelectedView(key.toString())}>
+            <Tabs
+              aria-label="Views"
+              variant="underlined"
+              color="warning"
+              selectedKey={selectedView}
+              onSelectionChange={key => setSelectedView(key.toString())}
+              classNames={{
+                tabContent: "group-data-[selected=true]:text-foreground",
+              }}
+            >
               <Tab key="all" title="All">
                 <div className="flex p-[16px] flex-col self-stretch gap-[8px]">
                   <div role="button" className="flex items-center self-stretch gap-[8px]" onClick={() => setIsExpanded(prev => !prev)}>

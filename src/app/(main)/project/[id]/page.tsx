@@ -9,7 +9,7 @@ import List from "@/app/components/project/list";
 import Overview from "@/app/components/project/overview/overview";
 import Workload from "@/app/components/project/workload";
 import { Icon } from "@iconify-icon/react";
-import { Divider } from "@nextui-org/react";
+import { Divider, Tab, Tabs } from "@nextui-org/react";
 import clsx from "clsx";
 import { useState } from "react";
 // import { default as DHTMLXCalendar, getData } from "@/app/components/project/calendar/dhtmlx/calendar-dhtmlx";
@@ -41,7 +41,42 @@ export default function Page({
     <>
       <div className="flex justify-between items-center self-stretch border-b">
         <div className="flex items-center self-stretch">
-          <div className="flex max-w-[800px] items-center self-stretch overflow-x-auto">
+          <Tabs
+            aria-label="Views"
+            variant="underlined"
+            color="warning"
+            selectedKey={currentView}
+            onSelectionChange={key => setCurrentView(key.toString())}
+            classNames={{
+              tabList: "p-0 pl-[22px]",
+              tab: "p-0",
+              tabContent: "group-data-[selected=true]:text-foreground",
+            }}
+          >
+            {views.map(view => {
+              return (
+                <Tab key={view.id} title={
+                  <div className="flex px-[16px] py-[8px] items-center gap-[8px] self-stretch cursor-pointer">
+                    <Icon icon={view.icon} />
+                    <div className="flex flex-nowrap min-w-max items-center self-stretch">
+                      {view.name}
+                    </div>
+                  </div>
+                }>
+                </Tab>
+              );
+            })}
+          </Tabs>
+          <div className="flex py-[8px] self-stretch">
+            <Divider orientation="vertical" />
+          </div>
+          <div className="flex px-[16px] py-[8px] items-center gap-[8px] self-stretch cursor-pointer">
+            <Icon icon="heroicons:plus" height={14} style={{ color: "#B2BBC6" }} />
+            <div className="flex h-full items-center self-stretch text-grey-lighter">
+              View
+            </div>
+          </div>
+          {/* <div className="flex max-w-[800px] items-center self-stretch overflow-x-auto">
             {views.map((view) => (
               <div
                 key={view.id}
@@ -55,18 +90,7 @@ export default function Page({
                 </div>
               </div>
             ))}
-          </div>
-          <div className="flex py-[8px] self-stretch">
-            <Divider orientation="vertical" />
-          </div>
-          <div className="flex px-[16px] py-[8px] items-center gap-[8px] self-stretch">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M11 6.00004L6 6.00004M6 6.00004L1 6.00004M6 6.00004L6 1M6 6.00004L6 11" stroke="#B2BBC6" strokeWidth="1.25" strokeLinecap="round" />
-            </svg>
-            <div className="flex h-full items-center self-stretch text-grey-lighter">
-              View
-            </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
