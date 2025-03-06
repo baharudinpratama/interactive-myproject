@@ -146,7 +146,7 @@ export default function Workload() {
             <div
               className="flex w-full justify-center items-center text-white"
               style={{ height: `75%`, backgroundColor: "#F36B6D" }}
-            >75%</div>
+            ></div>
             <div
               className="flex w-full justify-center items-center text-white opacity-30"
               style={{ height: `25%`, backgroundColor: "#F36B6D" }}

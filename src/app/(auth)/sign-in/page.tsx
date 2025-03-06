@@ -6,7 +6,7 @@ import { useCountdownTimer } from "@/app/components/countdown-timer";
 import MyInput from "@/app/components/input";
 import { useLanguage } from "@/app/contexts/language";
 import { Icon } from "@iconify-icon/react";
-import { Image, Modal, ModalBody, ModalContent, Select, SelectItem } from "@nextui-org/react";
+import { Image, Modal, ModalBody, ModalContent, Select, SelectItem, Skeleton } from "@nextui-org/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -85,7 +85,9 @@ export default function Page() {
             <form className="flex flex-col w-[344px] gap-[16px] self-stretch" action="#">
               <div className="flex flex-col gap-[4px] self-stretch">
                 <div className="flex justify-center">
+                  {/* <Skeleton> */}
                   <Image src={"/logo-myproject-yellow.png"} alt={"logo-myproject"} width={192} height={56} radius="none" />
+                  {/* </Skeleton> */}
                 </div>
 
                 <p className="text-center text-grey-light-active">

@@ -10,7 +10,6 @@ import Overview from "@/app/components/project/overview/overview";
 import Workload from "@/app/components/project/workload";
 import { Icon } from "@iconify-icon/react";
 import { Divider, Tab, Tabs } from "@nextui-org/react";
-import clsx from "clsx";
 import { useState } from "react";
 // import { default as DHTMLXCalendar, getData } from "@/app/components/project/calendar/dhtmlx/calendar-dhtmlx";
 // import Calendar from "@/app/components/project/calendar/syncfusion/calendar";

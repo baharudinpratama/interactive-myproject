@@ -1,15 +1,17 @@
 "use client";
 
+import MyButton from "@/app/components/button";
 import { useModalContext } from "@/app/contexts/modal";
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor, MouseSensor, TouchSensor, useDroppable, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, Button } from "@nextui-org/react";
+import { Avatar, Button, Modal, ModalBody, ModalContent } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import IconColumnTitle from "../icon-column-title";
 import IconUser from "../icon-user";
+import type { Active, Over } from "@dnd-kit/core";
 
 type Id = string | number;
 
@@ -82,12 +84,11 @@ const TaskCard = ({ task }: { task: Task }) => {
 }
 
 const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
-  const { openModal } = useModalContext();
   const taskIds = useMemo(() => tasks.map(task => task.id), [tasks]);
   const { setNodeRef } = useDroppable({ id: column.id, data: { type: "column" } });
 
   return (
-    <div ref={setNodeRef} className="flex flex-col min-w-[240px] max-h-min p-[4px] items-start gap-[4px] rounded-[8px] bg-white-hover">
+    <div ref={setNodeRef} className="flex flex-col min-w-[240px] p-[4px] gap-[4px] rounded-[8px] bg-white-hover">
       <div className="flex w-full justify-between items-center">
         <div className="flex items-center gap-[8px]">
           <div className={`flex px-[8px] py-[4px] items-center gap-[8px] rounded-[8px]`} style={{ backgroundColor: column.color }}>
@@ -100,25 +101,82 @@ const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
           </div>
         </div>
 
-        <Button variant="light" size="sm" isIconOnly={true} fullWidth={false} >
-          <Icon icon="heroicons:plus" height={16} />
-        </Button>
+        <div className="flex">
+          <Button variant="light" size="sm" isIconOnly={true} fullWidth={false} >
+            <Icon icon="solar:menu-dots-bold" height={16} />
+          </Button>
+
+          <Button variant="light" size="sm" isIconOnly={true} fullWidth={false} >
+            <Icon icon="heroicons:plus" height={16} />
+          </Button>
+        </div>
       </div>
-      <div className="flex flex-col self-stretch gap-[4px]">
+      <div className="flex flex-col flex-1 gap-[4px]">
         <SortableContext items={taskIds}>
           {tasks.map(task => (
             <TaskCard key={task.id} task={task} />
           ))}
         </SortableContext>
       </div>
-      <div className="p-[8px] w-full items-center gap-[18px]">
+      <div className="flex p-[8px] w-full items-end gap-[18px]">
         Total : Rp. 50.000.000
       </div>
     </div>
   );
 }
 
+export function ConfirmModal({ onCancel, onConfirm }:
+  {
+    onCancel: () => void,
+    onConfirm: () => void
+  }) {
+  const { openModals } = useModalContext();
+
+  return (
+    <Modal isOpen={openModals["confirmModal"] ?? false} hideCloseButton={true} size="xs" className="w-[300px]">
+      <ModalContent className="overflow-visible">
+        <ModalBody className="px-[25px] py-[20px]">
+          <div className="flex flex-col gap-[16px]">
+            <div className="flex flex-col w-full">
+              <div className="flex items-center gap-[8px] self-stretch">
+                <div className="text-[16px] font-semibold">
+                  Move
+                </div>
+                <div className="flex">
+                  <Icon icon="solar:info-circle-bold" height={16} style={{ color: "var(--yellow)" }} />
+                </div>
+              </div>
+
+              <div className="text-grey-lighter text-base font-normal">
+                Are you sure to move this task?
+              </div>
+            </div>
+
+            <div className="flex w-full justify-center items-center gap-[12px]">
+              <MyButton
+                variant="bordered"
+                color="yellow"
+                children="Cancel"
+                onPress={onCancel}
+                className="w-full px-[24px]"
+              />
+              <MyButton
+                color="yellow"
+                children="Continue"
+                onPress={onConfirm}
+                className="w-full px-[24px]"
+              />
+            </div>
+          </div>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+}
+
 export default function Board() {
+  const { openModal, closeAllModals } = useModalContext();
+
   const [columns, setColumns] = useState<Column[]>([
     { id: "to-do", title: "TO DO", count: 2, color: "#B2BBC6" },
     { id: "on-going", title: "ON GOING", count: 2, color: "#F96E15" },
@@ -146,10 +204,12 @@ export default function Board() {
     keyboardSensor,
   );
 
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeTask, setActiveTask] = useState<Active | null>(null);
+  const [taskDropOver, setTaskDropOver] = useState<Over | null>(null);
 
   const onDragStart = (event: DragStartEvent) => {
-    setActiveTask(event.active.data.current?.task);
+    setActiveTask(event.active);
+    console.log(event.active)
     return;
   }
 
@@ -180,61 +240,103 @@ export default function Board() {
   }
 
   const onDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    const isOverColumn = over?.data.current?.type === "column";
-    const isOverTask = over?.data.current?.type === "task";
+    const { over } = event;
 
     if (!over) return;
 
-    if (isOverColumn) {
-      setTasks(tasks => {
-        const activeTaskIndex = tasks.findIndex(task => task.id === active.id);
+    setTaskDropOver(over);
 
-        tasks[activeTaskIndex].columnId = over?.id;
+    openModal("confirmModal");
 
-        return arrayMove(tasks, activeTaskIndex, 0);
-      });
-    }
+    // if (isOverColumn) {
+    //   setTasks(tasks => {
+    //     const activeTaskIndex = tasks.findIndex(task => task.id === active.id);
 
-    if (isOverTask) {
-      setTasks(tasks => {
-        const activeTaskIndex = tasks.findIndex(task => task.id === active.id);
-        const overTaskIndex = tasks.findIndex(task => task.id === over?.id);
+    //     tasks[activeTaskIndex].columnId = over?.id;
 
-        tasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId
+    //     return arrayMove(tasks, activeTaskIndex, 0);
+    //   });
+    // }
 
-        return arrayMove(tasks, activeTaskIndex, overTaskIndex);
-      });
-    }
+    // if (isOverTask) {
+    //   setTasks(tasks => {
+    //     const activeTaskIndex = tasks.findIndex(task => task.id === active.id);
+    //     const overTaskIndex = tasks.findIndex(task => task.id === over?.id);
+
+    //     tasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId
+
+    //     return arrayMove(tasks, activeTaskIndex, overTaskIndex);
+    //   });
+    // }
+  }
+
+  const handleMoveCancel = () => {
+    setTasks(tasks => {
+      const activeTaskIndex = tasks.findIndex(task => task.id === activeTask?.data.current?.task.id);
+
+      tasks[activeTaskIndex].columnId = activeTask?.data.current?.task.columnId as string;
+
+      return arrayMove(tasks, activeTask?.data.current?.sortable.index, activeTask?.data.current?.sortable.index as number);
+    });
+    closeAllModals();
+  }
+
+  const handleMoveConfirm = () => {
+    // if (taskDropOver?.data.current?.type === "column") {
+    //   setTasks(tasks => {
+    //     const activeTaskIndex = tasks.findIndex(task => task.id === activeTask?.id);
+
+    //     tasks[activeTaskIndex].columnId = taskDropOver?.id;
+
+    //     return arrayMove(tasks, activeTaskIndex, 0);
+    //   });
+    // }
+
+    console.log(tasks)
+    // if (taskDropOver?.data.current?.type === "column") {
+    //   setTasks(tasks => {
+    //     const activeTaskIndex = tasks.findIndex(task => task.id === activeTask?.id);
+    //     const overTaskIndex = tasks.findIndex(task => task.id === taskDropOver?.data.current?.id);
+
+    //     tasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId
+
+    //     return arrayMove(tasks, activeTaskIndex, overTaskIndex);
+    //   });
+    // }
+
+    closeAllModals();
   }
 
   return (
-    <div className="flex flex-col flex-1 self-stretch bg-white">
-      <div className="flex flex-col gap-[16px] flex-1 self-stretch">
-        <DndContext onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} sensors={sensors}>
-          <div className="flex gap-[16px]">
-            {columns.map(column => (<ColumnItem key={column.id} column={column} tasks={tasks.filter(task => task.columnId === column.id)} />))}
+    <>
+      <div className="flex flex-col flex-1 self-stretch bg-white">
+        <div className="flex flex-col gap-[16px] flex-1 self-stretch">
+          <DndContext onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} sensors={sensors}>
+            <div className="flex h-full gap-[16px]">
+              {columns.map(column => (<ColumnItem key={column.id} column={column} tasks={tasks.filter(task => task.columnId === column.id)} />))}
 
-            <div className="flex max-h-min p-[8px] items-center gap-[8px] cursor-pointer">
-              <Icon icon="heroicons:plus" height={12} style={{ color: "#B2BBC6" }} />
-              <div className="flex items-center text-base text-grey-lighter">
-                New Status
+              <div className="flex max-h-min p-[8px] items-center gap-[8px] cursor-pointer">
+                <Icon icon="heroicons:plus" height={12} style={{ color: "#B2BBC6" }} />
+                <div className="flex items-center text-base text-grey-lighter">
+                  New Status
+                </div>
               </div>
             </div>
-          </div>
 
-          {createPortal(
-            <DragOverlay>
-              {activeTask && (
-                <TaskCard task={activeTask} />
-              )}
-            </DragOverlay>,
-            document.body
-          )}
+            {createPortal(
+              <DragOverlay>
+                {activeTask && (
+                  <TaskCard task={activeTask.data.current?.task} />
+                )}
+              </DragOverlay>,
+              document.body
+            )}
 
-        </DndContext>
+          </DndContext>
+        </div>
       </div>
-    </div>
+
+      <ConfirmModal onCancel={handleMoveCancel} onConfirm={handleMoveConfirm} />
+    </>
   );
 }

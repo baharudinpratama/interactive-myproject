@@ -3,7 +3,7 @@
 import MyButton from "@/app/components/button";
 import { useWorkspaceContext } from "@/app/contexts/workspace";
 import { Icon } from "@iconify-icon/react";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, AvatarGroup, cn } from "@nextui-org/react";
 import { Gantt, Task, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import { useEffect, useState } from "react";
@@ -306,10 +306,38 @@ export default function GanttMatematuk() {
                     {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(formattedTask.end)}
                   </div>
                   <div className="flex min-w-[100px] p-[8px] items-center">
-                    <Avatar
-                      name="IA"
-                      classNames={{ base: "w-[20px] h-[20px] bg-[#ECEFFF]", name: "text-base text-[8px] text-[#6985FF]" }}
-                    />
+                    <AvatarGroup>
+                      <Avatar
+                        name="I"
+                        classNames={{
+                          base: cn(
+                            "w-[24px] h-[24px] border border-white bg-yellow-light-active",
+                            "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
+                          ),
+                          name: "text-base text-[10px] text-yellow-600"
+                        }}
+                      />
+                      <Avatar
+                        name="D"
+                        classNames={{
+                          base: cn(
+                            "w-[24px] h-[24px] border border-white bg-yellow-light-active",
+                            "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
+                          ),
+                          name: "text-base text-[10px] text-yellow-600"
+                        }}
+                      />
+                      <Avatar
+                        name="B"
+                        classNames={{
+                          base: cn(
+                            "w-[24px] h-[24px] border border-white bg-yellow-light-active",
+                            "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
+                          ),
+                          name: "text-base text-[10px] text-yellow-600"
+                        }}
+                      />
+                    </AvatarGroup>
                   </div>
                 </div>
               );

@@ -10,7 +10,7 @@ import {
   Input,
   Modal, ModalBody, ModalContent, ModalHeader,
   Popover, PopoverContent, PopoverTrigger,
-  Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea, TimeInput
+  Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs, Textarea, TimeInput
 } from "@nextui-org/react";
 import type { DateValue } from "@react-types/calendar";
 import clsx from "clsx";
@@ -785,7 +785,32 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
               </div>
               <div className="flex h-[30px]"></div>
               <div className="flex flex-col">
-                <div className="flex items-center flex-1 border-b border-white-active">
+                <div className="flex items-center self-stretch">
+                  <Tabs
+                    aria-label="Views"
+                    variant="underlined"
+                    color="warning"
+                    selectedKey={selectedBottomView}
+                    onSelectionChange={key => setSelectedBottomView(key.toString())}
+                    classNames={{
+                      tabList: "p-0",
+                      tab: "p-0",
+                      tabContent: "group-data-[selected=true]:text-foreground",
+                    }}
+                  >
+                    <Tab key="detail" title={
+                      <div className="flex px-[16px] py-[8px] items-center gap-[8px] self-stretch cursor-pointer">
+                        Detail
+                      </div>
+                    }></Tab>
+                    <Tab key="subtask" title={
+                      <div className="flex px-[16px] py-[8px] items-center gap-[8px] self-stretch cursor-pointer">
+                        Subtask
+                      </div>
+                    }></Tab>
+                  </Tabs>
+                </div>
+                {/* <div className="flex items-center flex-1 border-b border-white-active">
                   <div
                     onClick={() => setSelectedBottomView("detail")}
                     className={clsx("flex px-[16px] py-[5px] items-center gap-[8px] self-stretch text-grey-lighter cursor-pointer", {
@@ -804,7 +829,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                       Subtask
                     </div>
                   </div>
-                </div>
+                </div> */}
                 {selectedBottomView === "detail" && (
                   <Accordion showDivider={false} className="px-0">
                     <AccordionItem
