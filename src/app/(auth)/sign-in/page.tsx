@@ -6,7 +6,8 @@ import { useCountdownTimer } from "@/app/components/countdown-timer";
 import MyInput from "@/app/components/input";
 import { useLanguage } from "@/app/contexts/language";
 import { Icon } from "@iconify-icon/react";
-import { Image, Modal, ModalBody, ModalContent, Select, SelectItem, Skeleton } from "@nextui-org/react";
+import { Image, Modal, ModalBody, ModalContent, Select, SelectItem } from "@nextui-org/react";
+import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,6 +18,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const t = useTranslations();
   const { locale, setLocale } = useLanguage();
+  const { data: session } = useSession();
 
   const [openModals, setOpenModals] = useState<boolean[]>([]);
 
@@ -74,7 +76,13 @@ export default function Page() {
     if (searchParams.has("use-password")) {
       router.replace("/sign-in");
     }
-  }, [router]);
+
+    console.log(session?.user);
+
+    if (session) {
+      router.push("/dashboard");
+    }
+  }, [router, session]);
 
   return (
     <>
@@ -174,7 +182,7 @@ export default function Page() {
                     startContent={
                       <Image src={"/icon-google-gray.png"} alt={"google-icon"} height={16} radius="none" />
                     }
-                    onPress={() => router.push("/dashboard")}
+                    onPress={() => signIn("google", { callbackUrl: "/dashboard" })}
                     children="Sign in with Google"
                   />
                 </div>

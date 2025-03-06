@@ -3,16 +3,22 @@
 import Breadcrumb from "@/app/components/breadcrumb";
 import { Icon } from "@iconify-icon/react";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const router = useRouter();
+  const session = useSession();
 
   return (
     <div className="flex p-[16px] items-center gap-[16px] self-stretch border-b border-white-active">
       <div className="flex flex-1">
         <Breadcrumb />
       </div>
+
+      Welcome, {
+        session?.data?.user?.name
+      }
 
       <Dropdown>
         <DropdownTrigger>
@@ -25,7 +31,7 @@ export default function Navbar() {
           </div>
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions">
-          <DropdownItem key="logout" onClick={() => router.push('/sign-in')}>
+          <DropdownItem key="logout" onClick={() => signOut({ callbackUrl: "/sign-in" })}>
             Log Out
           </DropdownItem>
         </DropdownMenu>
