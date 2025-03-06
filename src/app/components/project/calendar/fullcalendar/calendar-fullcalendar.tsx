@@ -8,8 +8,7 @@ import {
   EventApi,
   EventChangeArg,
   EventClickArg,
-  EventInput,
-  formatDate,
+  EventInput
 } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -40,7 +39,7 @@ const DemoApp: React.FC = () => {
     tasks.forEach((task) => {
       let allDay = false;
       if (
-        task.start.toLocaleDateString() !== task.end.toLocaleDateString()
+        task.start !== task.end
       ) {
         allDay = true;
       }
@@ -58,7 +57,7 @@ const DemoApp: React.FC = () => {
       calendarApi.removeAllEvents();
       events.forEach(event => calendarApi.addEvent(event));
     }
-  }, [tasks]);
+  }, []);
 
   const handleDateClick = (selected: DateSelectArg) => {
     setSelectedDate(selected);

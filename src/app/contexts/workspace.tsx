@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
 export type Workspace = {
   id: string;
@@ -192,22 +192,51 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
     );
   };
 
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch("/api/calendar");
+      const data = await response.json();
+
+      if (!data.items) return;
+
+      data.items.forEach((item: any) => {
+        if (item.start && item.end) {
+          if (item.start.dateTime && item.end.dateTime) {
+            addTask({
+              id: item.id,
+              name: item.summary,
+              start: new Date(item.start.dateTime),
+              end: new Date(item.end.dateTime),
+              type: "task",
+            });
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching calendar events:", error);
+    }
+  };
+
+  useEffect(() => {
+    // fetchEvents();
+  }, []);
+
   const addTask = (task: Partial<Task>) => {
     const generatedId = `task-${new Date().getTime()}`
     if (task.start && task.end && task.name && task.type) {
-      const prepTask = {
+      const newTask = {
         start: task.start,
         end: task.end,
         name: task.name,
-        id: generatedId,
+        id: task.id ?? generatedId,
         progress: 0,
         type: task.type,
         dependencies: task.dependencies,
         project: task.project,
         displayOrder: task.displayOrder,
       }
-      tasks.push(prepTask);
-      setTasks(tasks);
+
+      setTasks((prevTasks) => [...prevTasks, newTask]);
 
       if (task.project) {
         const relatedProjectTasks = getProjectById(task.project)?.tasks;
@@ -267,131 +296,3 @@ export const useWorkspaceContext = (): WorkspaceContextType => {
   }
   return context;
 };
-
-// const getProjectDateRangeById = (projectId: string) => {
-//   const project = getProjectById(projectId);
-
-//   if (!project || !project.tasks || project.tasks.length === 0) {
-//     return { start: undefined, end: undefined, startTaskId: undefined, endTaskId: undefined };
-//   }
-
-//   const validTasks = project.tasks.filter(task => task.start && task.end);
-
-//   if (validTasks.length === 0) {
-//     return { start: undefined, end: undefined, startTaskId: undefined, endTaskId: undefined };
-//   }
-
-//   const earliestTask = validTasks.reduce((earliest, task) =>
-//     task.start.getTime() < earliest.start.getTime() ? task : earliest
-//   );
-
-//   const latestTask = validTasks.reduce((latest, task) =>
-//     task.end.getTime() > latest.end.getTime() ? task : latest
-//   );
-
-//   return {
-//     start: earliestTask.start,
-//     end: latestTask.end,
-//     startTaskId: earliestTask.id,
-//     endTaskId: latestTask.id,
-//   };
-// };
-
-// const getProjectById = (projectId: string): Project | undefined => {
-//   for (const workspace of workspaces) {
-//     const project = workspace.projects.find(project => project.id === projectId);
-//     if (project) {
-//       return project;
-//     }
-//   }
-//   return undefined;
-// };
-
-// const updateProject = (projectId: string, updates: Partial<Project>) => {
-//   const updatedWorkspaces = workspaces.map(workspace => ({
-//     ...workspace,
-//     projects: workspace.projects.map(project =>
-//       project.id === projectId
-//         ? { ...project, ...updates }
-//         : project
-//     )
-//   }));
-//   setWorkspaces(updatedWorkspaces);
-// };
-
-// const getTaskById = (taskId: string): Task | undefined => {
-//   for (const workspace of workspaces) {
-//     for (const project of workspace.projects) {
-//       const task = project.tasks.find(task => task.id === taskId);
-//       if (task) {
-//         return task;
-//       }
-//     }
-//   }
-//   return undefined;
-// };
-
-// const updateTask = (taskId: string, updates: Partial<Task>) => {
-//   if (updates.end) {
-//     const date = new Date(updates.end);
-//     if (isNaN(date.getTime())) {
-//       delete updates.end;
-//     }
-//   }
-
-//   const task = getTaskById(taskId);
-//   if (task?.project) {
-//       const projectDates = getProjectDateRangeById(task.project as string);
-//       let projectUpdates: Partial<Project> = {};
-
-//       if (updates.start) {
-//         if (projectDates.startTaskId === taskId && projectDates.start?.getTime() !== updates.start.getTime()) {
-//           projectUpdates.start = updates.start;
-//         } else if (projectDates.start && projectDates.start.getTime() > updates.start.getTime()) {
-//           projectUpdates.start = updates.start;
-//         } else if (projectDates.start && projectDates.start.getTime() < updates.start.getTime()) {
-//           projectUpdates.start = projectDates.start;
-//         }
-//       }
-
-//       const updatedWorkspaces = workspaces.map(workspace => ({
-//         ...workspace,
-//         projects: workspace.projects.map(project =>
-//           project.id === task.project
-//             ? {
-//               ...project,
-//               ...projectUpdates,
-//               tasks: project.tasks.map(task =>
-//                 task.id === taskId ? { ...task, ...updates } : task
-//               ),
-//             }
-//             : project
-//         ),
-//       }));
-
-//       return setWorkspaces(updatedWorkspaces);
-
-//     const updatedWorkspaces = workspaces.map(workspace => ({
-//       ...workspace,
-//       projects: workspace.projects.map(project => ({
-//         ...project,
-//         tasks: project.tasks.map(task =>
-//           task.id === taskId ? { ...task, ...updates } : task
-//         ),
-//       })),
-//     }));
-//     setWorkspaces(updatedWorkspaces);
-//   }
-// };
-
-
-// const deleteTask = (taskId: string) => {
-//   const updatedWorkspaces = workspaces.map(workspace => ({
-//     ...workspace,
-//     projects: workspace.projects.map(project => ({
-//       ...project,
-//       tasks: project.tasks.filter(task => task.id !== taskId)
-//     }))
-//   }));
-//   setWorkspaces(updatedWorkspaces);
-// };
