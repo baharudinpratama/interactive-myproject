@@ -25,16 +25,19 @@ export default function Page() {
   if (loading) return <p>Loading events...</p>;
 
   return (
-    <div>
-      <h2 className="text-xl font-bold">Google Calendar Events</h2>
+    <div className="p-[16px] w-full overflow-auto">
       {events.length === 0 ? (
         <p>No upcoming events.</p>
       ) : (
         <ul>
           {events.map((event) => (
             <li key={event.id} className="p-2 border-b">
-              <strong>{event.summary}</strong>
-              {/* - {new Date(event.start.dateTime).toLocaleString()} */}
+              <>{event.summary}</>
+              {
+                event.start && event.start.dateTime !== "Invalid date" ?
+                new Date(event.start.dateTime).toLocaleString()
+                : ""
+              }
             </li>
           ))}
         </ul>

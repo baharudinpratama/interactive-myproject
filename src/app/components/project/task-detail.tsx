@@ -65,7 +65,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
               </div>
               <Divider orientation="vertical" />
               <div className="flex w-[28px] justify-end items-center">
-                <button type="button" onClick={() => openModal("closeModal")}>
+                <button type="button" onClick={() => openModal("closeModal")} className="mr-1">
                   <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 11 11" fill="none">
                     <path d="M9.9583 1.00004L1 9.95833M0.999962 1L9.95826 9.9583" stroke="#090B0E" strokeWidth="2" strokeLinecap="round" />
                   </svg>
