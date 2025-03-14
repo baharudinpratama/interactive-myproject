@@ -24,7 +24,7 @@ export default function List() {
             <MyButton
               color="yellow"
               size="lg"
-              children="Create List"
+              children="Create Task"
               onPress={() => openModal("createTask")}
               className="px-[30px]"
             />

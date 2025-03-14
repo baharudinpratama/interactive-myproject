@@ -4,21 +4,22 @@ import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Button, Divider, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs } from "@nextui-org/react";
+import { Button, Checkbox, cn, Divider, Input, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalHeader, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs } from "@nextui-org/react";
 import { useState } from "react";
 
-export function SettingTeam() {
+export function SettingCustomField() {
   const { openModals, openModal, closeAllModals } = useModalContext();
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   return (
-    <Modal isOpen={openModals["settingTeam"] ?? false} hideCloseButton={true} size="xl">
+    <Modal isOpen={openModals["settingCustomField"] ?? false} hideCloseButton={true} size="xl">
       <ModalContent className="overflow-visible">
         <ModalHeader className="px-[25px] py-[20px]">
           <div className="flex flex-col w-full">
             <div className="flex items-center gap-[8px] self-stretch">
               <div className="flex flex-1 items-center gap-[8px]">
                 <div className="text-[16px] font-semibold">
-                  Setting Team
+                  Create New Field
                 </div>
                 <div className="flex">
                   <Icon icon="solar:info-circle-bold" height={16} style={{ color: "var(--yellow)" }} />
@@ -33,7 +34,7 @@ export function SettingTeam() {
             </div>
 
             <div className="text-grey-lighter text-base font-normal">
-              Manage and configure your team settings to enhance collaboration and define roles effectively.
+              {/* Manage and configure your team settings to enhance collaboration and define roles effectively. */}
             </div>
           </div>
         </ModalHeader>
@@ -41,32 +42,22 @@ export function SettingTeam() {
         <Divider />
 
         <ModalBody className="px-[25px] py-[20px]">
-          <div className="flex flex-col gap-[12px] self-stretch">
+          <div className="flex flex-col gap-[20px] self-stretch">
             <MyInput
               id="name"
               name="name"
-              label="Name"
+              label="Field Name"
               placeholder="Enter Name"
               // value={nameInput}
               // onValueChange={setNameInput}
               maxLength={254}
             />
 
-            <MyInput
-              id="email"
-              name="email"
-              type="email"
-              label="Email"
-              placeholder="Enter Email"
-              // value={nameInput}
-              // onValueChange={setNameInput}
-              maxLength={254}
-            />
-
             <Select
-              label="Project"
+              selectionMode="multiple"
+              label="Field Type"
               labelPlacement="outside"
-              placeholder="Choose one"
+              placeholder="Select field type"
               classNames={{
                 base: [
                   "text-base",
@@ -86,42 +77,193 @@ export function SettingTeam() {
                 ],
               }}
             >
-              <SelectItem key={"project-1"}>Project 1</SelectItem>
+              <SelectItem key={"checkbox"}>
+                <div className="flex items-center gap-[8px]">
+                  <Icon icon="solar:check-square-linear" height={16} />
+                  Checkbox
+                </div>
+              </SelectItem>
+              <SelectItem key={"date"}>
+                <div className="flex items-center gap-[8px]">
+                  <Icon icon="solar:calendar-date-linear" height={16} />
+                  Date
+                </div>
+              </SelectItem>
+              <SelectItem key={"dropdown"}>
+                <div className="flex items-center gap-[8px]">
+                  <Icon icon="solar:square-arrow-down-linear" height={16} />
+                  Dropdown
+                </div>
+              </SelectItem>
+              <SelectItem key={"files"}>
+                <div className="flex items-center gap-[8px]">
+                  <Icon icon="solar:paperclip-linear" height={16} />
+                  Files
+                </div>
+              </SelectItem>
             </Select>
 
-            <Select
-              label="Type"
-              labelPlacement="outside"
-              placeholder="Choose one"
-              classNames={{
-                base: [
-                  "text-base",
-                  "opacity-100",
-                ],
-                trigger: [
-                  "h-[46px]",
-                  "p-[14px]",
-                  "bg-transparent",
-                  "rounded-[8px]",
-                  "border border-grey-light-active",
-                  "text-base text-grey-light-active",
-                  "placeholder:text-grey-light-active",
-                  "data-[hover=true]:bg-transparent",
-                  "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
-                  "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
-                ],
-              }}
-            >
-              <SelectItem key={"daily"}>Daily</SelectItem>
-              <SelectItem key={"weekly"}>Weekly</SelectItem>
-              <SelectItem key={"monthly"}>Monthly</SelectItem>
-              <SelectItem key={"yearly"}>Yearly</SelectItem>
-            </Select>
+            <div className="flex flex-col gap-[4px]">
+              <span className="text-[20px] font-bold">Status</span>
+              <span className="text-grey-light-active">Select and add status</span>
+            </div>
 
-            <div className="flex justify-end items-center self-stretch">
+            <Popover placement="bottom-start">
+              <PopoverTrigger className="aria-expanded:opacity-100 aria-expanded:scale-1">
+                <div className="flex items-center gap-[4px] self-stretch cursor-pointer">
+                  <Icon icon="solar:add-circle-bold" height={16} style={{ color: "#FEC031" }} />
+                  <div className="flex h-full items-center self-stretch text-grey-lighter">
+                    Add Status
+                  </div>
+                </div>
+              </PopoverTrigger>
+
+              <PopoverContent className="w-[248px] p-0 rounded-[8px] border-white-active">
+                <div className="flex flex-col self-stretch">
+                  <div className="flex p-[8px]">
+                    <Input
+                      placeholder="Search status ..."
+                      classNames={{
+                        base: [
+                          "text-base",
+                          "bg-transparent",
+                          "group-data-[has-label=true]:mt-[27px]",
+                          "opacity-100",
+                        ],
+                        label: [
+                          "text-grey-dark-active",
+                          "group-data-[invalid=true]:!text-grey-dark-active",
+                          "group-data-[disabled=true]:!text-grey-light-active",
+                        ],
+                        input: [
+                          "text-grey-dark-active",
+                          "placeholder:text-base placeholder:text-grey-light-active",
+                          "group-data-[invalid=true]:!text-grey-dark-active",
+                          "group-data-[disabled=true]:!text-grey-light-active",
+                        ],
+                        inputWrapper: [
+                          "p-[8px]",
+                          "bg-transparent",
+                          "rounded-[8px]",
+                          "border border-white-active",
+                          "group-data-[hover=true]:bg-transparent",
+                          "group-data-[focus=true]:bg-transparent group-data-[focus=true]:border-grey-dark-active",
+                          "group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-transparent",
+                          "group-data-[invalid=true]:!border-red-active group-data-[invalid=true]:!bg-red-light-hover",
+                          "group-data-[disabled=true]:!bg-white-light-active",
+                          "shadow-none",
+                        ],
+                        errorMessage: [
+                          "text-[12px] text-red-active",
+                        ],
+                        helperWrapper: [
+                          "p-0 pt-[2px]",
+                        ],
+                      }}
+                    />
+                  </div>
+
+                  <Listbox aria-label="Select status" selectionMode="multiple">
+                    <ListboxItem key="to-do">TODO</ListboxItem>
+                    <ListboxItem key="on-going">ON GOING</ListboxItem>
+                    <ListboxItem key="review">REVIEW</ListboxItem>
+                  </Listbox>
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            <div className="flex flex-col gap-[4px]">
+              <span className="text-[20px] font-bold">Location</span>
+              <span className="text-grey-light-active">Select and add location</span>
+            </div>
+
+            <div className="flex items-end gap-[10px]">
+              <Select
+                selectionMode="multiple"
+                label="Location"
+                labelPlacement="outside"
+                placeholder="Select location"
+                classNames={{
+                  base: [
+                    "text-base",
+                    "opacity-100",
+                  ],
+                  trigger: [
+                    "h-[46px]",
+                    "p-[14px]",
+                    "bg-transparent",
+                    "rounded-[8px]",
+                    "border border-grey-light-active",
+                    "text-base text-grey-light-active",
+                    "placeholder:text-grey-light-active",
+                    "data-[hover=true]:bg-transparent",
+                    "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
+                    "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
+                  ],
+                }}
+              >
+                <SelectItem key={"checkbox"}>
+                  <div className="flex items-center gap-[8px]">
+                    <Icon icon="solar:check-square-linear" height={16} />
+                    Checkbox
+                  </div>
+                </SelectItem>
+                <SelectItem key={"date"}>
+                  <div className="flex items-center gap-[8px]">
+                    <Icon icon="solar:calendar-date-linear" height={16} />
+                    Date
+                  </div>
+                </SelectItem>
+                <SelectItem key={"dropdown"}>
+                  <div className="flex items-center gap-[8px]">
+                    <Icon icon="solar:square-arrow-down-linear" height={16} />
+                    Dropdown
+                  </div>
+                </SelectItem>
+                <SelectItem key={"files"}>
+                  <div className="flex items-center gap-[8px]">
+                    <Icon icon="solar:paperclip-linear" height={16} />
+                    Files
+                  </div>
+                </SelectItem>
+              </Select>
+
+              <Checkbox
+                size="sm"
+                // value={view.value}
+                disableAnimation={true}
+                classNames={{
+                  base: cn(
+                    "inline-flex max-w-md m-0",
+                    "cursor-pointer rounded-[8px] gap-[8px] px-[10px] py-[8px]",
+                    "data-[selected=true]:border-yellow",
+                  ),
+                  wrapper: cn(
+                    "mr-0 rtl:ml-0",
+                    "text-white after:text-white",
+                    "after:bg-yellow",
+                    "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
+                    "group-data-[focus-visible=true]:ring-yellow",
+                  ),
+                  label: cn("w-full", "text-[12px]"),
+                }}
+              >
+                Required
+              </Checkbox>
+            </div>
+
+            <div className="flex justify-end items-center gap-[12px] self-stretch">
+              <MyButton
+                variant="bordered"
+                color="yellow"
+                children="Close"
+                onPress={() => { closeAllModals() }}
+                className="px-[24px]"
+              />
+
               <MyButton
                 color="yellow"
-                children="Continue"
+                children="Save"
                 onPress={() => { closeAllModals() }}
                 className="px-[24px]"
               />
@@ -142,13 +284,23 @@ export default function Page() {
     <div className="flex flex-col p-[16px] items-start gap-[16px] flex-1 self-stretch bg-secondary">
       <div className="flex w-full flex-col p-[16px] rounded-[8px] border border-light-secondary bg-white">
         <div className="flex flex-col gap-[16px]">
-          <div className="flex flex-col flex-1 gap-[4px]">
-            <div className="flex text-base !text-[25px] font-bold">
-              Custom Field
+          <div className="flex gap-[4px]">
+            <div className="flex flex-col flex-1 gap-[4px]">
+              <div className="flex text-base !text-[25px] font-bold">
+                Custom Field
+              </div>
+              <span className="text-grey-25">
+                Manage and configure custom fields to suit your project's needs.
+              </span>
             </div>
-            <span className="text-grey-25">
-              Manage and configure custom fields to suit your project's needs.
-            </span>
+            <div className="flex items-end">
+              <MyButton
+                color="yellow"
+                children="Create New Field"
+                onPress={() => openModal("settingCustomField")}
+                className="px-[24px]"
+              />
+            </div>
           </div>
 
           <div className="flex w-full flex-col">
@@ -324,7 +476,7 @@ export default function Page() {
         </div>
       </div>
 
-      <SettingTeam />
+      <SettingCustomField />
     </div>
   );
 }
