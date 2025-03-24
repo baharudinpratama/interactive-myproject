@@ -52,15 +52,13 @@ export default function Page() {
   return (
     <>
       <div className="flex flex-col w-screen h-screen justify-center items-center" style={{ backgroundImage: "url('/bg-waves.png')", backgroundSize: "cover", }}>
-        <div className="flex flex-col px-[75px] py-[54px] items-start bg-white rounded-[8px] shadow-lg">
+        <div className="flex flex-col xs:mx-4 px-[75px] py-[54px] items-start bg-white rounded-[8px] shadow-lg">
           <div className="flex flex-col gap-[42px] self-stretch">
-            <div className="flex flex-col w-[344px] gap-[16px] self-stretch">
+            <div className="flex flex-col md:min-w-[344px] gap-[16px] self-stretch">
               <div className="flex flex-col gap-[4px] self-stretch">
-                <div className="flex justify-center">
-                  <Image src={"/logo-myproject-yellow.png"} alt={"logo myproject"} width={192} height={56} />
-                </div>
+                <Image src={"/logo-myproject-yellow.png"} alt={"logo myproject"} width={192} height={56} />
 
-                <p className="text-center text-grey-light-active">
+                <p className="max-w-[254px] text-center text-grey-light-active">
                   Please use your credentials to sign in.
                 </p>
               </div>

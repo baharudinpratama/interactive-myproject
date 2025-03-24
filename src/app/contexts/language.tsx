@@ -13,6 +13,7 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(undefine
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState('en');
+  const [timeZone, setTimeZone] = useState('Asia/Jakarta');
 
   useEffect(() => {
     // Get saved locale from localStorage
@@ -25,6 +26,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const detectedLocale = storedLocale || (availableLocales.includes(browserLocale) ? browserLocale : 'en');
 
     setLocaleState(detectedLocale);
+
+    // Detect user timezone
+    const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setTimeZone(detectedTimeZone);
   }, []);
 
   const setLocale = (newLocale: string) => {
@@ -41,7 +46,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>
-      <NextIntlClientProvider locale={locale} messages={messages}>
+      <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
         <Providers>
           {children}
         </Providers>

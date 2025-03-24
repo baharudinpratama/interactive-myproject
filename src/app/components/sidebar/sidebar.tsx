@@ -10,7 +10,7 @@ export default function Sidebar() {
   const { isSidebarOpen } = useSidebarContext();
 
   return (
-    <aside className={clsx("flex flex-col items-start self-stretch border-r bg-yellow duration-500", {
+    <aside className={clsx("flex flex-col items-start self-stretch border-r bg-yellow duration-500 overflow-auto", {
       "w-[242px]": isSidebarOpen,
       "w-[56px] ": !isSidebarOpen,
     })}>

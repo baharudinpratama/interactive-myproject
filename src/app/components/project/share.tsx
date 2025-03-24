@@ -4,7 +4,7 @@ import MyButton from "@/app/components/button";
 import { useCountdownTimer } from "@/app/components/countdown-timer";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader, Switch } from "@nextui-org/react";
+import { Avatar, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -70,17 +70,18 @@ export default function ShareProject() {
               <ModalBody className="px-[25px] py-[20px]">
                 <div className="flex flex-col gap-[12px]">
                   <div className="flex flex-col gap-[5px]">
-                    <div className="flex items-center gap-[12px] self-stretch">
+                    <div className="flex items-center gap-[8px] self-stretch">
                       <div className="flex items-center">
                         <Switch
                           isSelected={enableInviteLink}
                           onClick={() => setEnableInviteLink((prev) => !prev)}
                           classNames={{
-                            wrapper: "w-[28px] h-[16px] mr-0 group-data-[selected=true]:bg-yellow",
+                            wrapper: "px-[2px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
                             thumb: [
                               "w-[12px] h-[12px]",
+                              "group-data-[hover=true]:border-yellow",
                               "group-data-[pressed=true]:w-[12px]",
-                              "group-data-[selected=true]:ml-[8px] rtl:group-data-[selected=true]:mr-[8px] group-data-[selected]:group-data-[pressed]:ml-[8px]",
+                              "group-data-[selected=true]:ml-[12px] rtl:group-data-[selected=true]:mr-[12px] group-data-[selected]:group-data-[pressed]:ml-[12px]",
                             ],
                           }}
                         />
@@ -206,7 +207,7 @@ export default function ShareProject() {
                       <MyButton
                         color="yellow"
                         children="Invite"
-                        isDisabled={true}
+                        // isDisabled={true}
                         onPress={() => { }}
                         className="h-[40px] w-[82px] px-[24px]"
                       />
@@ -239,6 +240,46 @@ export default function ShareProject() {
 
                       Admin
                     </div>
+                  </div>
+
+                  <div className="flex flex-col gap-[5px]">
+                    <Select
+                      defaultSelectedKeys={"only-invited"}
+                      label=""
+                      labelPlacement="outside"
+                      placeholder="Select permission type"
+                      classNames={{
+                        base: [
+                          "text-base",
+                          "opacity-100",
+                        ],
+                        trigger: [
+                          "h-[46px]",
+                          "p-[14px]",
+                          "bg-transparent",
+                          "rounded-[8px]",
+                          "border border-grey-light-active",
+                          "text-base text-grey-light-active",
+                          "placeholder:text-grey-light-active",
+                          "data-[hover=true]:bg-transparent",
+                          "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
+                          "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
+                        ],
+                      }}
+                    >
+                      <SelectItem key={"only-invited"}>
+                        <div className="flex items-center gap-[8px]">
+                          <Icon icon="solar:check-square-linear" height={16} />
+                          Only Invited People
+                        </div>
+                      </SelectItem>
+                      <SelectItem key={"with-link"}>
+                        <div className="flex items-center gap-[8px]">
+                          <Icon icon="solar:calendar-date-linear" height={16} />
+                          People With the Link
+                        </div>
+                      </SelectItem>
+                    </Select>
                   </div>
 
                   <div className="flex justify-end items-center gap-[12px]">

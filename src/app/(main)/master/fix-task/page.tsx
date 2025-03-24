@@ -4,20 +4,20 @@ import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Button, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
+import { Button, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@nextui-org/react";
 
-export function SettingTeam() {
+export function SettingFixTask() {
   const { openModals, openModal, closeAllModals } = useModalContext();
 
   return (
-    <Modal isOpen={openModals["settingTeam"] ?? false} hideCloseButton={true} size="xl">
+    <Modal isOpen={openModals["settingFixTask"] ?? false} hideCloseButton={true} size="xl">
       <ModalContent className="overflow-visible">
         <ModalHeader className="px-[25px] py-[20px]">
           <div className="flex flex-col w-full">
             <div className="flex items-center gap-[8px] self-stretch">
               <div className="flex flex-1 items-center gap-[8px]">
                 <div className="text-[16px] font-semibold">
-                  Setting Team
+                  Setting Fix Task
                 </div>
                 <div className="flex">
                   <Icon icon="solar:info-circle-bold" height={16} style={{ color: "var(--yellow)" }} />
@@ -52,70 +52,21 @@ export function SettingTeam() {
             />
 
             <MyInput
-              id="email"
-              name="email"
-              type="email"
-              label="Email"
-              placeholder="Enter Email"
+              type="number"
+              min={1}
+              max={100}
+              label="Point"
+              placeholder="1 - 100"
               // value={nameInput}
               // onValueChange={setNameInput}
               maxLength={254}
             />
 
-            <Select
-              label="Project"
+            <Textarea
+              label="Description"
               labelPlacement="outside"
-              placeholder="Choose one"
-              classNames={{
-                base: [
-                  "text-base",
-                  "opacity-100",
-                ],
-                trigger: [
-                  "h-[46px]",
-                  "p-[14px]",
-                  "bg-transparent",
-                  "rounded-[8px]",
-                  "border border-grey-light-active",
-                  "text-base text-grey-light-active",
-                  "placeholder:text-grey-light-active",
-                  "data-[hover=true]:bg-transparent",
-                  "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
-                  "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
-                ],
-              }}
-            >
-              <SelectItem key={"project-1"}>Project 1</SelectItem>
-            </Select>
-
-            <Select
-              label="Type"
-              labelPlacement="outside"
-              placeholder="Choose one"
-              classNames={{
-                base: [
-                  "text-base",
-                  "opacity-100",
-                ],
-                trigger: [
-                  "h-[46px]",
-                  "p-[14px]",
-                  "bg-transparent",
-                  "rounded-[8px]",
-                  "border border-grey-light-active",
-                  "text-base text-grey-light-active",
-                  "placeholder:text-grey-light-active",
-                  "data-[hover=true]:bg-transparent",
-                  "data-[focus=true]:bg-transparent data-[focus=true]:border-grey-dark-active",
-                  "data-[focus-visible=true]:outline-0 data-[focus-visible=true]:outline-transparent",
-                ],
-              }}
-            >
-              <SelectItem key={"daily"}>Daily</SelectItem>
-              <SelectItem key={"weekly"}>Weekly</SelectItem>
-              <SelectItem key={"monthly"}>Monthly</SelectItem>
-              <SelectItem key={"yearly"}>Yearly</SelectItem>
-            </Select>
+              placeholder="Description"
+            />
 
             <div className="flex justify-end items-center self-stretch">
               <MyButton
@@ -142,7 +93,7 @@ export default function Page() {
           <div className="flex gap-[4px]">
             <div className="flex flex-col flex-1 gap-[4px]">
               <div className="flex text-base !text-[25px] font-bold">
-                Setting Team
+                Setting Fix Task
               </div>
               <span className="text-grey-25">
                 Manage and configure your team settings to enhance collaboration and define roles effectively.
@@ -151,8 +102,8 @@ export default function Page() {
             <div className="flex items-end">
               <MyButton
                 color="yellow"
-                children="Add Member"
-                onPress={() => openModal("settingTeam")}
+                children="Add Fix Task"
+                onPress={() => openModal("settingFixTask")}
                 className="px-[24px]"
               />
             </div>
@@ -179,42 +130,16 @@ export default function Page() {
             <TableHeader className="bg-white-normal">
               <TableColumn className="font-normal text-grey-lighter">#</TableColumn>
               <TableColumn className="text-center font-normal text-grey-lighter">NAME</TableColumn>
-              <TableColumn className="text-center font-normal text-grey-lighter">EMAIL</TableColumn>
-              <TableColumn className="text-center font-normal text-grey-lighter">PROJECT</TableColumn>
-              <TableColumn className="text-center font-normal text-grey-lighter">TYPE</TableColumn>
-              <TableColumn className="text-center font-normal text-grey-lighter">STATUS</TableColumn>
+              <TableColumn className="text-center font-normal text-grey-lighter">POINT</TableColumn>
+              <TableColumn className="text-center font-normal text-grey-lighter">DESCRIPTION</TableColumn>
               <TableColumn className="text-center font-normal text-grey-lighter">ACTIONS</TableColumn>
             </TableHeader>
             <TableBody>
               <TableRow key="1">
                 <TableCell>1</TableCell>
-                <TableCell>InterActive</TableCell>
-                <TableCell>admin@interactive.co.id</TableCell>
-                <TableCell>Project 1</TableCell>
-                <TableCell className="text-center">Admin</TableCell>
-                <TableCell className="text-center">
-                  <Chip color="success" classNames={{ base: "min-w-full rounded-[4px]", content: "text-white" }}>Approved</Chip>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    isIconOnly={true}
-                    disableAnimation={true}
-                  >
-                    <Icon icon="solar:menu-dots-bold" className="rotate-90 cursor-pointer" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-              <TableRow key="2">
-                <TableCell>2</TableCell>
-                <TableCell>Dea Aurelia</TableCell>
-                <TableCell>dea@gmail.com</TableCell>
-                <TableCell>Project 1</TableCell>
-                <TableCell className="text-center">Member</TableCell>
-                <TableCell className="text-center">
-                  <Chip color="default" classNames={{ base: "min-w-full rounded-[4px]", content: "text-white" }}>Not Approved</Chip>
-                </TableCell>
+                <TableCell>User requirement</TableCell>
+                <TableCell>75</TableCell>
+                <TableCell>Mengumpulkan kebutuhan user</TableCell>
                 <TableCell>
                   <Button
                     variant="light"
@@ -265,7 +190,7 @@ export default function Page() {
         </div>
       </div>
 
-      <SettingTeam />
+      <SettingFixTask />
     </div>
   );
 }

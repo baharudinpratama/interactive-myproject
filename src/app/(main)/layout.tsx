@@ -12,28 +12,28 @@ export default function MainLayout(
   { children }: Readonly<{ children: React.ReactNode; }>
 ) {
   return (
-    <div className="flex min-w-screen w-full min-h-screen xs:h-screen sm:h-screen h-screen items-start bg-white">
-      <WorkspaceProvider>
-        <ModalProvider>
-          <SidebarProvider>
+    <div className="flex min-w-screen w-full min-h-screen h-screen items-start bg-white">
+      <SidebarProvider>
+        <WorkspaceProvider>
+          <ModalProvider>
             <Sidebar />
-          </SidebarProvider>
 
-          <div className="flex flex-col items-start flex-1 self-stretch">
-            <Navbar />
+            <div className="flex flex-col w-full h-full items-start">
+              <Navbar />
 
-            {children}
-          </div>
+              {children}
+            </div>
 
-          <Onboarding />
-          <ArchiveProject />
-          <DuplicateProject />
-          <DeleteProject />
-          <ShareProject />
-          <RenameProject />
-          <CloseModal />
-        </ModalProvider>
-      </WorkspaceProvider>
+            <Onboarding />
+            <ArchiveProject />
+            <DuplicateProject />
+            <DeleteProject />
+            <ShareProject />
+            <RenameProject />
+            <CloseModal />
+          </ModalProvider>
+        </WorkspaceProvider>
+      </SidebarProvider>
     </div>
   );
 }

@@ -44,20 +44,20 @@ export default function Onboarding() {
   }
 
   return (
-    <Modal isOpen={openModals["onboarding"]} hideCloseButton={true} size="2xl">
-      <ModalContent className="overflow-visible bg-[url('/bg-polkadot.png')] bg-cover">
+    <Modal isOpen={openModals["onboarding"]} hideCloseButton={true} size={window.innerWidth < 1024 ? "full" : "2xl"}>
+      <ModalContent className="bg-[url('/bg-polkadot.png')] bg-cover">
         {() => (
           <>
             <ModalHeader className="min-h-[110px] px-[25px] py-[20px]">
               <Image src="/logo-myproject-yellow.png" height={36} className="rounded-none" />
             </ModalHeader>
-            <ModalBody className="px-[25px] py-[20px]">
+            <ModalBody className="flex px-[25px] py-[20px] items-center justify-center">
               {step === 1 && (
                 <div className="flex flex-col">
                   <div className="flex flex-col gap-[50px]">
                     <div className="flex flex-col items-center">
                       <div className="text-[24px] font-bold text-yellow-500 leading-[125%]">Welcome!</div>
-                      <div className="max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
+                      <div className="md:max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
                         What do you plan to achieve with MyProject?
                       </div>
                     </div>
@@ -81,12 +81,12 @@ export default function Onboarding() {
                 <div className="flex flex-col">
                   <div className="flex flex-col gap-[50px]">
                     <div className="flex flex-col items-center">
-                      <div className="max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
+                      <div className="md:max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
                         How many team members will you collaborate with?
                       </div>
                     </div>
                     <div className="flex justify-center self-stretch">
-                      <div className="grid grid-cols-3 min-w-[500px] gap-[15px]">
+                      <div className="grid grid-cols-3 md:min-w-[500px] gap-[15px]">
                         {teamCategories.map(teamCat => {
                           return (
                             <MyButton
@@ -107,12 +107,12 @@ export default function Onboarding() {
                 <div className="flex flex-col">
                   <div className="flex flex-col gap-[50px]">
                     <div className="flex flex-col items-center">
-                      <div className="max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
+                      <div className="md:max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
                         Which solution do you want to begin with?
                       </div>
                     </div>
                     <div className="flex justify-center self-stretch">
-                      <div className="flex flex-wrap justify-center min-w-[500px] gap-[15px]">
+                      <div className="flex flex-wrap justify-center md:min-w-[500px] gap-[15px]">
                         {solutions.map((solution, index) => {
                           return (
                             <MyButton
@@ -134,12 +134,12 @@ export default function Onboarding() {
                 <div className="flex flex-col">
                   <div className="flex flex-col gap-[50px]">
                     <div className="flex flex-col items-center">
-                      <div className="max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
+                      <div className="md:max-w-[708px] text-center text-[32px] font-bold leading-[125%]">
                         What do you want to name your Workspace?
                       </div>
                     </div>
                     <div className="flex justify-center self-stretch">
-                      <div className="flex flex-wrap justify-center min-w-[500px] gap-[15px]">
+                      <div className="flex flex-wrap justify-center md:min-w-[500px] gap-[15px]">
                         <MyInput
                           placeholder="Enter your workspace"
                           onKeyDown={(e) => { e.key === "Enter" && closeAllModals() }}
@@ -151,7 +151,6 @@ export default function Onboarding() {
                 </div>
               )}
             </ModalBody>
-
             <ModalFooter className="flex h-[115px] px-[35px] justify-between items-center">
               {step !== 1 && (
                 <MyButton

@@ -339,7 +339,6 @@ export default function Page() {
                   {isExpanded && (
                     <Table
                       aria-label="Table custom field"
-                      removeWrapper={true}
                       checkboxesProps={{
                         classNames: {
                           wrapper: [
@@ -425,7 +424,6 @@ export default function Page() {
                 <Table
                   aria-label="Table product"
                   selectionMode="multiple"
-                  removeWrapper={true}
                   checkboxesProps={{
                     classNames: {
                       wrapper: [

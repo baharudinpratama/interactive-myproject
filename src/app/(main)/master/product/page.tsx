@@ -120,7 +120,7 @@ export default function Page() {
   const { openModal } = useModalContext();
 
   return (
-    <div className="flex flex-col p-[16px] items-start gap-[16px] flex-1 self-stretch bg-secondary">
+    <div className="flex flex-col w-full p-[16px] items-start gap-[16px] flex-1 bg-secondary">
       <div className="flex w-full flex-col p-[16px] rounded-[8px] border border-light-secondary bg-white">
         <div className="flex flex-col gap-[16px]">
           <div className="flex gap-[4px]">
@@ -145,7 +145,6 @@ export default function Page() {
           <Table
             aria-label="Table product"
             selectionMode="multiple"
-            removeWrapper={true}
             checkboxesProps={{
               classNames: {
                 wrapper: [

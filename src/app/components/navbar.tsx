@@ -4,12 +4,16 @@ import Breadcrumb from "@/app/components/breadcrumb";
 import { Icon } from "@iconify-icon/react";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import { signOut, useSession } from "next-auth/react";
+import { useSidebarContext } from "../contexts/sidebar";
 
 export default function Navbar() {
   const session = useSession();
+  const { toggleSidebar } = useSidebarContext();
 
   return (
     <div className="flex p-[16px] items-center gap-[16px] self-stretch border-b border-white-active">
+      {/* <Icon icon="solar:hamburger-menu-bold" height={16} onClick={() => toggleSidebar()} /> */}
+
       <div className="flex flex-1">
         <Breadcrumb />
       </div>

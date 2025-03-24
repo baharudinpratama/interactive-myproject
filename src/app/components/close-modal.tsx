@@ -3,7 +3,7 @@
 import MyButton from "@/app/components/button";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent } from "@nextui-org/react";
 
 export default function CloseModal() {
   const { openModals, closeModal, closeAllModals } = useModalContext();

@@ -218,7 +218,7 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
   };
 
   useEffect(() => {
-    fetchEvents();
+    // fetchEvents();
   }, []);
 
   const addTask = (task: Partial<Task>) => {

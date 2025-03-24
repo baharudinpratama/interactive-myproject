@@ -48,6 +48,20 @@ const fetchedMenuItems = [
       {
         id: "menu-2-4",
         icon: "solar:checklist-linear",
+        label: "Customer",
+        url: "/master/customer",
+        children: [],
+      },
+      {
+        id: "menu-2-5",
+        icon: "solar:checklist-linear",
+        label: "Fix Task",
+        url: "/master/fix-task",
+        children: [],
+      },
+      {
+        id: "menu-2-6",
+        icon: "solar:checklist-linear",
         label: "Security & Permission",
         url: "/master/authorization",
         children: [],
@@ -61,6 +75,21 @@ const fetchedMenuItems = [
     url: "/personal-task",
     children: [],
   },
+  {
+    id: "menu-4",
+    icon: "solar:settings-linear",
+    label: "Setting",
+    url: "/setting",
+    children: [
+      {
+        id: "menu-4-1",
+        icon: "solar:chart-square-linear",
+        label: "Language & Region",
+        url: "/setting/language",
+        children: [],
+      },
+    ],
+  }
 ];
 
 const fetchedViews = [

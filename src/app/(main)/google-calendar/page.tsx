@@ -19,7 +19,7 @@ export default function Page() {
       }
     };
 
-    fetchEvents();
+    // fetchEvents();
   }, []);
 
   if (loading) return <p>Loading events...</p>;

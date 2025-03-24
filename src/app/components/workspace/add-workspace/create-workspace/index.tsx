@@ -11,11 +11,12 @@ import clsx from "clsx";
 import { useState } from "react";
 
 export default function CreateWorkspace() {
-  const { openModals, closeModal, closeAllModals, openModal } = useModalContext();
+  const { openModals, closeModal, openModal } = useModalContext();
   const [nameInput, setNameInput] = useState("");
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isPrivate, setPrivate] = useState(false);
+  const [taskApproval, setTaskApproval] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState(fetchedUsers);
 
@@ -212,15 +213,15 @@ export default function CreateWorkspace() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-[8px] self-stretch">
-                  <div className="flex flex-col flex-1">
-                    <div className="">Due Date</div>
-                    <span className="text-grey-lighter">
-                      Easily set and track due dates
-                    </span>
-                  </div>
+                <div className="flex flex-col self-stretch">
+                  <div className="flex items-center gap-[8px] self-stretch">
+                    <div className="flex flex-col flex-1">
+                      <div className="">Due Date</div>
+                      <span className="text-grey-lighter">
+                        Easily set and track due dates
+                      </span>
+                    </div>
 
-                  <div className="items-center">
                     <Switch
                       checked={useDueDate}
                       isSelected={useDueDate}
@@ -236,23 +237,58 @@ export default function CreateWorkspace() {
                       }}
                     />
                   </div>
+
+                  <div className={clsx("transition-all duration-300", {
+                    "max-h-[1000px] opacity-100": useDueDate,
+                    "max-h-0 opacity-0": !useDueDate,
+                  })}>
+                    <div className="grid grid-cols-2 gap-[12px] w-full">
+                      <DatePicker
+                        variant="bordered"
+                        label="Issued On"
+                        labelPlacement="outside"
+                        // value={issueDate}
+                        // onChange={(val) => setIssueDate(val)}
+                        classNames={{ calendar: "bg-[#ffffff]" }}
+                      />
+
+                      <DatePicker variant="bordered" label="Due On" labelPlacement="outside" onChange={() => setDueDate} />
+                    </div>
+                  </div>
                 </div>
 
-                <div className={clsx("transition-all duration-300", {
-                  "max-h-[1000px] opacity-100": useDueDate,
-                  "max-h-0 opacity-0": !useDueDate,
-                })}>
-                  <div className="grid grid-cols-2 gap-[12px] w-full">
-                    <DatePicker
-                      variant="bordered"
-                      label="Issued On"
-                      labelPlacement="outside"
-                      // value={issueDate}
-                      // onChange={(val) => setIssueDate(val)}
-                      classNames={{ calendar: "bg-[#ffffff]" }}
-                    />
+                <div className="flex flex-col self-stretch">
+                  <div className="flex items-center gap-[8px] self-stretch">
+                    <div className="flex flex-col flex-1">
+                      <div className="">Task Approval</div>
+                      <span className="text-grey-lighter">
+                        (Description)
+                      </span>
+                    </div>
 
-                    <DatePicker variant="bordered" label="Due On" labelPlacement="outside" onChange={() => setDueDate} />
+                    <div className="items-center">
+                      <Switch
+                        checked={taskApproval}
+                        isSelected={taskApproval}
+                        onChange={() => { setTaskApproval((prev) => !prev) }}
+                        classNames={{
+                          wrapper: "px-[2px] py-[4px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
+                          thumb: [
+                            "w-[12px] h-[12px]",
+                            "group-data-[hover=true]:border-yellow",
+                            "group-data-[pressed=true]:w-[12px]",
+                            "group-data-[selected=true]:ml-[12px] rtl:group-data-[selected=true]:mr-[12px] group-data-[selected]:group-data-[pressed]:ml-[12px]",
+                          ],
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={clsx("transition-all duration-300", {
+                    "max-h-[1000px] opacity-100": taskApproval,
+                    "max-h-0 opacity-0": !taskApproval,
+                  })}>
+
                   </div>
                 </div>
 
