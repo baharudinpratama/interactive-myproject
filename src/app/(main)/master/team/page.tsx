@@ -3,8 +3,13 @@
 import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
+import { Button } from "@heroui/button";
+import { Chip } from "@heroui/chip";
+import { Divider } from "@heroui/divider";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Select, SelectItem } from "@heroui/select";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/table";
 import { Icon } from "@iconify-icon/react";
-import { Button, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
 
 export function SettingTeam() {
   const { openModals, openModal, closeAllModals } = useModalContext();

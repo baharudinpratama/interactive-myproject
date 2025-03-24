@@ -1,7 +1,6 @@
 "use client";
 
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/image";
 
 export default function UnauthorizedAccess() {
   return (

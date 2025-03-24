@@ -1,9 +1,9 @@
 import MyButton from "@/app/components/button";
-import CreateTask from "@/app/components/project/create-task";
 import TaskDetail from "@/app/components/project/task-detail";
 import { useModalContext } from "@/app/contexts/modal";
+import { Avatar } from "@heroui/avatar";
+import { Image } from "@heroui/image";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, Image } from "@nextui-org/react";
 import { useState } from "react";
 
 export default function List() {

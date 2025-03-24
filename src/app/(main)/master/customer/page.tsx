@@ -3,8 +3,12 @@
 import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
+import { Button } from "@heroui/button";
+import { Divider } from "@heroui/divider";
+import { Textarea } from "@heroui/input";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/table";
 import { Icon } from "@iconify-icon/react";
-import { Button, Divider, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from "@nextui-org/react";
 
 export function SettingCustomer() {
   const { openModals, openModal, closeAllModals } = useModalContext();

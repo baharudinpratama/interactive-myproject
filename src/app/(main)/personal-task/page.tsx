@@ -1,7 +1,9 @@
 "use client";
 
+import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
+import { Switch } from "@heroui/switch";
 import { Icon } from "@iconify-icon/react";
-import { Button, Checkbox, cn, Switch } from "@nextui-org/react";
 import clsx from "clsx";
 import { useState } from "react";
 
@@ -36,13 +38,13 @@ export default function Page() {
           <div className="flex px-[16px] py-[8px] items-center self-stretch">
             <Switch
               classNames={{
-                base: cn(
+                base: clsx(
                   "inline-flex flex-row-reverse w-full items-center",
                   "justify-between cursor-pointer rounded-[100px] gap-[4px] px-[8px] border border-light-secondary bg-light-primary",
                 ),
                 wrapper: "px-[2px] py-[4px] w-[20px] h-[12px] group-data-[focus-visible=true]:ring-1 group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow mr-0",
                 label: "min-w-[80px]",
-                thumb: cn(
+                thumb: clsx(
                   "w-[8px] h-[8px]",
                   "group-data-[hover=true]:border-yellow",
                   "group-data-[pressed=true]:w-[8px]",

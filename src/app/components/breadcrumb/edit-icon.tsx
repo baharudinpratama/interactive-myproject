@@ -1,6 +1,7 @@
 import MyButton from "@/app/components/button";
+import { Divider } from "@heroui/divider";
+import { Input } from "@heroui/input";
 import { Icon } from "@iconify-icon/react";
-import { Divider, Input } from "@nextui-org/react";
 import twemojiJSONIconsData from "@iconify/json/json/twemoji.json";
 import { IconifyJSONIconsData } from "@iconify/types";
 import { useRef, useState } from "react";

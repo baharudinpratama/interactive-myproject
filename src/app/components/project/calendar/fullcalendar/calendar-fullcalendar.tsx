@@ -3,24 +3,13 @@
 import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useWorkspaceContext } from "@/app/contexts/workspace";
-import {
-  DateSelectArg,
-  EventApi,
-  EventChangeArg,
-  EventClickArg,
-  EventInput
-} from "@fullcalendar/core";
+import { DateSelectArg, EventApi, EventChangeArg, EventClickArg, EventInput } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from '@fullcalendar/list';
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-} from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import React, { useEffect, useRef, useState } from "react";
 
 const DemoApp: React.FC = () => {
@@ -210,7 +199,7 @@ const DemoApp: React.FC = () => {
                 label="Title"
                 placeholder="Event Title"
                 value={newEventTitle}
-                onChange={(e) => setNewEventTitle(e.target.value)}
+                onChange={(e: any) => setNewEventTitle(e.target.value)}
                 required
               />
               <MyInput
@@ -218,7 +207,7 @@ const DemoApp: React.FC = () => {
                 label="Date Start"
                 placeholder="Date start"
                 value={startDateInput}
-                onChange={(e) => setStartDateInput(e.target.value)}
+                onChange={(e: any) => setStartDateInput(e.target.value)}
                 required
               />
               <MyInput
@@ -226,7 +215,7 @@ const DemoApp: React.FC = () => {
                 label="Date End"
                 placeholder="Date end"
                 value={endDateInput}
-                onChange={(e) => setEndDateInput(e.target.value)}
+                onChange={(e: any) => setEndDateInput(e.target.value)}
                 required
               />
               <div className="flex justify-end items-center self-stretch">

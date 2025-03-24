@@ -3,13 +3,14 @@
 import MyButton from "@/app/components/button";
 import { useWorkspaceContext } from "@/app/contexts/workspace";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, AvatarGroup, cn } from "@nextui-org/react";
+import { Avatar, AvatarGroup } from "@heroui/avatar";
 import { Gantt, Task, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import { useEffect, useState } from "react";
 import { getStartEndDateForProject } from "./helper";
 import "./index.css";
 import { ViewSwitcher } from "./view-switcher";
+import clsx from "clsx";
 
 export default function GanttMatematuk() {
   const { workspaces, projects, tasks, getTaskById, addTask, updateTask, deleteTask } = useWorkspaceContext();
@@ -310,7 +311,7 @@ export default function GanttMatematuk() {
                       <Avatar
                         name="I"
                         classNames={{
-                          base: cn(
+                          base: clsx(
                             "w-[24px] h-[24px] border border-white bg-yellow-light-active",
                             "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
                           ),
@@ -320,7 +321,7 @@ export default function GanttMatematuk() {
                       <Avatar
                         name="D"
                         classNames={{
-                          base: cn(
+                          base: clsx(
                             "w-[24px] h-[24px] border border-white bg-yellow-light-active",
                             "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
                           ),
@@ -330,7 +331,7 @@ export default function GanttMatematuk() {
                       <Avatar
                         name="B"
                         classNames={{
-                          base: cn(
+                          base: clsx(
                             "w-[24px] h-[24px] border border-white bg-yellow-light-active",
                             "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
                           ),

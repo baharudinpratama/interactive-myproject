@@ -2,8 +2,8 @@
 
 import MyCheckbox from "@/app/components/checkbox";
 import { useModalContext } from "@/app/contexts/modal";
-import { Select, SelectItem } from "@nextui-org/react";
-import { useTimezoneSelect, allTimezones } from "react-timezone-select";
+import { Select, SelectItem } from "@heroui/select";
+import { allTimezones, useTimezoneSelect } from "react-timezone-select";
 
 const labelStyle = "original"
 const timezones = { ...allTimezones }
@@ -38,7 +38,7 @@ export function TimezoneSelect() {
       }}
     >
       {options.map((option, index) => (
-        <SelectItem key={index} value={option.value}>{option.label}</SelectItem>
+        <SelectItem key={index} textValue={option.value}>{option.label}</SelectItem>
       ))}
     </Select>
   )

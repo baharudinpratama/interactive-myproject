@@ -5,7 +5,7 @@ import { useCountdownTimer } from "@/app/components/countdown-timer";
 import OTPInput from "@/app/components/otp-input";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Modal, ModalBody, ModalContent } from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent } from "@heroui/modal";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

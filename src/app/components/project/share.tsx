@@ -3,8 +3,13 @@
 import MyButton from "@/app/components/button";
 import { useCountdownTimer } from "@/app/components/countdown-timer";
 import { useModalContext } from "@/app/contexts/modal";
+import { Avatar } from "@heroui/avatar";
+import { Divider } from "@heroui/divider";
+import { Input } from "@heroui/input";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Select, SelectItem } from "@heroui/select";
+import { Switch } from "@heroui/switch";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader, Select, SelectItem, Switch } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

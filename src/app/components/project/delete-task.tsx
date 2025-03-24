@@ -3,7 +3,7 @@
 import MyButton from "@/app/components/button";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Modal, ModalBody, ModalContent } from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent } from "@heroui/modal";
 import { useRouter } from "next/navigation";
 
 export default function DeleteTask() {

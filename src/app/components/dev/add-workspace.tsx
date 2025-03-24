@@ -3,7 +3,7 @@
 import { fetchedUsers } from "@/app/data";
 import { Icon } from "@iconify-icon/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { Button, DatePicker, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody, ModalContent, ModalHeader, Switch } from "@nextui-org/react";
+import { Button, DatePicker, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody, ModalContent, ModalHeader, Switch } from "@heroui/react";
 import clsx from "clsx";
 import { useState } from "react";
 

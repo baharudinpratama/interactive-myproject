@@ -1,14 +1,14 @@
 "use client";
 
 import MyButton from "@/app/components/button";
-import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
+import { Divider } from "@heroui/divider";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Radio, RadioGroup } from "@heroui/radio";
 import { Icon } from "@iconify-icon/react";
-import { Divider, Modal, ModalBody, ModalContent, ModalHeader, Radio, RadioGroup } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AdvancedViews from "./advanced-views";
-import IconPicker from "./icon-picker";
 import InApps from "./in-apps";
 import TaskStatuses from "./task-statuses";
 

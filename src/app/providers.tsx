@@ -1,10 +1,10 @@
 "use client";
 
-import { registerIcons } from "./components/register-icon";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/system";
+import { SessionProvider } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect } from "react";
-import { SessionProvider } from "next-auth/react";
+import { registerIcons } from "./components/register-icon";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -13,11 +13,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <NextThemesProvider defaultTheme="light">
-      <NextUIProvider>
+      <HeroUIProvider>
         <SessionProvider>
           {children}
         </SessionProvider>
-      </NextUIProvider>
+      </HeroUIProvider>
     </NextThemesProvider>
   );
 }

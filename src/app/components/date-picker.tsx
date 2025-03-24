@@ -1,4 +1,4 @@
-import { extendVariants, DatePicker } from "@nextui-org/react";
+import { extendVariants, DatePicker } from "@heroui/react";
 
 const MyDatePicker = extendVariants(DatePicker, {
   slots: {

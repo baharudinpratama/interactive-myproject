@@ -1,8 +1,9 @@
 import MyButton from "@/app/components/button";
+import { Divider } from "@heroui/divider";
+import { Input } from "@heroui/input";
 import { Icon } from "@iconify-icon/react";
 import solarJSONIconsData from "@iconify/json/json/solar.json";
 import { IconifyJSONIconsData } from "@iconify/types";
-import { Divider, Input } from "@nextui-org/react";
 import { useRef, useState } from "react";
 
 const solarIcons = solarJSONIconsData as IconifyJSONIconsData;

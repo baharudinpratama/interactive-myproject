@@ -2,16 +2,18 @@
 
 import MyButton from "@/app/components/button";
 import { useModalContext } from "@/app/contexts/modal";
+import type { Active, Over } from "@dnd-kit/core";
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor, MouseSensor, TouchSensor, useDroppable, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Avatar } from "@heroui/avatar";
+import { Button } from "@heroui/button";
+import { Modal, ModalBody, ModalContent } from "@heroui/modal";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, Button, Modal, ModalBody, ModalContent } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import IconColumnTitle from "../icon-column-title";
 import IconUser from "../icon-user";
-import type { Active, Over } from "@dnd-kit/core";
 
 type Id = string | number;
 

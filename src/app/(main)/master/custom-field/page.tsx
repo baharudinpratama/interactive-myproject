@@ -3,8 +3,18 @@
 import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
+import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
+import { Divider } from "@heroui/divider";
+import { Input } from "@heroui/input";
+import { Listbox, ListboxItem } from "@heroui/listbox";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
+import { Select, SelectItem } from "@heroui/select";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/table";
+import { Tab, Tabs } from "@heroui/tabs";
 import { Icon } from "@iconify-icon/react";
-import { Button, Checkbox, cn, Divider, Input, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalHeader, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs } from "@nextui-org/react";
+import clsx from "clsx";
 import { useState } from "react";
 
 export function SettingCustomField() {
@@ -233,19 +243,19 @@ export function SettingCustomField() {
                 // value={view.value}
                 disableAnimation={true}
                 classNames={{
-                  base: cn(
+                  base: clsx(
                     "inline-flex max-w-md m-0",
                     "cursor-pointer rounded-[8px] gap-[8px] px-[10px] py-[8px]",
                     "data-[selected=true]:border-yellow",
                   ),
-                  wrapper: cn(
+                  wrapper: clsx(
                     "mr-0 rtl:ml-0",
                     "text-white after:text-white",
                     "after:bg-yellow",
                     "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
                     "group-data-[focus-visible=true]:ring-yellow",
                   ),
-                  label: cn("w-full", "text-[12px]"),
+                  label: clsx("w-full", "text-[12px]"),
                 }}
               >
                 Required

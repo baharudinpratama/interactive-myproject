@@ -1,5 +1,7 @@
+import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
+import { Switch } from "@heroui/switch";
 import { Icon } from "@iconify-icon/react";
-import { Checkbox, CheckboxGroup, Switch, cn } from "@nextui-org/react";
+import clsx from "clsx";
 import { useState } from "react";
 
 interface CustomCheckBox {
@@ -27,19 +29,19 @@ export const CustomCheckbox = ({
         value={view.value}
         disableAnimation={true}
         classNames={{
-          base: cn(
+          base: clsx(
             "inline-flex w-full max-w-md m-0",
             "cursor-pointer rounded-[8px] gap-[10px] p-[10px] border border-white-active",
             "data-[selected=true]:border-yellow",
           ),
-          wrapper: cn(
+          wrapper: clsx(
             "mr-0 rtl:ml-0",
             "text-white after:text-white",
             "after:bg-yellow",
             "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
             "group-data-[focus-visible=true]:ring-yellow",
           ),
-          label: cn("w-full"),
+          label: clsx("w-full"),
         }}
       >
         <div className="flex items-center gap-[10px]">

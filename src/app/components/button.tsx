@@ -1,4 +1,4 @@
-import { extendVariants, Button } from "@nextui-org/react";
+import { extendVariants, Button } from "@heroui/react";
 
 const MyButton = extendVariants(Button, {
   variants: {
@@ -22,10 +22,10 @@ const MyButton = extendVariants(Button, {
     size: "md",
     variant: "solid",
     color: "default",
-    fullWidth: "false",
+    // fullWidth: "false",
     radius: "default",
-    disableAnimation: "true",
-    disableRipple: "true",
+    // disableAnimation: "true",
+    // disableRipple: "true",
   },
   compoundVariants: [
     {

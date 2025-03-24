@@ -1,7 +1,8 @@
-import { Avatar, DateRangePicker, Progress } from "@nextui-org/react";
-import { getLocalTimeZone, today } from "@internationalized/date";
 import MyButton from "@/app/components/button";
-import { Image } from "@nextui-org/react";
+import { Avatar } from "@heroui/avatar";
+import { DateRangePicker } from "@heroui/date-picker";
+import { Image } from "@heroui/image";
+import { getLocalTimeZone, today } from "@internationalized/date";
 
 export default function Workload() {
   return (

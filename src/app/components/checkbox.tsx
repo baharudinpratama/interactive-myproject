@@ -1,4 +1,4 @@
-import { extendVariants, Checkbox } from "@nextui-org/react";
+import { extendVariants, Checkbox } from "@heroui/react";
 
 const MyCheckbox = extendVariants(Checkbox, {
   variants: {
@@ -23,7 +23,7 @@ const MyCheckbox = extendVariants(Checkbox, {
   },
   defaultVariants: {
     radius: "default",
-    disableAnimation: "true",
+    // disableAnimation: "true",
   },
 });
 

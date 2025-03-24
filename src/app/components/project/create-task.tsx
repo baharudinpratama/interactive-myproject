@@ -1,8 +1,9 @@
 import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
+import { Divider } from "@heroui/divider";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { Icon } from "@iconify-icon/react";
-import { Divider, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import { useState } from "react";
 
 export default function CreateTask() {

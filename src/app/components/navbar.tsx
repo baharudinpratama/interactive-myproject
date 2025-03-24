@@ -2,7 +2,7 @@
 
 import Breadcrumb from "@/app/components/breadcrumb";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { signOut, useSession } from "next-auth/react";
 import { useSidebarContext } from "../contexts/sidebar";
 

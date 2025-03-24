@@ -1,12 +1,17 @@
 "use client";
 
 import { useModalContext } from "@/app/contexts/modal";
+import { useWorkspaceContext } from "@/app/contexts/workspace";
+import { Avatar } from "@heroui/avatar";
+import { BreadcrumbItem, Breadcrumbs } from "@heroui/breadcrumbs";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Listbox, ListboxItem } from "@heroui/listbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
 import { Icon } from "@iconify-icon/react";
-import { Avatar, BreadcrumbItem, Breadcrumbs, Button, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import EditIcon from "./edit-icon";
-import { useWorkspaceContext } from "@/app/contexts/workspace";
 
 export default function Breadcrumb() {
   const pathname = usePathname();

@@ -1,17 +1,22 @@
 import MyButton from "@/app/components/button";
 import { useModalContext } from "@/app/contexts/modal";
+import { Accordion, AccordionItem } from "@heroui/accordion";
+import { Avatar, AvatarGroup } from "@heroui/avatar";
+import { Button } from "@heroui/button";
+import { Calendar } from "@heroui/calendar";
+import { Checkbox } from "@heroui/checkbox";
+import type { TimeInputValue } from "@heroui/date-input";
+import { TimeInput } from "@heroui/date-input";
+import { Divider } from "@heroui/divider";
+import { Image } from "@heroui/image";
+import { Input, Textarea } from "@heroui/input";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
+import { Select, SelectItem } from "@heroui/select";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/table";
+import { Tab, Tabs } from "@heroui/tabs";
 import { Icon } from "@iconify-icon/react";
 import { parseDate } from "@internationalized/date";
-import type { TimeInputValue } from "@nextui-org/react";
-import {
-  Accordion, AccordionItem, Avatar, AvatarGroup, Button, Calendar, Checkbox, cn,
-  Divider,
-  Image,
-  Input,
-  Modal, ModalBody, ModalContent, ModalHeader,
-  Popover, PopoverContent, PopoverTrigger,
-  Select, SelectItem, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tabs, Textarea, TimeInput
-} from "@nextui-org/react";
 import type { DateValue } from "@react-types/calendar";
 import clsx from "clsx";
 import { useState } from "react";
@@ -199,7 +204,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                             <Avatar
                               name="I"
                               classNames={{
-                                base: cn(
+                                base: clsx(
                                   "w-[24px] h-[24px] border border-white bg-yellow-light-active",
                                   "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
                                 ),
@@ -209,7 +214,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                             <Avatar
                               name="D"
                               classNames={{
-                                base: cn(
+                                base: clsx(
                                   "w-[24px] h-[24px] border border-white bg-yellow-light-active",
                                   "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
                                 ),
@@ -219,7 +224,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                             <Avatar
                               name="B"
                               classNames={{
-                                base: cn(
+                                base: clsx(
                                   "w-[24px] h-[24px] border border-white bg-yellow-light-active",
                                   "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
                                 ),
@@ -529,19 +534,19 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                                 // value={view.value}
                                 disableAnimation={true}
                                 classNames={{
-                                  base: cn(
+                                  base: clsx(
                                     "inline-flex w-full max-w-md m-0",
                                     "cursor-pointer rounded-0 gap-[10px] p-[10px] border-none",
                                     "data-[selected=true]:border-yellow",
                                   ),
-                                  wrapper: cn(
+                                  wrapper: clsx(
                                     "mr-0 rtl:ml-0",
                                     "text-white after:text-white",
                                     "after:bg-yellow",
                                     "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
                                     "group-data-[focus-visible=true]:ring-yellow",
                                   ),
-                                  label: cn("w-full"),
+                                  label: clsx("w-full"),
                                 }}
                               >
                                 <div className="flex items-center gap-[10px]">
@@ -555,19 +560,19 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                                 // value={view.value}
                                 disableAnimation={true}
                                 classNames={{
-                                  base: cn(
+                                  base: clsx(
                                     "inline-flex w-full max-w-md m-0",
                                     "cursor-pointer rounded-0 gap-[10px] p-[10px] border-none",
                                     "data-[selected=true]:border-yellow",
                                   ),
-                                  wrapper: cn(
+                                  wrapper: clsx(
                                     "mr-0 rtl:ml-0",
                                     "text-white after:text-white",
                                     "after:bg-yellow",
                                     "rounded-[4px] before:rounded-[4px] after:rounded-[4px]",
                                     "group-data-[focus-visible=true]:ring-yellow",
                                   ),
-                                  label: cn("w-full"),
+                                  label: clsx("w-full"),
                                 }}
                               >
                                 <div className="flex items-center gap-[10px]">
@@ -836,7 +841,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                       key={1}
                       aria-label="Custom Field"
                       title="Custom Field"
-                      classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                      classNames={{ base: clsx("p-[16px] border-b border-white-active"), trigger: clsx("p-0"), title: clsx("text-base"), content: clsx("py-0") }}
                     >
                       <div className="flex w-full pt-[12px]">
                         <Table
@@ -882,7 +887,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                       key={2}
                       aria-label="Attachment"
                       title="Attachment"
-                      classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                      classNames={{ base: clsx("p-[16px] border-b border-white-active"), trigger: clsx("p-0"), title: clsx("text-base"), content: clsx("py-0") }}
                     >
                       <div className="flex w-full pt-[12px]">
                         <Table
@@ -951,7 +956,7 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                       key={3}
                       aria-label="Link"
                       title="Link"
-                      classNames={{ base: cn("p-[16px] border-b border-white-active"), trigger: cn("p-0"), title: cn("text-base"), content: cn("py-0") }}
+                      classNames={{ base: clsx("p-[16px] border-b border-white-active"), trigger: clsx("p-0"), title: clsx("text-base"), content: clsx("py-0") }}
                     >
                       <div className="flex w-full pt-[12px]">
                         <Table

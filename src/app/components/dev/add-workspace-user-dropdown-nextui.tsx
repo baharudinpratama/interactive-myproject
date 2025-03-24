@@ -1,6 +1,6 @@
 import { fetchedUsers } from "@/app/data";
 import { useState } from "react";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react"
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react"
 
 export default function Page() {
     const [dropdownOpen, setDropdownOpen] = useState(false);

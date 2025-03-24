@@ -2,7 +2,7 @@ import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
 import { Icon } from "@iconify-icon/react";
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { useState } from "react";
 import IconPicker from "./icon-picker";
 import UrlConverter from "@/app/components/url-converter";

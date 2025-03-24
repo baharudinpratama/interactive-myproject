@@ -6,7 +6,11 @@ import { useModalContext } from "@/app/contexts/modal";
 import { fetchedUsers } from "@/app/data";
 import { Icon } from "@iconify-icon/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { Avatar, DatePicker, Divider, Modal, ModalBody, ModalContent, ModalHeader, Switch } from "@nextui-org/react";
+import { Avatar } from "@heroui/avatar";
+import { DatePicker } from "@heroui/date-picker";
+import { Divider } from "@heroui/divider";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Switch } from "@heroui/switch";
 import clsx from "clsx";
 import { useState } from "react";
 
