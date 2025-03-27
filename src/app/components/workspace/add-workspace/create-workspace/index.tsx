@@ -4,13 +4,13 @@ import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
 import { fetchedUsers } from "@/app/data";
-import { Icon } from "@iconify-icon/react";
-import { getLocalTimeZone, today } from "@internationalized/date";
 import { Avatar } from "@heroui/avatar";
 import { DatePicker } from "@heroui/date-picker";
 import { Divider } from "@heroui/divider";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { Switch } from "@heroui/switch";
+import { Icon } from "@iconify-icon/react";
+import { getLocalTimeZone, today } from "@internationalized/date";
 import clsx from "clsx";
 import { useState } from "react";
 
@@ -111,12 +111,11 @@ export default function CreateWorkspace() {
                         isSelected={isPrivate}
                         onChange={() => { setPrivate((prev) => !prev); isDropdownOpen && setDropdownOpen(false) }}
                         classNames={{
-                          wrapper: "px-[2px] py-[4px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
+                          wrapper: "w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
                           thumb: [
                             "w-[12px] h-[12px]",
                             "group-data-[hover=true]:border-yellow",
-                            "group-data-[pressed=true]:w-[12px]",
-                            "group-data-[selected=true]:ml-[12px] rtl:group-data-[selected=true]:mr-[12px] group-data-[selected]:group-data-[pressed]:ml-[12px]",
+                            "group-data-[selected=true]:ms-[8px]",
                           ],
                         }}
                       />
@@ -231,12 +230,11 @@ export default function CreateWorkspace() {
                       isSelected={useDueDate}
                       onChange={() => setUseDueDate((prev) => !prev)}
                       classNames={{
-                        wrapper: "px-[2px] py-[4px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
+                        wrapper: "w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
                         thumb: [
                           "w-[12px] h-[12px]",
                           "group-data-[hover=true]:border-yellow",
-                          "group-data-[pressed=true]:w-[12px]",
-                          "group-data-[selected=true]:ml-[12px] rtl:group-data-[selected=true]:mr-[12px] group-data-[selected]:group-data-[pressed]:ml-[12px]",
+                          "group-data-[selected=true]:ms-[8px]",
                         ],
                       }}
                     />
@@ -276,12 +274,11 @@ export default function CreateWorkspace() {
                         isSelected={taskApproval}
                         onChange={() => { setTaskApproval((prev) => !prev) }}
                         classNames={{
-                          wrapper: "px-[2px] py-[4px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
+                          wrapper: "w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
                           thumb: [
                             "w-[12px] h-[12px]",
                             "group-data-[hover=true]:border-yellow",
-                            "group-data-[pressed=true]:w-[12px]",
-                            "group-data-[selected=true]:ml-[12px] rtl:group-data-[selected=true]:mr-[12px] group-data-[selected]:group-data-[pressed]:ml-[12px]",
+                            "group-data-[selected=true]:ms-[8px]",
                           ],
                         }}
                       />

@@ -93,10 +93,10 @@ export default function Page() {
             <div className="flex flex-col items-center gap-[4px] self-stretch">
               <Image src={"/logo-myproject-yellow.png"} alt={"logo-myproject"} width={192} height={56} radius="none" />
 
-              <p className="max-w-[254px] text-center text-grey-light-active">
+              <p className="max-w-[344px] text-center text-grey-light-active">
                 {usePassword
-                  ? ("Please enter your password to continue and access your account.")
-                  : ("Please use your credentials to sign in.")}
+                  ? (t("SignIn.titleUsePassword"))
+                  : (t("SignIn.title"))}
               </p>
             </div>
 
@@ -106,8 +106,9 @@ export default function Page() {
                 name="email"
                 type="email"
                 label="Email"
-                placeholder="Enter your email"
+                placeholder={t("form.email.placeholder")}
                 maxLength={254}
+                autoComplete="true"
                 onValueChange={setEmailValue}
                 isInvalid={isInvalid}
                 errorMessage="Please enter a valid email"
@@ -128,7 +129,7 @@ export default function Page() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   label="Password"
-                  placeholder="Enter your password"
+                  placeholder={t("form.password.placeholder")}
                   maxLength={254}
                   endContent={
                     <div role="button" onClick={togglePassword}>
@@ -142,7 +143,7 @@ export default function Page() {
                     color="yellow"
                     children={
                       <span className="text-[12px] text-grey-light-active">
-                        I Agree with Terms & Conditions
+                        {t("termsAndConditions")}
                       </span>
                     }
                     classNames={{
@@ -152,7 +153,7 @@ export default function Page() {
 
                   <Link href="/forget-password">
                     <span className="text-[12px] text-grey-light-active">
-                      Forget Password?
+                      {t("forgetPassword")}?
                     </span>
                   </Link>
                 </div>
@@ -161,7 +162,7 @@ export default function Page() {
 
             <MyButton
               color="yellow"
-              children={t("sign-in")}
+              children={t("signIn")}
               onPress={handleSignIn}
             />
 
@@ -169,17 +170,17 @@ export default function Page() {
               <div className="flex flex-col gap-[16px] self-stretch">
                 <div className="flex gap-[10px] justify-center items-center self-stretch">
                   <div className="flex h-[1px] w-full bg-grey-lighter"></div>
-                  <div className="text-grey-light-active text-center text-[12px] font-semibold">Or</div>
+                  <div className="text-grey-light-active text-center text-[12px] font-semibold">{t("or")}</div>
                   <div className="flex h-[1px] w-full bg-grey-lighter"></div>
                 </div>
 
                 <MyButton
                   variant="bordered"
                   startContent={
-                    <Image src={"/icon-google-gray.png"} alt={"google-icon"} height={16} radius="none" />
+                    <Icon icon="fa-brands:google" height={16} />
                   }
                   onPress={() => signIn("google", { callbackUrl: "/dashboard" })}
-                  children="Sign in with Google"
+                  children={t("signInWith", { provider: "Google" })}
                 />
               </div>
             )}
@@ -187,8 +188,8 @@ export default function Page() {
 
           {!usePassword && (
             <div className="flex justify-center items-center gap-[6px]">
-              <div className="text-grey-light-active">Don't have an account?</div>
-              <Link href={"/sign-up"} className="text-yellow-hover font-bold focus:outline-yellow-hover focus:outline-offset-2">Sign Up</Link>
+              <div className="text-grey-light-active">{t("SignIn.noAccount")}</div>
+              <Link href={"/sign-up"} className="text-yellow-hover font-bold focus:outline-yellow-hover focus:outline-offset-2">{t("signUp")}</Link>
             </div>
           )}
         </div>
@@ -207,7 +208,7 @@ export default function Page() {
 
       {/* Language */}
       <div className="absolute w-20 top-[24px] right-[24px]">
-        <Select aria-label="Select language" selectedKeys={[locale]} onSelectionChange={(item) => { if (item.currentKey) { setLocale(item.currentKey) } }}>
+        <Select name="selectLanguage" aria-label="Select language" selectedKeys={[locale]} onSelectionChange={(item) => { if (item.currentKey) { setLocale(item.currentKey) } }}>
           <SelectItem key="en">
             EN
           </SelectItem>
@@ -226,12 +227,12 @@ export default function Page() {
                   <Icon icon="solar:lock-keyhole-linear" width={37} className="self-center" />
 
                   <div className="self-center">
-                    <span className="text-[16px] font-semibold">Sign in with your InterActive ID</span>
+                    <span className="text-[16px] font-semibold">{t("SignIn.verifyTitle")}</span>
                   </div>
 
                   <div className="flex flex-col gap-[5px] self-stretch">
                     <p className="self-center text-center text-grey-light-active">
-                      To help secure your account, InterActive Holic wants to ensure it's really you trying to sign in
+                      {t("SignIn.verifySubtitle")}
                     </p>
 
                     <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]" onClick={() => router.push("/dashboard")}>
@@ -248,25 +249,26 @@ export default function Page() {
 
                   <div className="flex flex-col gap-[5px] self-stretch">
                     <span className="flex justify-center">
-                      Check your InterActive Holic on another device.
+                      {t("SignIn.checkOtherDevice")}
                     </span>
 
                     <p className="text-center text-grey-light-active">
-                      Swipe down the notification panel and tap on the new notification. Then, select <span className="text-grey-dark-active font-bold">'Yes'</span> and press <span className="text-grey-dark-active font-bold">18</span> in the app to confirm your login.
+                      {t("SignIn.otherDeviceMessage")}
+                      {/* Swipe down the notification panel and tap on the new notification. Then, select <span className="text-grey-dark-active font-bold">'Yes'</span> and press <span className="text-grey-dark-active font-bold">18</span> in the app to confirm your login. */}
                     </p>
                   </div>
 
                   <div className="flex justify-center items-center gap-[5px]">
-                    <div className="text-grey-light-active">Didn't get the code?</div>
+                    <div className="text-grey-light-active">{t("SignIn.noCode")}</div>
                     {canTriggerAction() ? (
-                      <Link href="#" className="text-yellow font-bold">Resend</Link>
+                      <Link href="#" className="text-yellow font-bold">{t("resend")}</Link>
                     ) : (
                       <span className="text-grey-light-active font-bold">{getTimerString()}</span>
                     )}
                   </div>
 
                   <div className="flex justify-center items-center">
-                    <button type="button" className="text-yellow font-bold" onClick={(e) => { closeModal(0); openModal(1); }}>Try another way</button>
+                    <button type="button" className="text-yellow font-bold" onClick={(e) => { closeModal(0); openModal(1); }}>{t("SignIn.tryOtherWay")}</button>
                   </div>
                 </div>
               </ModalBody>
@@ -284,12 +286,12 @@ export default function Page() {
                   <Icon icon="solar:shield-keyhole-linear" width={37} className="self-center" />
 
                   <div className="self-center">
-                    <span className="text-[16px] font-semibold">Sign in with your InterActive ID</span>
+                    <span className="text-[16px] font-semibold">{t("SignIn.verifyTitle")}</span>
                   </div>
 
                   <div className="flex flex-col gap-[5px] self-stretch">
                     <p className="self-center text-center text-grey-light-active">
-                      To help secure your account, InterActive MyProject wants to ensure it"s really you trying to sign in
+                      {t("SignIn.verifySubtitle")}
                     </p>
 
                     <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]" onClick={() => router.push("/dashboard")}>
@@ -301,7 +303,7 @@ export default function Page() {
                   </div>
 
                   <div className="flex justify-center">
-                    Choose how you want to sign in:
+                    {t("SignIn.chooseOption.title")}:
                   </div>
 
                   <MyButton
@@ -315,7 +317,8 @@ export default function Page() {
                     }
                     children={
                       <p className="text-base">
-                        Choose <span className="font-bold">'Yes'</span> on InterActive Holic
+                        {t("SignIn.chooseOption.chooseYes")}
+                        {/* Choose <span className="font-bold">'Yes'</span> on InterActive Holic */}
                       </p>
                     }
                   />
@@ -331,7 +334,7 @@ export default function Page() {
                     }
                     children={
                       <p className="text-base">
-                        Enter your password
+                        {t("SignIn.chooseOption.enterPassword")}
                       </p>
                     }
                   />

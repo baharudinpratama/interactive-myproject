@@ -19,6 +19,7 @@ export const CustomCheckbox = ({
 }) => {
   return (
     <Checkbox
+      key={view.value}
       size="sm"
       value={view.value}
       disableAnimation={true}

@@ -1,3 +1,60 @@
 {
-  "sign-in": "Sign In"
+  "signIn": "Sign In",
+  "signInWith": "Sign In with {provider}",
+  "signUp": "Sign Up",
+  "or": "Or",
+  "continue": "Continue",
+  "termsAndConditions": "I Agree with Terms & Conditions",
+  "forgetPassword": "Forget Password",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "phoneNumber": "Phone Number",
+  "setting": "Setting",
+  "welcome": "Welcome",
+  "yes": "Yes",
+  "send": "Send",
+  "resend": "Resend",
+  "cancel": "Cancel",
+  "SignIn": {
+    "title": "Please use your credentials to sign in",
+    "titleUsePassword": "Please enter your password to continue and access your account",
+    "noAccount": "Don't have an account?",
+    "verifyTitle": "Sign in with your InterActive ID",
+    "verifySubtitle": "To help secure your account, InterActive Holic wants to ensure it's really you trying to sign in",
+    "checkOtherDevice": "Check your InterActive Holic on another device",
+    "otherDeviceMessage": "Swipe down the notification panel and tap on the new notification. Then, select 'Yes' and press 18 in the app to confirm your login.",
+    "noCode": "Didn't get the code?",
+    "tryOtherWay": "Try another way",
+    "chooseOption": {
+      "title": "Choose how you want to sign in",
+      "chooseYes": "Choose 'Yes' on InterActive Holic",
+      "enterPassword": "Enter your password"
+    }
+  },
+  "ForgetPassword": {
+    "title": "Forgot your password?",
+    "titleResetPassword": "Reset your password to regain access to your account securely."
+  },
+  "otp": {
+    "verifyEmail": "Verify Your Email",
+    "otpSent": "We have just sent a 6-digit code to",
+    "resend": "Resend the code in"
+  },
+  "form": {
+    "email": {
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "placeholder": "Enter your password"
+    },
+    "firstName": {
+      "placeholder": "Enter your first name"
+    },
+    "lastName": {
+      "placeholder": "Enter your last name"
+    },
+    "phoneNumber": {
+      "placeholder": "Enter your phone number"
+    }
+  }
 }

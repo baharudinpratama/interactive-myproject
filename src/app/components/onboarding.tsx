@@ -63,9 +63,10 @@ export default function Onboarding() {
                       </div>
                     </div>
                     <div className="flex justify-center gap-[15px]">
-                      {plans.map(plan => {
+                      {plans.map((plan, index) => {
                         return (
                           <MyButton
+                            key={index}
                             variant="bordered"
                             color="yellow"
                             children={plan}
@@ -88,9 +89,10 @@ export default function Onboarding() {
                     </div>
                     <div className="flex justify-center self-stretch">
                       <div className="grid grid-cols-3 md:min-w-[500px] gap-[15px]">
-                        {teamCategories.map(teamCat => {
+                        {teamCategories.map((teamCat, index) => {
                           return (
                             <MyButton
+                              key={index}
                               variant="bordered"
                               color="yellow"
                               children={teamCat}

@@ -66,7 +66,7 @@ export default function TaskStatuses() {
         </div>
       </div>
 
-      <Modal isOpen={openModals["defineWorkflowDetailStatus"]} onClose={() => openModal("defineWorkflow")} hideCloseButton={true}>
+      <Modal isOpen={openModals["defineWorkflowDetailStatus"] ?? false} onClose={() => openModal("defineWorkflow")} hideCloseButton={true}>
         <ModalContent className="overflow-visible">
           {() => {
             return (
@@ -102,7 +102,10 @@ export default function TaskStatuses() {
                       Icon & Name
 
                       <div className="flex items-center gap-[12px]">
-                        <div role="button" onClick={() => setShowIconPicker(prev => !prev)} className="flex size-[46px] p-[15px] justify-center items-center rounded-[8px] border border-grey-light-active bg-white-alt-active">
+                        <div
+                          onClick={() => setShowIconPicker(prev => !prev)}
+                          className="flex size-[46px] p-[15px] justify-center items-center rounded-[8px] border border-grey-light-active bg-white-alt-active cursor-pointer"
+                        >
                           <Icon icon={icon} height={20} style={{ color: color }} />
                         </div>
                         <MyInput
@@ -120,12 +123,15 @@ export default function TaskStatuses() {
                     <div className="flex flex-col gap-[2px]">
                       Custom Field
 
-                      <button onClick={() => openModal("defineWorkflowDetailStatus")} className="flex p-[10px] items-center gap-[8px] self-stretch rounded-[8px] border border-dashed">
+                      <div
+                        onClick={() => openModal("defineWorkflowDetailStatus")}
+                        className="flex p-[10px] items-center gap-[8px] self-stretch rounded-[8px] border border-dashed cursor-pointer"
+                      >
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="11" viewBox="0 0 10 11" fill="none">
                           <path d="M9 5.50003L5 5.50003M5 5.50003L1 5.50003M5 5.50003L5 1.5M5 5.50003L5 9.5" stroke="#B2BBC6" strokeWidth="1.25" strokeLinecap="round" />
                         </svg>
                         <div className="flex flex-1 text-grey-lighter">Add status</div>
-                      </button>
+                      </div>
                     </div>
 
                     <div className="flex justify-end items-center gap-[12px]">

@@ -1,3 +1,60 @@
 {
-  "sign-in": "Masuk"
+  "signIn": "Masuk",
+  "signInWith": "Masuk menggunakan {provider}",
+  "signUp": "Daftar",
+  "or": "Atau",
+  "continue": "Lanjutkan",
+  "termsAndConditions": "Saya Setuju dengan Syarat & Ketentuan",
+  "forgetPassword": "Lupa Password",
+  "firstName": "Nama Depan",
+  "lastName": "Nama Belakang",
+  "phoneNumber": "Phone Number",
+  "setting": "Pengaturan",
+  "welcome": "Selamat Datang",
+  "yes": "Ya",
+  "send": "Kirim",
+  "resend": "Kirim Ulang",
+  "cancel": "Batal",
+  "SignIn": {
+    "title": "Silakan gunakan kredensial Anda untuk masuk",
+    "titleUsePassword": "Masukkan kata sandi untuk melanjutkan dan mengakses akun Anda",
+    "noAccount": "Belum punya akun?",
+    "verifyTitle": "Masuk dengan ID InterActive Anda",
+    "verifySubtitle": "Untuk membantu mengamankan akun Anda, InterActive Holic ingin memastikan bahwa Anda benar-benar mencoba masuk",
+    "checkOtherDevice": "Periksa InterActive Holic Anda di perangkat lain",
+    "otherDeviceMessage": "Usap ke bawah panel notifikasi dan ketuk notifikasi baru. Kemudian, pilih 'Ya' dan tekan 18 di aplikasi untuk mengonfirmasi login Anda.",
+    "noCode": "Tidak mendapatkan kode?",
+    "tryOtherWay": "Coba cara lain",
+    "chooseOption": {
+      "title": "Pilih bagaimana cara masuk yang Anda inginkan",
+      "chooseYes": "Pilih 'Ya' pada InterActive Holic",
+      "enterPassword": "Masukkan password Anda"
+    }
+  },
+  "ForgetPassword": {
+    "title": "Forgot your password?",
+    "titleResetPassword": "Atur ulang kata sandi Anda untuk mendapatkan kembali akses ke akun Anda dengan aman."
+  },
+  "otp": {
+    "verifyEmail": "Verifikasi Email Anda",
+    "otpSent": "Kami baru saja mengirimkan 6 digit kode ke",
+    "resend": "Kirim ulang kode dalam"
+  },
+  "form": {
+    "email": {
+      "placeholder": "Masukkan email anda"
+    },
+    "password": {
+      "placeholder": "Masukkan password anda"
+    },
+    "firstName": {
+      "placeholder": "Masukkan nama depan anda"
+    },
+    "lastName": {
+      "placeholder": "Masukkan nama belakang anda"
+    },
+    "phoneNumber": {
+      "placeholder": "Masukkan nomor telepon anda"
+    }
+  }
 }

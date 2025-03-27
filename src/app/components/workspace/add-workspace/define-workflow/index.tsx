@@ -49,7 +49,7 @@ export default function DefineWorkflow() {
 
   return (
     <>
-      <Modal isOpen={openModals["defineWorkflow"]} hideCloseButton={true}>
+      <Modal isOpen={openModals["defineWorkflow"] ?? false} hideCloseButton={true}>
         <ModalContent>
           {() => (
             <>
@@ -80,25 +80,33 @@ export default function DefineWorkflow() {
 
               <ModalBody className="px-[25px] pb-[20px] pt-[10px]">
                 <div className="flex flex-col gap-[12px] self-stretch">
-                  <RadioGroup defaultValue={"1"} value={currentFlow} classNames={{ base: "gap-0 ", wrapper: "gap-0" }}>
-                    <div className="flex px-[25px] py-[10px] items-center gap-[12px] self-stretch rounded-[7px] border border-white-active bg-white-alt-hover">
-                      {flows.map((flow, index) => (
-                        <>
-                          {index !== 0 && <Divider className="flex flex-1 bg-grey-lighter" />}
-                          <div className="flex gap-[10px]">
-                            <Radio
-                              key={flow.id}
-                              value={flow.id}
-                              onClick={() => setCurrentFlow(flow.id)}
-                              disableAnimation={true}
-                              classNames={{ wrapper: "group-data-[selected=true]:border-yellow group-data-[selected=true]:bg-yellow-light", control: "group-data-[selected=true]:bg-yellow" }}
-                            >
-                              <span className="text-grey-dark-active text-base">{flow.name}</span>
-                            </Radio>
-                          </div>
-                        </>
-                      ))}
-                    </div>
+                  <RadioGroup
+                    orientation="horizontal"
+                    defaultValue={"1"}
+                    value={currentFlow}
+                    onValueChange={setCurrentFlow}
+                    classNames={{
+                      wrapper: "flex w-full px-[25px] py-[10px] justify-between items-center rounded-[7px] border border-white-active !bg-white-alt-hover"
+                    }}
+                  >
+                    {flows.map((flow, index) => (
+                      <div key={index} className="flex items-center gap-[12px]">
+                        {index !== 0 && <Divider className="flex items-center flex-1 bg-grey-lighter" />}
+                        {/* <div className="flex gap-[10px]"> */}
+                        <Radio
+                          value={flow.id}
+                          // onClick={() => setCurrentFlow(flow.id)}
+                          disableAnimation={true}
+                          classNames={{
+                            wrapper: "group-data-[selected=true]:border-yellow group-data-[selected=true]:bg-yellow-light",
+                            control: "group-data-[selected=true]:bg-yellow"
+                          }}
+                        >
+                          <span className="text-grey-dark-active text-base">{flow.name}</span>
+                        </Radio>
+                        {/* </div> */}
+                      </div>
+                    ))}
                   </RadioGroup>
 
                   {currentFlow === "1" && <AdvancedViews />}

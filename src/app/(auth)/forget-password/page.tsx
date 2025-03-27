@@ -6,9 +6,11 @@ import { Icon } from "@iconify-icon/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Page() {
   const router = useRouter();
+  const t = useTranslations();
 
   const [emailValue, setEmailValue] = useState("");
 
@@ -41,8 +43,8 @@ export default function Page() {
 
                 <p className="text-center text-grey-light-active">
                   {emailSent
-                    ? ("Reset your password to regain access to your account securely.")
-                    : ("Forgot your password?")}
+                    ? (t("ForgetPassword.titleResetPassword"))
+                  : (t("ForgetPassword.title"))}
                 </p>
               </div>
 
@@ -52,7 +54,7 @@ export default function Page() {
                   name="email"
                   type="email"
                   label="Email"
-                  placeholder="Enter your email"
+                  placeholder={t("form.email.placeholder")}
                   maxLength={254}
                   onValueChange={setEmailValue}
                   isInvalid={isInvalid}
@@ -67,7 +69,7 @@ export default function Page() {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     label="Password"
-                    placeholder="Enter your password"
+                    placeholder={t("form.password.placeholder")}
                     endContent={
                       <div role="button" onClick={togglePassword}>
                         {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
@@ -80,7 +82,7 @@ export default function Page() {
                     name="confirmPassword"
                     type={showPassword ? "text" : "password"}
                     label="Confirm Password"
-                    placeholder="Enter your password"
+                    placeholder={t("form.password.placeholder")}
                     endContent={
                       <div role="button" onClick={togglePassword}>
                         {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
@@ -94,7 +96,7 @@ export default function Page() {
                 ?
                 <MyButton
                   color="yellow"
-                  children="Continue"
+                  children={t("continue")}
                   onPress={() => {
                     router.push("sign-in?use-password");
                   }}
@@ -102,14 +104,14 @@ export default function Page() {
                 : <>
                   <MyButton
                     color="yellow"
-                    children="Send"
+                    children={t("send")}
                     onPress={() => { setEmailSent(true); }}
                   />
 
                   <MyButton
                     variant="bordered"
                     color="yellow"
-                    children="Cancel"
+                    children={t("cancel")}
                     onPress={() => router.push("sign-in?use-password")}
                   />
                 </>

@@ -10,9 +10,11 @@ import { Icon } from "@iconify-icon/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Page() {
   const router = useRouter();
+  const t = useTranslations();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,11 +57,11 @@ export default function Page() {
         <div className="flex flex-col xs:mx-4 px-[75px] py-[54px] items-start bg-white rounded-[8px] shadow-lg">
           <div className="flex flex-col gap-[42px] self-stretch">
             <div className="flex flex-col md:min-w-[344px] gap-[16px] self-stretch">
-              <div className="flex flex-col gap-[4px] self-stretch">
+              <div className="flex flex-col items-center gap-[4px] self-stretch">
                 <Image src={"/logo-myproject-yellow.png"} alt={"logo myproject"} width={192} height={56} />
 
                 <p className="max-w-[254px] text-center text-grey-light-active">
-                  Please use your credentials to sign in.
+                  {t("SignIn.title")}
                 </p>
               </div>
 
@@ -70,8 +72,12 @@ export default function Page() {
                     name="email"
                     type="email"
                     label="Email"
-                    placeholder="Enter your email"
+                    autoComplete="true"
+                    placeholder={t("form.email.placeholder")}
                     maxLength={254}
+                    // onValueChange={setEmailValue}
+                    // isInvalid={isInvalid}
+                    errorMessage="Please enter a valid email"
                   />
 
                   <MyInput
@@ -79,7 +85,7 @@ export default function Page() {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     label="Password"
-                    placeholder="Enter your password"
+                    placeholder={t("form.password.placeholder")}
                     endContent={
                       <div role="button" onClick={togglePassword}>
                         {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
@@ -92,7 +98,7 @@ export default function Page() {
                     name="confirmPassword"
                     type={showPassword ? "text" : "password"}
                     label="Confirm Password"
-                    placeholder="Enter your password"
+                    placeholder={t("form.password.placeholder")}
                     endContent={
                       <div role="button" onClick={togglePassword}>
                         {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
@@ -101,8 +107,9 @@ export default function Page() {
                   />
 
                   <MyCheckbox
+                    name="tncAgreement"
                     color="yellow"
-                    children={<p className="text-[12px] text-grey-light-active">I Agree with Terms & Conditions</p>}
+                    children={<p className="text-[12px] text-grey-light-active">{t("termsAndConditions")}</p>}
                     classNames={{
                       wrapper: "!size-[16px] before:size-[16px] after:size-[16px]",
                     }}
@@ -111,7 +118,7 @@ export default function Page() {
                   <MyButton
                     color="yellow"
                     size="lg"
-                    children="Continue"
+                    children={t("continue")}
                     onPress={() => {
                       setShowVerifyEmail(true); if (getTimerString() === '00:00') {
                         startTimer();
@@ -126,16 +133,16 @@ export default function Page() {
                   <MyInput
                     id="first-name"
                     name="firstName"
-                    label="First Name"
-                    placeholder="Enter your first name"
+                    label={t("firstName")}
+                    placeholder={t("form.firstName.placeholder")}
                     maxLength={254}
                   />
 
                   <MyInput
                     id="last-name"
                     name="lastName"
-                    label="Last Name"
-                    placeholder="Enter your last name"
+                    label={t("lastName")}
+                    placeholder={t("form.lastName.placeholder")}
                     maxLength={254}
                   />
 
@@ -143,23 +150,16 @@ export default function Page() {
                     id="phone-number"
                     name="phoneNumber"
                     type="number"
-                    label="Phone Number"
-                    placeholder="Enter your phone number"
+                    label={t("phoneNumber")}
+                    placeholder={t("form.phoneNumber.placeholder")}
                     maxLength={16}
-                    endContent={
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 6.00002V6.75002H18.75V6.00002H18ZM15.7172 2.32614L15.6111 1.58368L15.7172 2.32614ZM4.91959 3.86865L4.81353 3.12619H4.81353L4.91959 3.86865ZM5.07107 6.75002H18V5.25002H5.07107V6.75002ZM18.75 6.00002V4.30604H17.25V6.00002H18.75ZM15.6111 1.58368L4.81353 3.12619L5.02566 4.61111L15.8232 3.0686L15.6111 1.58368ZM4.81353 3.12619C3.91638 3.25435 3.25 4.0227 3.25 4.92895H4.75C4.75 4.76917 4.86749 4.63371 5.02566 4.61111L4.81353 3.12619ZM18.75 4.30604C18.75 2.63253 17.2678 1.34701 15.6111 1.58368L15.8232 3.0686C16.5763 2.96103 17.25 3.54535 17.25 4.30604H18.75ZM5.07107 5.25002C4.89375 5.25002 4.75 5.10627 4.75 4.92895H3.25C3.25 5.9347 4.06532 6.75002 5.07107 6.75002V5.25002Z" fill="currentColor" />
-                        <path d="M8 12H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        <path d="M8 15.5H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        <path d="M4 6V19C4 20.6569 5.34315 22 7 22H17C18.6569 22 20 20.6569 20 19V14M4 6V5M4 6H17C18.6569 6 20 7.34315 20 9V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                    }
+                    endContent={<Icon icon="solar:school-document-broken" height={18} />}
                   />
 
                   <MyButton
                     color="yellow"
                     size="lg"
-                    children="Sign Up"
+                    children={t("signUp")}
                     onPress={() => router.push("/dashboard")}
                   />
                 </>
@@ -189,11 +189,11 @@ export default function Page() {
                   <Icon icon="solar:shield-keyhole-linear" width={37} className="self-center" />
 
                   <div className="self-center">
-                    <span className="text-[16px] font-semibold">Verify Your Email</span>
+                    <span className="text-[16px] font-semibold">{t("otp.verifyEmail")}</span>
                   </div>
 
                   <div className="flex flex-col gap-[5px] self-stretch">
-                    <span className="self-center text-grey-light-active ">We have just sent a 6-digit code to</span>
+                    <span className="self-center text-grey-light-active ">{t("otp.otpSent")}</span>
                     <span className="self-center">user@email.com</span>
                   </div>
 
@@ -206,13 +206,12 @@ export default function Page() {
                       className="border border-grey-light-active"
                       // isDisabled={!enableResend}
                       children={
-                        <div className="text-[12px]">
-                          Resend the code
+                        <div className="flex text-[12px] gap-[4px]">
+                          {t("otp.resend")}
                           {/* {!enableResend && ( */}
-                          <> in <span className="font-bold">
+                          <span className="font-bold">
                             {getTimerString()}
                           </span>
-                          </>
                           {/* )} */}
                         </div>
                       }

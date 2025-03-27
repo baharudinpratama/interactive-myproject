@@ -1,13 +1,15 @@
 "use client"
 
 import Breadcrumb from "@/app/components/breadcrumb";
-import { Icon } from "@iconify-icon/react";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
+import { Icon } from "@iconify-icon/react";
 import { signOut, useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useSidebarContext } from "../contexts/sidebar";
 
 export default function Navbar() {
   const session = useSession();
+  const t = useTranslations();
   const { toggleSidebar } = useSidebarContext();
 
   return (
@@ -18,7 +20,7 @@ export default function Navbar() {
         <Breadcrumb />
       </div>
 
-      Welcome, {
+      {t("welcome")}, {
         session?.data?.user?.name
       }
 

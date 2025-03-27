@@ -62,9 +62,8 @@ export const CustomCheckbox = ({
 
       <div className="absolute right-1 top-[12px]">
         <Switch
-          checked={view.isDefault}
           isSelected={view.isDefault}
-          onClick={handleSwitchClick}
+          onValueChange={handleSwitchClick}
           aria-label={`Set ${view.label} as default view`}
           classNames={{
             wrapper: "px-[2px] py-[4px] w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",

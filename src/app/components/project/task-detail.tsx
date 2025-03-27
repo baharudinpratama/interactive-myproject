@@ -1001,14 +1001,90 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                   </Accordion>
                 )}
                 {selectedBottomView === "subtask" && (
-                  <div className="flex items-start min-h-[162px]">
-                    <div className="flex w-full p-[16px] items-center gap-[8px] text-grey-lighter cursor-pointer" onClick={() => openModal("createTask")}>
-                      <Icon icon="heroicons:plus" />
-                      <div className="flex items-center text-base">
-                        Add Task
-                      </div>
+                  <>
+                    <div className="flex w-full pt-[12px]">
+                      <Table
+                        aria-label="Table custom field"
+                        classNames={{
+                          wrapper: "p-0 shadow-none rounded-[8px] border border-white-active",
+                          thead: "[&>tr]:first:rounded-none",
+                          th: "first:rounded-s-none last:rounded-e-none",
+                          td: "text-[12px] border-b border-white-active",
+                        }}
+                      >
+                        <TableHeader className="bg-white-normal">
+                          <TableColumn key={"name"} className="text-[12px] font-normal text-grey-lighter">Name</TableColumn>
+                          <TableColumn key={"assignee"} className="text-[12px] font-normal text-grey-lighter">Assignee</TableColumn>
+                          <TableColumn key={"date"} className="text-[12px] font-normal text-grey-lighter">Priority</TableColumn>
+                          <TableColumn key={"author"} className="text-[12px] font-normal text-grey-lighter">Due Date</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow key={"link-1"}>
+                            <TableCell>Survey</TableCell>
+                            <TableCell>
+                              <AvatarGroup>
+                                <Avatar
+                                  name="I"
+                                  classNames={{
+                                    base: clsx(
+                                      "w-[24px] h-[24px] border border-white bg-yellow-light-active",
+                                      "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
+                                    ),
+                                    name: "text-base text-[10px] text-yellow-600"
+                                  }}
+                                />
+                                <Avatar
+                                  name="D"
+                                  classNames={{
+                                    base: clsx(
+                                      "w-[24px] h-[24px] border border-white bg-yellow-light-active",
+                                      "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
+                                    ),
+                                    name: "text-base text-[10px] text-yellow-600"
+                                  }}
+                                />
+                                <Avatar
+                                  name="B"
+                                  classNames={{
+                                    base: clsx(
+                                      "w-[24px] h-[24px] border border-white bg-yellow-light-active",
+                                      "!-ms-[6px] data-[hover=true]:-translate-x-[4px] rtl:data-[hover=true]:translate-x-[4px] transition-transform",
+                                    ),
+                                    name: "text-base text-[10px] text-yellow-600"
+                                  }}
+                                />
+                              </AvatarGroup>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-[8px]">
+                                <Icon icon="solar:flag-bold" height={16} style={{ color: "#E20000" }} />
+                                <div className="text-base">
+                                  High
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-grey-lighter">01/01/2024</TableCell>
+                          </TableRow>
+                          <TableRow key={"add-subtask"} aria-colspan={4}>
+                            <TableCell>
+                              <div className="flex w-full items-center gap-[8px] text-grey-lighter cursor-pointer" onClick={() => openModal("createTask")}>
+                                <Icon icon="heroicons:plus" />
+                                <div className="flex items-center text-base">
+                                  Add Subtask
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
                     </div>
-                  </div>
+                    <div className="flex items-start min-h-[162px]">
+
+                    </div>
+                  </>
                 )}
               </div>
               <div className="flex pt-[16px] justify-end items-center">
