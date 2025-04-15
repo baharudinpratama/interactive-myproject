@@ -10,11 +10,13 @@ import { useSidebarContext } from "../contexts/sidebar";
 export default function Navbar() {
   const session = useSession();
   const t = useTranslations();
-  const { toggleSidebar } = useSidebarContext();
+  const { isSidebarOpen, toggleSidebar } = useSidebarContext();
 
   return (
     <div className="flex p-[16px] items-center gap-[16px] self-stretch border-b border-white-active">
-      {/* <Icon icon="solar:hamburger-menu-bold" height={16} onClick={() => toggleSidebar()} /> */}
+      <div className="flex cursor-pointer">
+        {!isSidebarOpen && <Icon icon="solar:sidebar-code-linear" height={16} onClick={() => toggleSidebar()} />}
+      </div>
 
       <div className="flex flex-1">
         <Breadcrumb />
@@ -35,8 +37,8 @@ export default function Navbar() {
           </div>
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions">
-          <DropdownItem key="logout" onClick={() => signOut({ callbackUrl: "/sign-in" })}>
-            Log Out
+          <DropdownItem key="logout" onPress={() => signOut({ callbackUrl: "/sign-in" })}>
+            {t('signOut')}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

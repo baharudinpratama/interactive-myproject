@@ -1,7 +1,8 @@
 {
   "signIn": "Masuk",
   "signInWith": "Masuk menggunakan {provider}",
-  "signUp": "Daftar",
+  "signUp": "Registrasi",
+  "signOut": "Keluar",
   "or": "Atau",
   "continue": "Lanjutkan",
   "termsAndConditions": "Saya Setuju dengan Syarat & Ketentuan",
@@ -15,6 +16,19 @@
   "send": "Kirim",
   "resend": "Kirim Ulang",
   "cancel": "Batal",
+  "list": "Daftar",
+  "board": "Papan",
+  "calendar": "Kalender",
+  "workload": "Beban Kerja",
+  "product": "Produk",
+  "team": "Tim",
+  "customer": "Pelanggan",
+  "security": "Keamanan",
+  "permission": "Perizinan",
+  "personalTask": "Tugas Personal",
+  "language": "Bahasa",
+  "region": "Wilayah",
+  "timezone": "Zona Waktu",
   "SignIn": {
     "title": "Silakan gunakan kredensial Anda untuk masuk",
     "titleUsePassword": "Masukkan kata sandi untuk melanjutkan dan mengakses akun Anda",
@@ -56,5 +70,9 @@
     "phoneNumber": {
       "placeholder": "Masukkan nomor telepon anda"
     }
+  },
+  "Language": {
+    "title": "Sesuaikan bahasa dan wilayah.",
+    "notify": "Ingatkan saya untuk perubahan zona waktu"
   }
 }

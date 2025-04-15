@@ -10,12 +10,14 @@ import { Divider } from "@heroui/divider";
 import { Icon } from "@iconify-icon/react";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 
 export default function Body() {
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations();
   const { projects } = useWorkspaceContext();
   const { isSidebarOpen } = useSidebarContext();
   const { openModal } = useModalContext();

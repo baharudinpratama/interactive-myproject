@@ -10,7 +10,7 @@ export default function Header() {
 
   return (
     <div className={clsx("flex min-h-[75px] p-[16px] py-[11px] items-center self-stretch transition-all duration-500", {
-      // "gap-[8px]": isSidebarOpen,
+      "gap-[8px]": isSidebarOpen,
     })}>
       <div
         className={clsx("flex justify-center items-center flex-1 transition-all duration-500 cursor-pointer", {
@@ -22,8 +22,8 @@ export default function Header() {
         <Image src={"/logo-myproject-white.png"} alt={"logo-myproject"} width={170} height={52} priority />
       </div>
 
-      <button type="button" onClick={toggleSidebar} className="hidden duration-500">
-        {isSidebarOpen ? <Icon icon="solar:sidebar-code-linear" /> : <Image src={"/icon-myproject-rounded.png"} alt={""} width={23} height={23} />}
+      <button type="button" onClick={toggleSidebar} className="duration-500">
+        {isSidebarOpen ? <Icon icon="solar:sidebar-code-linear" height={16} /> : <Image src={"/icon-myproject-rounded.png"} alt={""} width={23} height={23} />}
       </button >
     </div>
   );

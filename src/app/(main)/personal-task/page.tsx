@@ -48,7 +48,7 @@ export default function Page() {
                   "w-[8px] h-[8px]",
                   "group-data-[hover=true]:border-yellow",
                   "group-data-[pressed=true]:w-[8px]",
-                  "group-data-[selected=true]:ml-[7px] rtl:group-data-[selected=true]:mr-[7px] group-data-[selected]:group-data-[pressed]:ml-[7px]",
+                  "group-data-[selected=true]:ms-[8px]",
                 ),
               }}
             >

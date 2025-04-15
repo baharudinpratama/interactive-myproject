@@ -5,8 +5,10 @@ import { Avatar } from "@heroui/avatar";
 import { Image } from "@heroui/image";
 import { Icon } from "@iconify-icon/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function List() {
+  const router = useRouter();
   const { openModal } = useModalContext();
   const [isEmpty, setIsEmpty] = useState(true);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -25,7 +27,7 @@ export default function List() {
               color="yellow"
               size="lg"
               children="Create Task"
-              onPress={() => openModal("createTask")}
+              onPress={() => router.push("/task-form")}
               className="px-[30px]"
             />
           </div>

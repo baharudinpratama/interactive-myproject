@@ -7,9 +7,12 @@ import { Image } from "@heroui/image";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/modal";
 import { Icon } from "@iconify-icon/react";
 import { useEffect, useState } from "react";
+import { useWindow } from "@/hooks/window";
 
 export default function Onboarding() {
   const { openModals, closeAllModals, openModal } = useModalContext();
+  const { width } = useWindow();
+  const modalSize = width < 1024 ? "full" : "2xl";
   const [step, setStep] = useState(1);
   const [plans] = useState(["Work", "Personal", "School"]);
   const [selectedPlan, setSelectedPlan] = useState("");
@@ -45,7 +48,7 @@ export default function Onboarding() {
   }
 
   return (
-    <Modal isOpen={openModals["onboarding"]} hideCloseButton={true} size={window.innerWidth < 1024 ? "full" : "2xl"}>
+    <Modal isOpen={openModals["onboarding"] ?? false} hideCloseButton={true} size={modalSize}>
       <ModalContent className="bg-[url('/bg-polkadot.png')] bg-cover">
         {() => (
           <>

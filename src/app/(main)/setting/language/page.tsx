@@ -1,8 +1,10 @@
 "use client";
 
 import MyCheckbox from "@/app/components/checkbox";
+import { useLanguage } from "@/app/contexts/language";
 import { useModalContext } from "@/app/contexts/modal";
 import { Select, SelectItem } from "@heroui/select";
+import { useTranslations } from "next-intl";
 import { allTimezones, useTimezoneSelect } from "react-timezone-select";
 
 const labelStyle = "original"
@@ -10,10 +12,11 @@ const timezones = { ...allTimezones }
 
 export function TimezoneSelect() {
   const { options, parseTimezone } = useTimezoneSelect({ labelStyle, timezones });
+  const t = useTranslations();
 
   return (
     <Select
-      label="Timezone"
+      label={t('timezone')}
       labelPlacement="outside"
       placeholder="Choose one"
       selectedKeys={["57"]}
@@ -46,6 +49,8 @@ export function TimezoneSelect() {
 
 export default function Page() {
   const { openModal } = useModalContext();
+  const { locale, setLocale, getLocale } = useLanguage();
+  const t = useTranslations();
 
   return (
     <div className="flex flex-col p-[16px] items-start gap-[16px] flex-1 self-stretch">
@@ -54,10 +59,10 @@ export default function Page() {
           <div className="flex gap-[4px]">
             <div className="flex flex-col flex-1 gap-[4px]">
               <div className="flex text-base !text-[25px] font-bold">
-                Language & Region
+                {t('language')} & {t('region')}
               </div>
               <span className="text-grey-25">
-                Customize your language and region.
+                {t('Language.title')}
               </span>
             </div>
             {/* <div className="flex items-end">
@@ -71,10 +76,11 @@ export default function Page() {
           </div>
 
           <Select
-            label="Language"
+            label={t('language')}
             labelPlacement="outside"
             placeholder="Choose one"
-            selectedKeys={["english"]}
+            selectedKeys={[getLocale() as string]}
+            onSelectionChange={(item) => { if (item.currentKey) { setLocale(item.currentKey) } }}
             classNames={{
               base: [
                 "text-base",
@@ -94,8 +100,8 @@ export default function Page() {
               ],
             }}
           >
-            <SelectItem key={"english"}>English</SelectItem>
-            <SelectItem key={"indonesia"}>Indonesia</SelectItem>
+            <SelectItem key={"en"}>English</SelectItem>
+            <SelectItem key={"id"}>Indonesia</SelectItem>
           </Select>
 
           <TimezoneSelect />
@@ -104,7 +110,7 @@ export default function Page() {
             color="yellow"
             children={
               <span className="text-[12px] text-grey-light-active">
-                Notify me of Timezone changes
+                {t('Language.notify')}
               </span>
             }
             classNames={{

@@ -1,12 +1,12 @@
 'use client';
 
 import { NextIntlClientProvider } from 'next-intl';
-import { Providers } from '@/app/providers';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface LanguageContextProps {
   locale: string;
   setLocale: (locale: string) => void;
+  getLocale: () => string | null;
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
@@ -37,6 +37,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLocaleState(newLocale);
   };
 
+  const getLocale = () => {
+    return localStorage.getItem('locale');
+  }
+
   let messages;
   try {
     messages = require(`../../../messages/${locale}.json`);
@@ -45,11 +49,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale }}>
+    <LanguageContext.Provider value={{ locale, setLocale, getLocale }}>
       <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
-        <Providers>
-          {children}
-        </Providers>
+        {children}
       </NextIntlClientProvider>
     </LanguageContext.Provider>
   );

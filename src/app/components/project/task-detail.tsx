@@ -1074,9 +1074,9 @@ export default function TaskDetail({ setIsEmpty }: { setIsEmpty: (isEmpty: boole
                                 </div>
                               </div>
                             </TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
+                            <TableCell children={""}></TableCell>
+                            <TableCell children={""}></TableCell>
+                            <TableCell children={""}></TableCell>
                           </TableRow>
                         </TableBody>
                       </Table>

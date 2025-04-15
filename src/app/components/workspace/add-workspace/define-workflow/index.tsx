@@ -30,7 +30,7 @@ export default function DefineWorkflow() {
     } else if (currentFlow === "2") {
       setCurrentFlow("3");
     } else if (currentFlow === "3") {
-      router.push("/project");
+      router.push("/project/project-1");
       setCurrentFlow("1");
       closeAllModals();
     }

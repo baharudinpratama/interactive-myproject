@@ -40,7 +40,7 @@ export default function Page({
   return (
     <>
       <div className="flex justify-between items-center self-stretch border-b">
-        <div className="flex items-center self-stretch">
+        <div className="flex items-center max-w-full self-stretch overflow-auto">
           <Tabs
             aria-label="Views"
             variant="underlined"

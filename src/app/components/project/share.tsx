@@ -79,7 +79,7 @@ export default function ShareProject() {
                       <div className="flex items-center">
                         <Switch
                           isSelected={enableInviteLink}
-                          onClick={() => setEnableInviteLink((prev) => !prev)}
+                          onValueChange={() => setEnableInviteLink((prev) => !prev)}
                           classNames={{
                             wrapper: "w-[28px] h-[16px] group-data-[focus-visible=true]:ring-yellow group-data-[selected=true]:bg-yellow",
                             thumb: [

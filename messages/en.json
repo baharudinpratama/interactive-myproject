@@ -2,6 +2,7 @@
   "signIn": "Sign In",
   "signInWith": "Sign In with {provider}",
   "signUp": "Sign Up",
+  "signOut": "Sign Out",
   "or": "Or",
   "continue": "Continue",
   "termsAndConditions": "I Agree with Terms & Conditions",
@@ -15,6 +16,20 @@
   "send": "Send",
   "resend": "Resend",
   "cancel": "Cancel",
+  "overview": "Overview",
+  "list": "List",
+  "board": "Board",
+  "calendar": "Calendar",
+  "workload": "Workload",
+  "product": "Product",
+  "team": "Team",
+  "customer": "Customer",
+  "security": "Security",
+  "permission": "Permission",
+  "personalTask": "Personal Task",
+  "language": "Language",
+  "region": "Region",
+  "timezone": "Timezone",
   "SignIn": {
     "title": "Please use your credentials to sign in",
     "titleUsePassword": "Please enter your password to continue and access your account",
@@ -56,5 +71,9 @@
     "phoneNumber": {
       "placeholder": "Enter your phone number"
     }
+  },
+  "Language": {
+    "title": "Customize your language and region.",
+    "notify": "Notify me of Timezone changes"
   }
 }

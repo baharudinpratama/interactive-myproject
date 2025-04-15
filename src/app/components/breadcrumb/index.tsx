@@ -83,8 +83,8 @@ export default function Breadcrumb() {
               <Listbox classNames={{ base: "p-0", list: "gap-0" }} itemClasses={{ base: "data-[hover=true]:bg-yellow-light-active data-[selectable=true]:focus:bg-white data-[focus=true]:bg-white" }} aria-label="Action">
                 <ListboxItem key="rename" onPress={() => { openModal("renameProject"); setIsOpen(false); }} classNames={{ base: "px-[10px] py-[8px] data-[selectable=true]:focus:bg-white data-[focus=true]:bg-white data-[hover=true]:bg-yellow-light-active" }}>
                   <div className="flex items-center gap-[8px] flex-1">
-                    <Icon icon="solar:pen-linear" height={16} />
-                    <div className="flex flex-1">Rename</div>
+                    <Icon icon="solar:pen-new-square-linear" height={16} />
+                    <div className="flex flex-1">About Project</div>
                   </div>
                 </ListboxItem>
 
@@ -129,6 +129,7 @@ export default function Breadcrumb() {
                           variant="light"
                           disableAnimation={true}
                           disableRipple={true}
+                          onPress={() => { openModal("projectStatuses"); setIsOpen(false); }}
                           children={
                             <div className="flex items-center gap-[8px] flex-1">
                               <Icon icon="solar:notification-unread-lines-linear" height={16} />

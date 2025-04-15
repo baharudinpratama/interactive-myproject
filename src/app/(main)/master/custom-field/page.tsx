@@ -359,7 +359,7 @@ export default function Page() {
                         }
                       }}
                       classNames={{
-                        wrapper: "p-0 shadow-none rounded-none border border-white-active",
+                        wrapper: "p-0 shadow-none rounded-none",
                         thead: "[&>tr]:first:rounded-none",
                         th: "first:rounded-s-none last:rounded-e-none border-y border-white-active",
                         tr: "h-[42px] border-b border-white-active",
@@ -381,7 +381,7 @@ export default function Page() {
                           <TableCell>Dec 8, 2025</TableCell>
                         </TableRow>
                         <TableRow key="last">
-                          <TableCell colSpan={5} className="text-grey-lighter cursor-pointer" onClick={() => openModal("createTask")}>
+                          <TableCell className="text-grey-lighter cursor-pointer" onClick={() => openModal("createTask")}>
                             <div className="flex py-[3px] items-center">
                               + Create Field
                             </div>
