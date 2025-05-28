@@ -8,20 +8,23 @@ import GanttMatematuk from "@/app/components/project/gantt/matematuk/gantt";
 import List from "@/app/components/project/list";
 import Overview from "@/app/components/project/overview/overview";
 import Workload from "@/app/components/project/workload";
+import { useProjectStore } from "@/lib/store/project-store";
 import { Divider } from "@heroui/divider";
 import { Tab, Tabs } from "@heroui/tabs";
 import { Icon } from "@iconify-icon/react";
-import { useState } from "react";
-// import { default as DHTMLXCalendar, getData } from "@/app/components/project/calendar/dhtmlx/calendar-dhtmlx";
-// import Calendar from "@/app/components/project/calendar/syncfusion/calendar";
-// import GanttView from "@/app/components/project/gantt/dhtmlx/gantt";
-// import GanttSyncfusion from "@/app/components/project/gantt/syncfusion/gantt";
+import { useEffect, useState } from "react";
 
 export default function Page({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: { id: string }
 }) {
+  const { fetchProject } = useProjectStore();
+
+  useEffect(() => {
+    fetchProject(params.id);
+  }, []);
+
   const views = [
     { id: "view-overview", name: "Overview", icon: "solar:calendar-search-linear" },
     { id: "view-list", name: "List", icon: "solar:checklist-linear" },
@@ -29,10 +32,6 @@ export default function Page({
     { id: "view-calendar-fullcalendar", name: "Calendar", icon: "solar:calendar-linear" },
     { id: "view-gantt-matematuk", name: "Gantt", icon: "solar:align-left-linear" },
     { id: "view-workload", name: "Workload", icon: "solar:spedometer-low-broken" },
-    // { id: "view-calendar-dhtmlx", name: "Calendar DHTMLX", icon: "solar:calendar-linear" },
-    // { id: "view-calendar-syncfusion", name: "Calendar Syncfusion", icon: "solar:calendar-linear" },
-    // { id: "view-gantt-dhtmlx", name: "Gantt DHTMLX", icon: "solar:align-left-linear" },
-    // { id: "view-gantt-syncfusion", name: "Gantt Syncfusion", icon: "solar:align-left-linear" },
   ];
 
   const [currentView, setCurrentView] = useState("view-overview");

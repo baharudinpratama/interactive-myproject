@@ -1,26 +1,13 @@
 "use client";
 
 import { Icon } from "@iconify-icon/react";
-import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [res, setRes] = useState<any>("{message}");
-
-  useEffect(() => {
-    fetch("http://localhost:8000/api/hello")
-      .then(res => res.json())
-      .then(setRes);
-  }, []);
-
   return (
     <>
       <div className="flex justify-between items-center self-stretch border-b">
         <div className="p-[16px]">
           All workspace
-        </div>
-
-        <div className="flex">
-          {res.message}
         </div>
 
         <div className="flex p-[16px] items-center gap-[8px] self-stretch">

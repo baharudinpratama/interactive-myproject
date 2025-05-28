@@ -30,6 +30,9 @@
   "language": "Language",
   "region": "Region",
   "timezone": "Timezone",
+  "SignUp": {
+    "title": "Fill in details to sign up"
+  },
   "SignIn": {
     "title": "Please use your credentials to sign in",
     "titleUsePassword": "Please enter your password to continue and access your account",

@@ -14,21 +14,28 @@ import { Image } from "@heroui/image";
 import { Input, Textarea } from "@heroui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
 import { Select, SelectItem } from "@heroui/select";
+import { Spinner } from "@heroui/spinner";
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/table";
 import { Tab, Tabs } from "@heroui/tabs";
+import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify-icon/react";
-import { parseDate } from "@internationalized/date";
+import { today } from "@internationalized/date";
 import type { DateValue } from "@react-types/calendar";
+import axios from "axios";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 export default function Page() {
+  const { params } = useParams();
+  const [loading, setLoading] = useState(false);
   const { openModal, closeAllModals } = useModalContext();
-  const [taskName, setTaskName] = useState("Survey");
+  const [taskName, setTaskName] = useState("New Task");
   const [renameMode, setRenameMode] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<string>("to-do");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [statusName, setStatusName] = useState<string>("");
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>(["InterActive"]);
-  const [dueDate, setDueDate] = useState<DateValue | null>(parseDate("2025-02-08"));
+  const [dueDate, setDueDate] = useState<DateValue | null>(today(Intl.DateTimeFormat().resolvedOptions().timeZone));
   const [selectedPriority, setSelectedPriority] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<string[]>(["v1"]);
   const [inputDescription, setInputDescription] = useState("");
@@ -36,6 +43,8 @@ export default function Page() {
   const [dueDateTime, setDueDateTime] = useState<TimeInputValue | null>(null);
   const [selectedRightView, setSelectedRightView] = useState("act");
   const [selectedBottomView, setSelectedBottomView] = useState("detail");
+  const [fetchedStatus, setFetchedStatus] = useState<any>([]);
+
   const handleSelectAssignees = (assignee: string) => {
     setSelectedAssignees((prevAssignees) =>
       prevAssignees.includes(assignee)
@@ -43,6 +52,7 @@ export default function Page() {
         : [...prevAssignees, assignee]
     );
   }
+
   const handleSelectTags = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag)
@@ -51,13 +61,60 @@ export default function Page() {
     );
   }
 
+  const handleSelectStatus = (statusId: string, statusName: string) => {
+    setSelectedStatus(statusId);
+    setStatusName(statusName);
+  }
+
+  const handleFormSubmit = async () => {
+    setLoading(true);
+
+    const form = new FormData();
+    form.append("taskType", "task");
+    form.append("taskName", taskName);
+    form.append("taskStatus", selectedStatus);
+    form.append("dueDate", dueDate?.toString() as string);
+    form.append("taskDesc", inputDescription);
+
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/tasks/store`, form)
+        .then(response => {
+          addToast({
+            title: "Success",
+            description: response.data.message,
+          });
+        });
+    } catch (error: any) {
+      if (error.response && error.response.status === 422) {
+        const errors = error.response.data.message;
+        addToast({
+          title: "Error",
+          description: `Validation error: ${errors}`,
+        });
+      } else {
+        console.log("Something went wrong:", error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/statuses/`)
+      .then(response => {
+        setFetchedStatus(() => [...response.data.data]);
+      });
+
+    console.log(params);
+  }, []);
+
   return (
     <div className="flex flex-wrap w-full overflow-y-auto">
       <div className="flex xs:basis-full sm:basis-full md:basis-7/12 p-[16px] flex-col justify-start flex-1">
         <div className="flex flex-col border-b border-white-active">
           <div className="flex justify-between items-center self-stretch font-semibold">
             <div className="flex items-center gap-[4px]">
-              <Icon icon="cuida:subtask-outline" height={14} />
+              {/* <Icon icon="cuida:subtask-outline" height={14} /> */}
               <div className="flex h-[24px] items-center" onClick={() => setRenameMode(true)}>
                 {renameMode ? (
                   <Input
@@ -80,7 +137,7 @@ export default function Page() {
             </div>
             <Icon icon="solar:pen-2-linear" height={17} onClick={() => setRenameMode(false)} />
           </div>
-          <div className="grid xs:grid-cols-1 sm:grid-cols-1 grid-cols-2 pb-[16px] pt-[8px] gap-x-[16px] gap-y-[12px]">
+          <div className="grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 grid-cols-2 pb-[16px] pt-[8px] gap-x-[16px] gap-y-[12px]">
             <Popover placement="bottom-start">
               <PopoverTrigger className="aria-expanded:opacity-100 aria-expanded:scale-1">
                 <div className="flex items-center gap-[20px] cursor-pointer">
@@ -89,7 +146,7 @@ export default function Page() {
                     Status
                   </div>
                   <div className="flex text-grey-lighter">
-                    Empty
+                    {statusName === "" ? "Empty" : statusName}
                   </div>
                 </div>
               </PopoverTrigger>
@@ -140,23 +197,30 @@ export default function Page() {
                   </div>
                   <Divider />
                   <ul>
-                    <li key="to-do" className="flex justify-between items-center px-[10px] py-[8px] gap-[8px] cursor-pointer hover:bg-yellow-light-active last:rounded-b-[8px]" onClick={() => setSelectedStatus("to-do")}>
-                      <div className="flex items-center gap-[8px]">
-                        <Icon icon="solar:record-circle-filled-linear" height={16} style={{ color: "#B2BBC6" }} />
-                        <div className="text-base">
-                          TO DO
-                        </div>
-                      </div>
-                      {selectedStatus === "to-do" ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path fillRule="evenodd" clipRule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="#FEC031" />
-                        </svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <circle cx="12" cy="12" r="10" stroke="#B2BBC6" stroke-width="1.25" />
-                        </svg>
-                      )}
-                    </li>
+                    {fetchedStatus.map((status: any) => {
+                      return (
+                        <li key={`status-${status.stat_id}`}
+                          className="flex justify-between items-center px-[10px] py-[8px] gap-[8px] cursor-pointer hover:bg-yellow-light-active last:rounded-b-[8px]"
+                          onClick={() => handleSelectStatus(status.stat_id, status.stat_name)}
+                        >
+                          <div className="flex items-center gap-[8px]">
+                            <Icon icon="solar:record-circle-filled-linear" height={16} style={{ color: status.stat_color }} />
+                            <div className="text-base">
+                              {status.stat_name}
+                            </div>
+                          </div>
+                          {selectedStatus === status.stat_id ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <path fillRule="evenodd" clipRule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="#FEC031" />
+                            </svg>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <circle cx="12" cy="12" r="10" stroke="#B2BBC6" strokeWidth="1.25" />
+                            </svg>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </PopoverContent>
@@ -1057,10 +1121,12 @@ export default function Page() {
           )}
         </div>
         <div className="flex pt-[16px] justify-end items-center">
+          {loading && <Spinner />}
+
           <MyButton
             color="yellow"
             children="Save"
-            onPress={() => { closeAllModals() }}
+            onPress={() => handleFormSubmit()}
             className="px-[24px]"
           />
         </div>

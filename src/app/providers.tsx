@@ -1,6 +1,8 @@
 "use client";
 
+import { ModalProvider } from "@/app/contexts/modal";
 import { HeroUIProvider } from "@heroui/system";
+import { ToastProvider } from "@heroui/toast";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useEffect } from "react";
@@ -14,9 +16,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextThemesProvider defaultTheme="light">
       <HeroUIProvider>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        <ToastProvider placement={"top-right"} />
+        <ModalProvider>
+          <SessionProvider>
+            {children}
+          </SessionProvider>
+        </ModalProvider>
       </HeroUIProvider>
     </NextThemesProvider>
   );

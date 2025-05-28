@@ -5,7 +5,6 @@ import { useModalContext } from "@/app/contexts/modal";
 import { useSidebarContext } from "@/app/contexts/sidebar";
 import { useWorkspaceContext } from "@/app/contexts/workspace";
 import { fetchedMenuItems } from "@/app/data";
-import { Avatar } from "@heroui/avatar";
 import { Divider } from "@heroui/divider";
 import { Icon } from "@iconify-icon/react";
 import clsx from "clsx";
@@ -14,11 +13,16 @@ import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 
+import { useWorkspaceStore } from "@/lib/store/workspace-store";
+
 export default function Body() {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations();
+
+  const { workspace } = useWorkspaceStore();
   const { projects } = useWorkspaceContext();
+
   const { isSidebarOpen } = useSidebarContext();
   const { openModal } = useModalContext();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -134,50 +138,61 @@ export default function Body() {
           )}
         </div>
 
-        <>
-          <div className="flex flex-col gap-[8px] self-stretch transition-all duration-500">
-            <div
-              className={clsx("flex w-full min-h-[37px] p-[8px] items-center self-stretch rounded-[8px] cursor-pointer", {
-                "gap-[8px]": isSidebarOpen,
-              })}
-              onClick={() => { }}
-            >
-              <div className="flex justify-center items-center min-w-[24px] self-stretch">
-                <Avatar
-                  name="R"
-                  classNames={{ base: "w-[20px] h-[20px] rounded-[3px] bg-yellow-active", name: "text-base text-[10px] text-yellow-light-active" }}
-                />
-              </div>
-
-              {isSidebarOpen && (
-                <div className="flex flex-1 whitespace-nowrap overflow-hidden">
-                  RnD
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-[8px]">
+        {workspace.map((ws) => {
+          return (
+            <div key={ws.ws_id} className="flex flex-col gap-[8px] self-stretch transition-all duration-500">
               <div
-                className={clsx("flex w-full min-h-[37px] p-[8px] pl-[16px] items-center self-stretch rounded-[8px] cursor-pointer font-semibold bg-[#F9E9B8]", {
+                className={clsx("flex w-full min-h-[37px] p-[8px] items-center self-stretch rounded-[8px] cursor-pointer", {
                   "gap-[8px]": isSidebarOpen,
                 })}
-                onClick={() => { router.push(`/project/${projects[0].id}`) }}
+                onClick={() => { }}
               >
                 <div className="flex justify-center items-center min-w-[24px] self-stretch">
-                  {isLoaded && (
-                    <Icon icon={projects[0].icon} height={20} color={projects[0].iconColor} />
-                  )}
+                  {/* <Avatar
+                      name={ws.ws_name[0]}
+                      classNames={{ base: "w-[20px] h-[20px] rounded-[3px] bg-yellow-active", name: "text-base text-[10px] text-yellow-light-active" }}
+                    /> */}
+                  <Icon icon={ws.ws_icon} height={20} color={"#090b0e"} />
                 </div>
 
                 {isSidebarOpen && (
                   <div className="flex flex-1 whitespace-nowrap overflow-hidden">
-                    {projects[0].name}
+                    {ws.ws_name}
                   </div>
                 )}
               </div>
+
+              {ws.projects.map((proj) => {
+                const isActive = pathname === `/project/${proj.proj_id}`;
+
+                return (
+                  <div key={proj.proj_id} className="flex flex-col gap-[8px]">
+                    <div
+                      className={
+                        clsx(["flex w-full min-h-[37px] p-[8px] pl-[16px] items-center self-stretch rounded-[8px] cursor-pointer"], {
+                          "gap-[8px]": isSidebarOpen,
+                          "font-semibold bg-[#F9E9B8]": isActive
+                        })}
+                      onClick={() => { router.push(`/project/${proj.proj_id}`) }}
+                    >
+                      <div className="flex justify-center items-center min-w-[24px] self-stretch">
+                        {isLoaded && (
+                          <Icon icon={proj.proj_icon} height={20} color={"#090b0e"} />
+                        )}
+                      </div>
+
+                      {isSidebarOpen && (
+                        <div className="flex flex-1 whitespace-nowrap overflow-hidden">
+                          {proj.proj_name}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        </>
+          );
+        })}
       </div>
       <div className="flex px-[16px] self-stretch">
         <Divider />

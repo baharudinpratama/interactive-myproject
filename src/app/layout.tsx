@@ -1,8 +1,10 @@
 import { LanguageProvider } from '@/app/contexts/language';
-import "@/app/globals.css";
-import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { Providers } from '@/app/providers';
+
+import "@/app/globals.css";
+import localFont from "next/font/local";
+
+import type { Metadata } from "next";
 
 const proximaNova = localFont({
   src: [

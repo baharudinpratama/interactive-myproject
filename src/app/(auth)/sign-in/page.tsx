@@ -1,14 +1,17 @@
 "use client";
 
 import MyButton from "@/app/components/button";
-import MyCheckbox from "@/app/components/checkbox";
 import { useCountdownTimer } from "@/app/components/countdown-timer";
 import MyInput from "@/app/components/input";
+import ModalLoading from "@/app/components/modal-loading";
 import { useLanguage } from "@/app/contexts/language";
+import { useModalContext } from "@/app/contexts/modal";
 import { Image } from "@heroui/image";
 import { Modal, ModalBody, ModalContent } from "@heroui/modal";
 import { Select, SelectItem } from "@heroui/select";
+import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify-icon/react";
+import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -21,6 +24,7 @@ export default function Page() {
   const t = useTranslations();
   const { locale, setLocale } = useLanguage();
   const { data: session } = useSession();
+  const { openModal: openModalGlobal, closeModal: closeModalGlobal } = useModalContext();
 
   const [openModals, setOpenModals] = useState<boolean[]>([]);
 
@@ -40,15 +44,20 @@ export default function Page() {
     });
   };
 
-  const [emailValue, setEmailValue] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isInvalid, setIsInvalid] = useState(true);
 
-  const validateEmail = (emailValue: string) => emailValue.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-  const isInvalid = useMemo(() => {
-    if (emailValue === "") return false;
+  useMemo(() => {
+    if (email === "") return setIsInvalid(false);
 
-    return validateEmail(emailValue) ? false : true;
-  }, [emailValue]);
+    return validateEmail(email) ? setIsInvalid(false) : setIsInvalid(true);
+  }, [email]);
 
   const {
     getTimerString,
@@ -63,13 +72,101 @@ export default function Page() {
     setShowPassword(!showPassword);
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async (event: any) => {
+    if (event.type === "submit") {
+      event.preventDefault();
+    }
+
     if (usePassword) {
-      router.push("/dashboard");
+      if (!password) {
+        return addToast({
+          color: "danger",
+          title: "Failed",
+          description: "Please provide password.",
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        });
+      }
+
+      try {
+        openModalGlobal("modalLoading");
+
+        const res = await signIn("credentials", { email: email, password: password, redirect: false });
+
+        if (res?.ok) {
+          router.push("/dashboard");
+          closeModalGlobal("modalLoading");
+        } else {
+          addToast({
+            color: "danger",
+            title: "Failed",
+            description: "Invalid password.",
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+          closeModalGlobal("modalLoading");
+        }
+      } catch (error: any) {
+        if (error.response?.status) {
+          addToast({
+            color: "danger",
+            title: "Failed",
+            description: error.response.data.message,
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+          closeModalGlobal("modalLoading");
+        } else {
+          addToast({
+            color: "danger",
+            title: "Error",
+            description: "Something went wrong.",
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+          closeModalGlobal("modalLoading");
+        }
+      }
     } else {
-      openModal(0);
-      if (getTimerString() === '00:00') {
-        startTimer();
+      if (!validateEmail(email)) {
+        setIsInvalid(true);
+        return;
+      }
+
+      try {
+        openModalGlobal("modalLoading");
+
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/check-email`, {
+          email: email,
+          context: "sign-in"
+        }).then(response => {
+          if (response.data.success) {
+            openModal(0);
+            if (getTimerString() === "00:00") {
+              startTimer();
+            }
+          }
+        });
+      } catch (error: any) {
+        if (error.response?.status) {
+          addToast({
+            color: "danger",
+            title: "Failed",
+            description: error.response.data.message,
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+        } else {
+          addToast({
+            color: "danger",
+            title: "Error",
+            description: "Something went wrong.",
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+        }
+      } finally {
+        closeModalGlobal("modalLoading");
       }
     }
   }
@@ -89,7 +186,7 @@ export default function Page() {
       {/* Main content */}
       <div className="flex flex-col xs:mx-4 px-[75px] py-[54px] items-start bg-white rounded-[8px] shadow-lg">
         <div className="flex flex-col gap-[42px] self-stretch">
-          <form className="flex flex-col md:min-w-[344px] gap-[16px] self-stretch" action="#">
+          <form className="flex flex-col md:min-w-[344px] gap-[16px] self-stretch" onSubmit={handleSignIn}>
             <div className="flex flex-col items-center gap-[4px] self-stretch">
               <Image src={"/logo-myproject-yellow.png"} alt={"logo-myproject"} width={192} height={56} radius="none" />
 
@@ -109,7 +206,8 @@ export default function Page() {
                 placeholder={t("form.email.placeholder")}
                 maxLength={254}
                 autoComplete="true"
-                onValueChange={setEmailValue}
+                value={email}
+                onValueChange={setEmail}
                 isInvalid={isInvalid}
                 errorMessage="Please enter a valid email"
               />
@@ -117,11 +215,11 @@ export default function Page() {
 
             {usePassword && (
               <>
-                <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]" onClick={() => router.push("/dashboard")}>
+                <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]">
                   <div className="flex items-center justify-center w-6 h-6 text-white bg-[#6985FF] rounded-full">
-                    U
+                    {email[0].toUpperCase()}
                   </div>
-                  user@email.com
+                  {email}
                 </div>
 
                 <MyInput
@@ -131,26 +229,16 @@ export default function Page() {
                   label="Password"
                   placeholder={t("form.password.placeholder")}
                   maxLength={254}
+                  value={password}
+                  onValueChange={setPassword}
                   endContent={
-                    <div role="button" onClick={togglePassword}>
+                    <div role="button" className="flex items-center justify-items-center" onClick={togglePassword}>
                       {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
                     </div>
                   }
                 />
 
-                <div className="flex xs:flex-col justify-between items-center">
-                  <MyCheckbox
-                    color="yellow"
-                    children={
-                      <span className="text-[12px] text-grey-light-active">
-                        {t("termsAndConditions")}
-                      </span>
-                    }
-                    classNames={{
-                      wrapper: "!size-[16px] before:size-[16px] after:size-[16px]",
-                    }}
-                  />
-
+                <div className="flex xs:flex-col justify-between items-end">
                   <Link href="/forget-password">
                     <span className="text-[12px] text-grey-light-active">
                       {t("forgetPassword")}?
@@ -179,7 +267,7 @@ export default function Page() {
                   startContent={
                     <Icon icon="fa-brands:google" height={16} />
                   }
-                  onPress={() => signIn("google", { callbackUrl: "/dashboard" })}
+                  onPress={() => signIn("google")}
                   children={t("signInWith", { provider: "Google" })}
                 />
               </div>
@@ -218,7 +306,7 @@ export default function Page() {
         </Select>
       </div>
 
-      <Modal isOpen={openModals[0]} onClose={() => closeModal(0)} hideCloseButton={true} size="lg">
+      <Modal isOpen={openModals[0] ?? false} onClose={() => closeModal(0)} hideCloseButton={true} size="lg">
         <ModalContent>
           {() => (
             <>
@@ -235,11 +323,11 @@ export default function Page() {
                       {t("SignIn.verifySubtitle")}
                     </p>
 
-                    <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]" onClick={() => router.push("/dashboard")}>
+                    <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]">
                       <div className="flex items-center justify-center w-6 h-6 text-white bg-[#6985FF] rounded-full">
-                        U
+                        {email[0].toUpperCase()}
                       </div>
-                      user@email.com
+                      {email}
                     </div>
                   </div>
 
@@ -277,7 +365,7 @@ export default function Page() {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={openModals[1]} onClose={() => closeModal(1)} hideCloseButton={true} size="lg">
+      <Modal isOpen={openModals[1] ?? false} onClose={() => closeModal(1)} hideCloseButton={true} size="lg">
         <ModalContent>
           {() => (
             <>
@@ -294,11 +382,11 @@ export default function Page() {
                       {t("SignIn.verifySubtitle")}
                     </p>
 
-                    <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]" onClick={() => router.push("/dashboard")}>
+                    <div className="flex px-[10px] py-[6px] items-center gap-[8px] self-center border rounded-[144px]">
                       <div className="flex items-center justify-center w-6 h-6 text-white bg-[#6985FF] rounded-full">
-                        U
+                        {email[0].toUpperCase()}
                       </div>
-                      user@email.com
+                      {email}
                     </div>
                   </div>
 
@@ -344,6 +432,8 @@ export default function Page() {
           )}
         </ModalContent>
       </Modal>
+
+      <ModalLoading />
     </div>
   );
 }

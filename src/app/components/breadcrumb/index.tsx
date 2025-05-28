@@ -12,6 +12,7 @@ import { Icon } from "@iconify-icon/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import EditIcon from "./edit-icon";
+import { addToast } from "@heroui/react";
 
 export default function Breadcrumb() {
   const pathname = usePathname();
@@ -42,16 +43,21 @@ export default function Breadcrumb() {
 
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     const currentUrl = window.location.href;
-    navigator.clipboard.writeText(currentUrl)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
+    try {
+      await navigator.clipboard.writeText(currentUrl)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        });
+    } catch (error) {
+      console.log(error);
+      addToast({
+        title: 'Can not copy',
+        description: 'Clipboard API is not supported',
       });
+    }
   };
 
   return (

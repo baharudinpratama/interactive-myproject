@@ -38,7 +38,7 @@ export default function Navbar() {
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions">
           <DropdownItem key="logout" onPress={() => signOut({ callbackUrl: "/sign-in" })}>
-            {t('signOut')}
+            {t("signOut")}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

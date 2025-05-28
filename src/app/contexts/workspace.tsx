@@ -199,6 +199,17 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
 
       if (!data.items) return;
 
+      console.log(data.items);
+
+      // try {
+      //   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/task/google`, {
+      //     method: "POST",
+      //     body: JSON.stringify(data.items),
+      //   });
+      // } catch (error) {
+      //   console.log("Sync google calendar task failed:", error);
+      // }
+
       data.items.forEach((item: any) => {
         if (item.start && item.end) {
           if (item.start.dateTime && item.end.dateTime) {

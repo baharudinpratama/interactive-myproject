@@ -9,9 +9,36 @@ import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { Select, SelectItem } from "@heroui/select";
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/table";
 import { Icon } from "@iconify-icon/react";
+import axios from "axios";
+import { useState } from "react";
+import { addToast } from "@heroui/toast";
 
 export function SettingProduct() {
   const { openModals, openModal, closeAllModals } = useModalContext();
+
+  const [codeInput, setCodeInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [priceInput, setPriceInput] = useState("");
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/products/store`, {
+        code: codeInput,
+        name: nameInput,
+        price: priceInput,
+      }).then(response => {
+        addToast({
+          title: "Success",
+          description: response.data.message,
+        });
+      });
+    } catch (error) {
+      addToast({
+        title: "Error",
+        description: `Error posting data: ${error}`,
+      });
+    }
+  };
 
   return (
     <Modal isOpen={openModals["settingProduct"] ?? false} hideCloseButton={true} size="xl">
@@ -50,8 +77,8 @@ export function SettingProduct() {
               name="code"
               label="Code"
               placeholder="Enter Code"
-              // value={nameInput}
-              // onValueChange={setNameInput}
+              value={codeInput}
+              onValueChange={setCodeInput}
               maxLength={254}
             />
 
@@ -60,8 +87,8 @@ export function SettingProduct() {
               name="name"
               label="Name"
               placeholder="Enter Name"
-              // value={nameInput}
-              // onValueChange={setNameInput}
+              value={nameInput}
+              onValueChange={setNameInput}
               maxLength={254}
             />
 
@@ -71,8 +98,8 @@ export function SettingProduct() {
               type="number"
               label="Price"
               placeholder="Enter Price"
-              // value={nameInput}
-              // onValueChange={setNameInput}
+              value={priceInput}
+              onValueChange={setPriceInput}
               maxLength={254}
             />
 
@@ -99,17 +126,16 @@ export function SettingProduct() {
                 ],
               }}
             >
-              <SelectItem key={"daily"}>Daily</SelectItem>
-              <SelectItem key={"weekly"}>Weekly</SelectItem>
-              <SelectItem key={"monthly"}>Monthly</SelectItem>
-              <SelectItem key={"yearly"}>Yearly</SelectItem>
+              <SelectItem key={"hardware"}>Hardware</SelectItem>
+              <SelectItem key={"software"}>Software</SelectItem>
+              <SelectItem key={"service"}>Service</SelectItem>
             </Select>
 
             <div className="flex justify-end items-center self-stretch">
               <MyButton
                 color="yellow"
                 children="Continue"
-                onPress={() => { closeAllModals() }}
+                onPress={() => { handleSubmit() }}
                 className="px-[24px]"
               />
             </div>

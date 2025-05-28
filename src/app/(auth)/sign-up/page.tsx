@@ -1,20 +1,26 @@
 "use client";
 
 import MyButton from "@/app/components/button";
-import MyCheckbox from "@/app/components/checkbox";
 import { useCountdownTimer } from "@/app/components/countdown-timer";
-import MyInput from "@/app/components/input";
-import OTPInput from "@/app/components/otp-input";
-import { Modal, ModalBody, ModalContent } from "@heroui/modal";
+import { useModalContext } from "@/app/contexts/modal";
+import { Image } from "@heroui/image";
+import { addToast } from "@heroui/react";
 import { Icon } from "@iconify-icon/react";
-import Image from "next/image";
+import axios from "axios";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+
+import EmailPasswordForm from "./components/EmailPasswordForm";
+import EmailVerificationModal from "./components/EmailVerificationModal";
+import PersonalDetailsForm from "./components/PersonalDetailsForm";
+import useAuthStore from "./states/AuthStore";
 
 export default function Page() {
   const router = useRouter();
   const t = useTranslations();
+  const { form, resetForm } = useAuthStore();
+  const { openModal, closeModal } = useModalContext();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -27,23 +33,59 @@ export default function Page() {
   const otp = "123123";
   const [emailVerified, setEmailVerified] = useState(false);
 
-  const handleOtp = (val: string) => {
-    if (val === otp) {
-      setEmailVerified(true);
-      setShowVerifyEmail(false);
-    }
-  }
-
   const {
     getTimerString,
     startTimer
-  } = useCountdownTimer(5, 'sign-up-verification-timer');
+  } = useCountdownTimer(5, "sign-up-verification-timer");
 
   useEffect(() => {
-    if (getTimerString() === '00:00') {
+    if (getTimerString() === "00:00") {
       startTimer();
     }
   }, []);
+
+  const handleSignUpForm = async () => {
+    const fullName = `${form.firstName} ${form.lastName}`.trimEnd();
+
+    try {
+      openModal("modalLoading");
+
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-up`, {
+        "email": form.email,
+        "password": form.password,
+        "fullName": fullName,
+        "nickname": form.firstName,
+        "phoneNumber": form.phoneNumber,
+      }).then((response: any) => {
+        if (response.data.success) {
+          addToast({
+            color: "success",
+            title: "Success",
+            description: response.data.message,
+            timeout: 3000,
+            shouldShowTimeoutProgress: true,
+          });
+          resetForm();
+          router.push('/sign-in');
+        }
+      });
+    } catch (error: any) {
+      if (error.response && error.response?.status === 422) {
+        const errors = error.response.data.message;
+        addToast({
+          color: "danger",
+          title: "Error",
+          description: `Validation error: ${errors}`,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        });
+      } else {
+        console.log("Something went wrong:", error.message);
+      }
+    } finally {
+      closeModal("modalLoading");
+    }
+  }
 
   // const [enableResend, setEnableResend] = useState(false);
 
@@ -58,111 +100,30 @@ export default function Page() {
           <div className="flex flex-col gap-[42px] self-stretch">
             <div className="flex flex-col md:min-w-[344px] gap-[16px] self-stretch">
               <div className="flex flex-col items-center gap-[4px] self-stretch">
-                <Image src={"/logo-myproject-yellow.png"} alt={"logo myproject"} width={192} height={56} />
+                <Image src={"/logo-myproject-yellow.png"} alt={"logo myproject"} height={56} radius="none" />
 
                 <p className="max-w-[254px] text-center text-grey-light-active">
-                  {t("SignIn.title")}
+                  {t("SignUp.title")}
                 </p>
               </div>
 
               {!emailVerified && (
-                <>
-                  <MyInput
-                    id="email"
-                    name="email"
-                    type="email"
-                    label="Email"
-                    autoComplete="true"
-                    placeholder={t("form.email.placeholder")}
-                    maxLength={254}
-                    // onValueChange={setEmailValue}
-                    // isInvalid={isInvalid}
-                    errorMessage="Please enter a valid email"
-                  />
-
-                  <MyInput
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    label="Password"
-                    placeholder={t("form.password.placeholder")}
-                    endContent={
-                      <div role="button" onClick={togglePassword}>
-                        {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
-                      </div>
+                <EmailPasswordForm
+                  showPassword={showPassword}
+                  togglePassword={togglePassword}
+                  onContinue={() => {
+                    setShowVerifyEmail(true);
+                    if (getTimerString() === '00:00') {
+                      startTimer();
                     }
-                  />
-
-                  <MyInput
-                    id="confirm-password"
-                    name="confirmPassword"
-                    type={showPassword ? "text" : "password"}
-                    label="Confirm Password"
-                    placeholder={t("form.password.placeholder")}
-                    endContent={
-                      <div role="button" onClick={togglePassword}>
-                        {showPassword ? <Icon icon="solar:eye-bold" width={18} /> : <Icon icon="solar:eye-closed-bold" width={18} />}
-                      </div>
-                    }
-                  />
-
-                  <MyCheckbox
-                    name="tncAgreement"
-                    color="yellow"
-                    children={<p className="text-[12px] text-grey-light-active">{t("termsAndConditions")}</p>}
-                    classNames={{
-                      wrapper: "!size-[16px] before:size-[16px] after:size-[16px]",
-                    }}
-                  />
-
-                  <MyButton
-                    color="yellow"
-                    size="lg"
-                    children={t("continue")}
-                    onPress={() => {
-                      setShowVerifyEmail(true); if (getTimerString() === '00:00') {
-                        startTimer();
-                      }
-                    }}
-                  />
-                </>
+                  }}
+                />
               )}
 
               {emailVerified && (
-                <>
-                  <MyInput
-                    id="first-name"
-                    name="firstName"
-                    label={t("firstName")}
-                    placeholder={t("form.firstName.placeholder")}
-                    maxLength={254}
-                  />
-
-                  <MyInput
-                    id="last-name"
-                    name="lastName"
-                    label={t("lastName")}
-                    placeholder={t("form.lastName.placeholder")}
-                    maxLength={254}
-                  />
-
-                  <MyInput
-                    id="phone-number"
-                    name="phoneNumber"
-                    type="number"
-                    label={t("phoneNumber")}
-                    placeholder={t("form.phoneNumber.placeholder")}
-                    maxLength={16}
-                    endContent={<Icon icon="solar:school-document-broken" height={18} />}
-                  />
-
-                  <MyButton
-                    color="yellow"
-                    size="lg"
-                    children={t("signUp")}
-                    onPress={() => router.push("/dashboard")}
-                  />
-                </>
+                <PersonalDetailsForm
+                  onSignUp={() => handleSignUpForm()}
+                />
               )}
             </div>
           </div>
@@ -180,49 +141,16 @@ export default function Page() {
         />
       </div>
 
-      <Modal isOpen={showVerifyEmail} onClose={() => setShowVerifyEmail(false)} hideCloseButton={true} size="lg">
-        <ModalContent>
-          {() => (
-            <>
-              <ModalBody className="p-0 rouded-[8px]">
-                <div className="flex flex-col px-[42px] py-[54px] gap-[16px] self-stretch">
-                  <Icon icon="solar:shield-keyhole-linear" width={37} className="self-center" />
-
-                  <div className="self-center">
-                    <span className="text-[16px] font-semibold">{t("otp.verifyEmail")}</span>
-                  </div>
-
-                  <div className="flex flex-col gap-[5px] self-stretch">
-                    <span className="self-center text-grey-light-active ">{t("otp.otpSent")}</span>
-                    <span className="self-center">user@email.com</span>
-                  </div>
-
-                  <OTPInput onChange={(val) => handleOtp(val)} />
-
-                  <div className="flex self-center">
-                    <MyButton
-                      variant="bordered"
-                      size="sm"
-                      className="border border-grey-light-active"
-                      // isDisabled={!enableResend}
-                      children={
-                        <div className="flex text-[12px] gap-[4px]">
-                          {t("otp.resend")}
-                          {/* {!enableResend && ( */}
-                          <span className="font-bold">
-                            {getTimerString()}
-                          </span>
-                          {/* )} */}
-                        </div>
-                      }
-                    />
-                  </div>
-                </div>
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <EmailVerificationModal
+        isOpen={showVerifyEmail}
+        onClose={() => setShowVerifyEmail(false)}
+        onOtpVerified={() => {
+          setEmailVerified(true);
+          setShowVerifyEmail(false);
+        }}
+        timerString={getTimerString()}
+        otp={otp}
+      />
     </>
   );
 }

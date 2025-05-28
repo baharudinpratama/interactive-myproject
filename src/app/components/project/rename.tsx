@@ -5,6 +5,7 @@ import MyInput from "@/app/components/input";
 import { useModalContext } from "@/app/contexts/modal";
 import { useWorkspaceContext } from "@/app/contexts/workspace";
 import { fetchedUsers } from "@/app/data";
+import { useProjectStore } from "@/lib/store/project-store";
 import { Avatar } from "@heroui/avatar";
 import { DatePicker } from "@heroui/date-picker";
 import { Divider } from "@heroui/divider";
@@ -15,15 +16,17 @@ import { Icon } from "@iconify-icon/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { clsx } from "clsx";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RenameProject() {
   const params = useParams();
+  const { project } = useProjectStore();
+
   const projectId = params.id as string;
   const { getProjectById, updateProject } = useWorkspaceContext();
   const { openModals, closeAllModals } = useModalContext();
-  const [projectNameInput, setProjectNameInput] = useState(getProjectById(projectId)?.name);
-  const [inputDescription, setInputDescription] = useState("");
+  const [projectNameInput, setProjectNameInput] = useState(project?.proj_name as string);
+  const [descriptionInput, setDescriptionInput] = useState(project?.proj_desc as string);
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isPrivate, setPrivate] = useState(false);
@@ -62,6 +65,13 @@ export default function RenameProject() {
   const handleRename = () => {
 
   }
+
+  useEffect(() => {
+    if (project) {
+      setProjectNameInput(project.proj_name || '');
+      setDescriptionInput(project.proj_desc || '');
+    }
+  }, [project]);
 
   return (
     <Modal isOpen={openModals["renameProject"]} hideCloseButton={true} size="lg">
@@ -109,8 +119,8 @@ export default function RenameProject() {
                     label="Description"
                     labelPlacement="outside"
                     placeholder="Write description"
-                    value={inputDescription}
-                    onValueChange={setInputDescription}
+                    value={descriptionInput}
+                    onValueChange={setDescriptionInput}
                   />
                 </div>
 
