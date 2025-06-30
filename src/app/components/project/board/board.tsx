@@ -10,10 +10,12 @@ import { Avatar } from "@heroui/avatar";
 import { Button } from "@heroui/button";
 import { Modal, ModalBody, ModalContent } from "@heroui/modal";
 import { Icon } from "@iconify-icon/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import IconColumnTitle from "../icon-column-title";
 import IconUser from "../icon-user";
+import { Status } from "@/lib/types/status";
+import { useStatusStore } from "@/lib/store/status-store";
 
 type Id = string | number;
 
@@ -85,21 +87,21 @@ const TaskCard = ({ task }: { task: Task }) => {
   );
 }
 
-const ColumnItem = ({ column, tasks }: { column: Column, tasks: Task[] }) => {
+const ColumnItem = ({ column, tasks }: { column: Status, tasks: Task[] }) => {
   const taskIds = useMemo(() => tasks.map(task => task.id), [tasks]);
-  const { setNodeRef } = useDroppable({ id: column.id, data: { type: "column" } });
+  const { setNodeRef } = useDroppable({ id: column.stat_id, data: { type: "column" } });
 
   return (
     <div ref={setNodeRef} className="flex flex-col min-w-[240px] p-[4px] gap-[4px] rounded-[8px] bg-white-hover">
       <div className="flex w-full justify-between items-center">
         <div className="flex items-center gap-[8px]">
-          <div className={`flex px-[8px] py-[4px] items-center gap-[8px] rounded-[8px]`} style={{ backgroundColor: column.color }}>
-            <IconColumnTitle />
-            <span className="mix-blend-normal">{column.title}</span>
+          <div className={`flex px-[8px] py-[4px] items-center gap-[8px] rounded-[8px]`} style={{ backgroundColor: column.stat_color as string }}>
+            <Icon icon={column.stat_icon ?? 'solar:record-bold-duotone'} height={16} style={{ color: "white" }} />
+            <span className="mix-blend-normal text-white">{column.stat_name}</span>
           </div>
 
           <div className="flex">
-            {column.count}
+            {/* {column.count} */}
           </div>
         </div>
 
@@ -177,6 +179,7 @@ export function ConfirmModal({ onCancel, onConfirm }:
 }
 
 export default function Board() {
+  const { status, fetchStatus } = useStatusStore();
   const { openModal, closeAllModals } = useModalContext();
 
   const [columns, setColumns] = useState<Column[]>([
@@ -186,10 +189,10 @@ export default function Board() {
   ]);
 
   const [tasks, setTasks] = useState<Task[]>([
-    { id: "task-1", columnId: "to-do", title: "Task 1", priority: "high", priorityColor: "#E20000" },
-    { id: "task-2", columnId: "to-do", title: "Task 2", priority: "low", priorityColor: "#B2BBC6" },
-    { id: "task-3", columnId: "on-going", title: "Task 3", priority: "high", priorityColor: "#E20000" },
-    { id: "task-4", columnId: "on-going", title: "Task 4", priority: "normal", priorityColor: "#F96E15" },
+    { id: "task-1", columnId: "2", title: "Task 1", priority: "high", priorityColor: "#E20000" },
+    { id: "task-2", columnId: "2", title: "Task 2", priority: "low", priorityColor: "#B2BBC6" },
+    { id: "task-3", columnId: "3", title: "Task 3", priority: "high", priorityColor: "#E20000" },
+    { id: "task-4", columnId: "3", title: "Task 4", priority: "normal", priorityColor: "#F96E15" },
   ]);
 
   const mouseSensor = useSensor(MouseSensor, {
@@ -309,13 +312,25 @@ export default function Board() {
     closeAllModals();
   }
 
+  useEffect(() => {
+    fetchStatus('1');
+  }, []);
+
   return (
     <>
       <div className="flex flex-col flex-1 self-stretch bg-white">
         <div className="flex flex-col gap-[16px] flex-1 self-stretch">
           <DndContext onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} sensors={sensors}>
             <div className="flex h-full gap-[16px]">
-              {columns.map(column => (<ColumnItem key={column.id} column={column} tasks={tasks.filter(task => task.columnId === column.id)} />))}
+              {/* {columns.map(column => (
+                <ColumnItem key={column.id} column={column} tasks={tasks.filter(task => task.columnId === column.id)} />
+              ))} */}
+
+              {status?.map((status: Status) => {
+                return (
+                  <ColumnItem key={status.stat_id} column={status} tasks={tasks.filter(task => task.columnId == status.stat_id)} />
+                );
+              })}
 
               <div className="flex max-h-min p-[8px] items-center gap-[8px] cursor-pointer">
                 <Icon icon="heroicons:plus" height={12} style={{ color: "#B2BBC6" }} />

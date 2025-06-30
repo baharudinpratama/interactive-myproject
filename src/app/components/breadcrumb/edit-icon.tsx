@@ -1,20 +1,30 @@
 import MyButton from "@/app/components/button";
+import { useModalContext } from "@/app/contexts/modal";
+import { useProjectStore } from "@/lib/store/project-store";
+import { useWorkspaceStore } from "@/lib/store/workspace-store";
 import { Divider } from "@heroui/divider";
 import { Input } from "@heroui/input";
+import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify-icon/react";
-import twemojiJSONIconsData from "@iconify/json/json/twemoji.json";
+import solarJSONIconsData from "@iconify/json/json/solar.json";
 import { IconifyJSONIconsData } from "@iconify/types";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 
-const twemojiIcons = twemojiJSONIconsData as IconifyJSONIconsData;
+const solarIcons = solarJSONIconsData as IconifyJSONIconsData;
 
 export default function EditIcon() {
+  const { data: session } = useSession();
+  const { openModal, closeModal, closeAllModals } = useModalContext();
+  const { fetchProject, project } = useProjectStore();
+  const { fetchWorkspace } = useWorkspaceStore();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [icons, setIcons] = useState<any>(Object.keys(twemojiIcons.icons).slice(0, 12).map(value => `twemoji:${value}`));
+  const [icons, setIcons] = useState<any>(Object.keys(solarIcons.icons).slice(0, 12).map(value => `solar:${value}`));
   const [colors] = useState(["#6E56CF", "#3E63DD", "#0091FF", "#12A594", "#B2BBC6"]);
   const [selectedColor, setSelectedColor] = useState("#B2BBC6");
   const [iconSearchInput, setIconSearchInput] = useState("");
-  const [selectedIcon, setSelectedIcon] = useState("heroicons:list-bullet");
+  const [selectedIcon, setSelectedIcon] = useState("");
 
   const handleColorClick = () => {
     if (inputRef.current) {
@@ -31,9 +41,9 @@ export default function EditIcon() {
 
   const handleSearch = (query: string) => {
     setIconSearchInput(query);
-    const filteredIcons = Object.keys(twemojiIcons.icons)
+    const filteredIcons = Object.keys(solarIcons.icons)
       .filter(icon => query.toLowerCase().split(" ").every((word) => icon.toLowerCase().includes(word))).slice(0, 12)
-      .map(value => `twemoji:${value}`);
+      .map(value => `solar:${value}`);
     setIcons(filteredIcons);
   }
 
@@ -41,10 +51,66 @@ export default function EditIcon() {
     setSelectedIcon(icon);
   }
 
+  const handleSave = async () => {
+    try {
+      openModal("modalLoading");
+
+      if (!project?.proj_id) {
+        addToast({
+          title: "Error",
+          description: "Project ID is missing.",
+        });
+        closeModal("modalLoading");
+        return;
+      }
+
+      const form = new FormData();
+      form.append("projectIcon", selectedIcon);
+      form.append("projectColor", selectedColor);
+      form.append("_method", "PUT");
+
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/${project?.proj_id}`, form)
+        .then(response => {
+          if (response.data.success) {
+            addToast({
+              color: "success",
+              title: "Success",
+              description: response.data.message,
+            });
+            if (session?.user.id) {
+              fetchWorkspace(session.user.id);
+            }
+            fetchProject(project.proj_id);
+            closeAllModals();
+          }
+        });
+    } catch (error: any) {
+      if (error.response?.status) {
+        addToast({
+          color: "danger",
+          title: "Failed",
+          description: error.response.data.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        });
+      } else {
+        addToast({
+          color: "danger",
+          title: "Error",
+          description: `Something went wrong: ${error}`,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        });
+      }
+    } finally {
+      closeModal("modalLoading");
+    }
+  }
+
   return (
     <div className="flex flex-col gap-[13px]">
       <div className="flex items-center gap-[4px]">
-        Example : <Icon icon={selectedIcon} height={22} style={{ color: selectedColor }} />
+        Preview : {selectedIcon !== "" && <Icon icon={selectedIcon} height={22} style={{ color: selectedColor }} />}
       </div>
 
       <div className="flex flex-col gap-[8px] self-stretch">
@@ -186,6 +252,13 @@ export default function EditIcon() {
             </button>
           ))}
         </div>
+
+        <MyButton
+          color="yellow"
+          children="Save"
+          onPress={handleSave}
+          className="px-[24px]"
+        />
       </div>
     </div>
   );

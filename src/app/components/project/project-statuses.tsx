@@ -7,9 +7,14 @@ import { useModalContext } from "@/app/contexts/modal";
 import { Divider } from "@heroui/divider";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { Icon } from "@iconify-icon/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProjectStore } from "@/lib/store/project-store";
+import { useStatusStore } from "@/lib/store/status-store";
+import { Status } from "@/lib/types";
 
 export default function ProjectStatuses() {
+  const { project } = useProjectStore();
+  const { status, fetchStatus } = useStatusStore();
   const { openModals, closeModal, openModal, closeAllModals } = useModalContext();
 
   const [taskStatuses, setTaskStatuses] = useState([
@@ -25,6 +30,10 @@ export default function ProjectStatuses() {
     closeModal("defineWorkflowDetailStatus");
   }
 
+  useEffect(() => {
+    fetchStatus('1');
+  }, []);
+
   return (
     <>
       <Modal isOpen={openModals["projectStatuses"]} hideCloseButton={true} size="lg">
@@ -36,7 +45,7 @@ export default function ProjectStatuses() {
                   <div className="flex items-center gap-[8px] self-stretch">
                     <div className="flex flex-1 items-center gap-[8px]">
                       <div className="text-[16px] font-semibold">
-                        Edit (project name) Statuses
+                        Edit {project?.proj_name} Statuses
                       </div>
                       <div className="flex">
                         <Icon icon="solar:info-circle-bold" size={16} style={{ color: "var(--yellow)" }} />
@@ -51,7 +60,7 @@ export default function ProjectStatuses() {
                   </div>
 
                   <div className="text-grey-lighter text-base font-normal">
-                    Update and customize (project name) statuses to align with your project needs, ensuring clear progress tracking and improved workflow management.
+                    Update and customize {project?.proj_name} statuses to align with your project needs, ensuring clear progress tracking and improved workflow management.
                   </div>
                 </div>
               </ModalHeader>
@@ -60,9 +69,9 @@ export default function ProjectStatuses() {
 
               <ModalBody className="px-[25px] py-[20px]">
                 <div className="flex flex-col items-center gap-[12px] self-stretch">
-                  {taskStatuses.map(taskStatus => {
+                  {status?.map((status: Status) => {
                     return (
-                      <div key={`task-status-${taskStatus.id}`} className="flex p-[10px] items-center gap-[8px] self-stretch rounded-[8px] border border-white-active">
+                      <div key={`task-status-${status.stat_id}`} className="flex p-[10px] items-center gap-[8px] self-stretch rounded-[8px] border border-white-active">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <path d="M6.66667 8.00006C6.66667 7.26368 6.06971 6.66673 5.33333 6.66673C4.59696 6.66673 4 7.26368 4 8.00006C4 8.73644 4.59696 9.33339 5.33334 9.33339C6.06971 9.33339 6.66667 8.73644 6.66667 8.00006Z" fill="#B2BBC6" />
                           <path d="M6.66667 3.33333C6.66667 2.59695 6.06971 2 5.33333 2C4.59696 2 4 2.59695 4 3.33333C4 4.06971 4.59696 4.66667 5.33333 4.66667C6.06971 4.66667 6.66667 4.06971 6.66667 3.33333Z" fill="#B2BBC6" />
@@ -74,10 +83,10 @@ export default function ProjectStatuses() {
 
                         <div className="flex item-center gap-[8px] flex-1">
                           <div className="flex items-center">
-                            <Icon icon={taskStatus.icon} height={16} style={{ color: taskStatus.iconColor }} />
+                            <Icon icon={status.stat_icon ?? 'solar:record-bold-duotone'} height={16} style={{ color: status.stat_color as string}} />
                           </div>
 
-                          {taskStatus.name}
+                          {status.stat_name}
                         </div>
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">

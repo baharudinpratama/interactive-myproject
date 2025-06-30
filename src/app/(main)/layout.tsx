@@ -9,10 +9,10 @@ import RenameProject from "@/app/components/project/rename";
 import Sidebar from "@/app/components/sidebar/sidebar";
 import { SidebarProvider } from "@/app/contexts/sidebar";
 import { WorkspaceProvider } from "@/app/contexts/workspace";
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { useWorkspaceStore } from "@/lib/store/workspace-store";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 export default function MainLayout(
   { children }: Readonly<{ children: React.ReactNode; }>

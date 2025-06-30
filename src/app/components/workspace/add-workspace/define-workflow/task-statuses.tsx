@@ -1,13 +1,16 @@
 import MyButton from "@/app/components/button";
 import MyInput from "@/app/components/input";
-import { useModalContext } from "@/app/contexts/modal";
-import { Icon } from "@iconify-icon/react";
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
-import { useState } from "react";
-import IconPicker from "./icon-picker";
 import UrlConverter from "@/app/components/url-converter";
+import { useModalContext } from "@/app/contexts/modal";
+import { useStatusStore } from "@/lib/store/status-store";
+import { Status } from "@/lib/types";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Icon } from "@iconify-icon/react";
+import { useEffect, useState } from "react";
+import IconPicker from "./icon-picker";
 
 export default function TaskStatuses() {
+  const { status, fetchStatus } = useStatusStore();
   const [taskStatuses, setTaskStatuses] = useState([
     { id: "to-do", name: "TO DO", icon: "solar:record-circle-filled-linear", iconColor: "#B2BBC6" },
   ]);
@@ -24,15 +27,19 @@ export default function TaskStatuses() {
     setTaskStatuses([...taskStatuses, { id: id, name: statusNameInput, icon: icon, iconColor: color }])
   }
 
+  useEffect(() => {
+    fetchStatus('1');
+  }, []);
+
   return (
     <>
       <div className="flex flex-col min-h-[184px] gap-[12px]">
         Set (project name) statuses
 
         <div className="flex flex-col items-center gap-[12px] self-stretch">
-          {taskStatuses.map(taskStatus => {
+          {status?.map((status: Status) => {
             return (
-              <div key={`task-status-${taskStatus.id}`} className="flex p-[10px] items-center gap-[8px] self-stretch rounded-[8px] border border-white-active">
+              <div key={`task-status-${status.stat_id}`} className="flex p-[10px] items-center gap-[8px] self-stretch rounded-[8px] border border-white-active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M6.66667 8.00006C6.66667 7.26368 6.06971 6.66673 5.33333 6.66673C4.59696 6.66673 4 7.26368 4 8.00006C4 8.73644 4.59696 9.33339 5.33334 9.33339C6.06971 9.33339 6.66667 8.73644 6.66667 8.00006Z" fill="#B2BBC6" />
                   <path d="M6.66667 3.33333C6.66667 2.59695 6.06971 2 5.33333 2C4.59696 2 4 2.59695 4 3.33333C4 4.06971 4.59696 4.66667 5.33333 4.66667C6.06971 4.66667 6.66667 4.06971 6.66667 3.33333Z" fill="#B2BBC6" />
@@ -44,10 +51,10 @@ export default function TaskStatuses() {
 
                 <div className="flex item-center gap-[8px] flex-1">
                   <div className="flex items-center">
-                    <Icon icon={taskStatus.icon} height={16} style={{ color: taskStatus.iconColor }} />
+                    <Icon icon={status.stat_icon ?? 'solar:record-bold-duotone'} height={16} style={{ color: status.stat_color as string }} />
                   </div>
 
-                  {taskStatus.name}
+                  {status.stat_name}
                 </div>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">

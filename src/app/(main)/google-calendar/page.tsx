@@ -7,17 +7,17 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch("/api/calendar");
-        const data = await response.json();
-        setEvents(data.items || []);
-      } catch (error) {
-        console.error("Error fetching calendar events:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // const fetchEvents = async () => {
+    //   try {
+    //     const response = await fetch("/api/calendar");
+    //     const data = await response.json();
+    //     setEvents(data.items || []);
+    //   } catch (error) {
+    //     console.error("Error fetching calendar events:", error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
     // fetchEvents();
   }, []);

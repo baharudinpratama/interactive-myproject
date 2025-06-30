@@ -12,4 +12,5 @@ export type Project = {
   p_uid: string | null
   ws_id: number
   proj_icon: string
+  proj_color: string
 }

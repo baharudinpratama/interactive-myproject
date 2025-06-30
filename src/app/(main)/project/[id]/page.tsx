@@ -116,18 +116,6 @@ export default function Page({
         {currentView === "view-workload" && (
           <Workload />
         )}
-        {/* {currentView === "view-calendar-dhtmlx" && (
-          <DHTMLXCalendar events={getData()} date={new Date()} />
-        )} */}
-        {/* {currentView === "view-calendar-syncfusion" && (
-          <Calendar />
-        )} */}
-        {/* {currentView === "view-gantt-dhtmlx" && (
-          <GanttView />
-        )} */}
-        {/* {currentView === "view-gantt-syncfusion" && (
-          <GanttSyncfusion />
-        )} */}
       </div>
 
       <CreateTask />

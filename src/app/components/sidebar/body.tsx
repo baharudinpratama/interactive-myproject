@@ -177,7 +177,7 @@ export default function Body() {
                     >
                       <div className="flex justify-center items-center min-w-[24px] self-stretch">
                         {isLoaded && (
-                          <Icon icon={proj.proj_icon} height={20} color={"#090b0e"} />
+                          <Icon icon={proj.proj_icon} height={20} style={{ color: proj.proj_color }} />
                         )}
                       </div>
 

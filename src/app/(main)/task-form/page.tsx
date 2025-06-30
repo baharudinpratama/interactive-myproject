@@ -23,13 +23,11 @@ import { today } from "@internationalized/date";
 import type { DateValue } from "@react-types/calendar";
 import axios from "axios";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function Page() {
-  const { params } = useParams();
   const [loading, setLoading] = useState(false);
-  const { openModal, closeAllModals } = useModalContext();
+  const { openModal } = useModalContext();
   const [taskName, setTaskName] = useState("New Task");
   const [renameMode, setRenameMode] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -44,6 +42,8 @@ export default function Page() {
   const [selectedRightView, setSelectedRightView] = useState("act");
   const [selectedBottomView, setSelectedBottomView] = useState("detail");
   const [fetchedStatus, setFetchedStatus] = useState<any>([]);
+
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSelectAssignees = (assignee: string) => {
     setSelectedAssignees((prevAssignees) =>
@@ -104,8 +104,6 @@ export default function Page() {
       .then(response => {
         setFetchedStatus(() => [...response.data.data]);
       });
-
-    console.log(params);
   }, []);
 
   return (
@@ -118,6 +116,7 @@ export default function Page() {
               <div className="flex h-[24px] items-center" onClick={() => setRenameMode(true)}>
                 {renameMode ? (
                   <Input
+                    ref={nameInputRef}
                     autoFocus={true}
                     value={taskName}
                     onValueChange={setTaskName}
@@ -135,7 +134,9 @@ export default function Page() {
                 ) : taskName}
               </div>
             </div>
-            <Icon icon="solar:pen-2-linear" height={17} onClick={() => setRenameMode(false)} />
+            {!renameMode && (
+              <Icon icon="solar:pen-2-linear" height={17} className="cursor-pointer" onClick={() => setRenameMode(prev => !prev)} />
+            )}
           </div>
           <div className="grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 grid-cols-2 pb-[16px] pt-[8px] gap-x-[16px] gap-y-[12px]">
             <Popover placement="bottom-start">

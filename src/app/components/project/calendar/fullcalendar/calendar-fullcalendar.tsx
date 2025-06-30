@@ -23,29 +23,29 @@ const DemoApp: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<DateSelectArg | null>(null);
 
   useEffect(() => {
-    const events: EventInput[] = [];
+    // const events: EventInput[] = [];
 
-    tasks.forEach((task) => {
-      let allDay = false;
-      if (
-        task.start !== task.end
-      ) {
-        allDay = true;
-      }
-      events.push({
-        id: task.id,
-        title: task.name,
-        start: task.start,
-        end: task.end,
-        allDay,
-      });
-    });
+    // tasks.forEach((task) => {
+    //   let allDay = false;
+    //   if (
+    //     task.start !== task.end
+    //   ) {
+    //     allDay = true;
+    //   }
+    //   events.push({
+    //     id: task.id,
+    //     title: task.name,
+    //     start: task.start,
+    //     end: task.end,
+    //     allDay,
+    //   });
+    // });
 
-    if (calendarRef.current) {
-      const calendarApi = calendarRef.current.getApi();
-      calendarApi.removeAllEvents();
-      events.forEach(event => calendarApi.addEvent(event));
-    }
+    // if (calendarRef.current) {
+    //   const calendarApi = calendarRef.current.getApi();
+    //   calendarApi.removeAllEvents();
+    //   events.forEach(event => calendarApi.addEvent(event));
+    // }
   }, []);
 
   const handleDateClick = (selected: DateSelectArg) => {

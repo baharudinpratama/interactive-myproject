@@ -12,19 +12,21 @@ import { Divider } from "@heroui/divider";
 import { Textarea } from "@heroui/input";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { Switch } from "@heroui/switch";
+import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify-icon/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
+import axios from "axios";
 import { clsx } from "clsx";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function RenameProject() {
   const params = useParams();
-  const { project } = useProjectStore();
+  const { fetchProject, project } = useProjectStore();
 
   const projectId = params.id as string;
   const { getProjectById, updateProject } = useWorkspaceContext();
-  const { openModals, closeAllModals } = useModalContext();
+  const { openModals, openModal, closeModal, closeAllModals } = useModalContext();
   const [projectNameInput, setProjectNameInput] = useState(project?.proj_name as string);
   const [descriptionInput, setDescriptionInput] = useState(project?.proj_desc as string);
 
@@ -62,19 +64,59 @@ export default function RenameProject() {
     );
   };
 
-  const handleRename = () => {
+  const handleRename = async () => {
+    openModal("modalLoading");
 
+    if (!project?.proj_id) {
+      addToast({
+        title: "Error",
+        description: "Project ID is missing.",
+      });
+      closeModal("modalLoading");
+      return;
+    }
+
+    const form = new FormData();
+    form.append("projectName", projectNameInput);
+    form.append("projectDesc", descriptionInput);
+    form.append("projectPrivate", isPrivate ? "1" : "0");
+    form.append("_method", "PUT");
+
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/${project?.proj_id}`, form)
+        .then(response => {
+          addToast({
+            title: "Success",
+            description: response.data.message,
+          });
+          fetchProject(project.proj_id);
+          closeAllModals();
+        });
+    } catch (error: any) {
+      if (error.response && error.response.status === 422) {
+        const errors = error.response.data.message;
+        addToast({
+          title: "Error",
+          description: `Validation error: ${errors}`,
+        });
+      } else {
+        console.log("Something went wrong:", error.message);
+      }
+    } finally {
+      closeModal("modalLoading");
+    }
   }
 
   useEffect(() => {
     if (project) {
       setProjectNameInput(project.proj_name || '');
       setDescriptionInput(project.proj_desc || '');
+      setPrivate(project.proj_is_private === 1 ? true : false);
     }
   }, [project]);
 
   return (
-    <Modal isOpen={openModals["renameProject"]} hideCloseButton={true} size="lg">
+    <Modal isOpen={openModals["renameProject"] ?? false} hideCloseButton={true} size="lg">
       <ModalContent className="overflow-visible">
         {() => (
           <>
@@ -286,7 +328,6 @@ export default function RenameProject() {
                     </div>
                   </div>
                 </div>
-
 
                 <div className="flex justify-end items-center gap-[12px]">
                   <MyButton
